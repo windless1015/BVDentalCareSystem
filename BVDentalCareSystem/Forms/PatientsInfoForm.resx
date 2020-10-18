@@ -117,56 +117,69 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="about" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\关于.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="Button_modify.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
   </data>
-  <data name="btn_add_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btn_del_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\del.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btn_modify_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\modify.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btn_query_record" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\query.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="btn_return" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\返回.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="exitButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="headBackgroundBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\headTopBar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\帮助.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\firm_logo2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="oralView_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\oralView_selected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="oralView_unselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\oralViewer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="patientInfo_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\patientInfo_selected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="patientInfo_unselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\patientInfo1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="periodontal_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\periodontal_selected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="periodontal_unselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\periodontal_unselected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="platform_name" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\邦沃口腔诊疗管理平台.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  <metadata name="id.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="name.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="gender.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="birth_date.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="identity_number.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="phone.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="create_time.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

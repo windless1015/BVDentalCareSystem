@@ -20,11 +20,13 @@ namespace BVDentalCareSystem
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
         {
-            //Button a = new Button();
-            //a.Text = "text";
-            //a.Location = new Point(0, 100);
-            //a.Show();
-            //this.splitContainer.Panel2.Controls.Add(a);
+            PatientsInfoForm pif = new PatientsInfoForm();
+            pif.TopLevel = false; //重要的一个步骤
+            pif.Parent = this.splitContainer.Panel2;
+            pif.Location = new Point(0, panel_head.Height + 14);
+            pif.Size = new Size(this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10, this.splitContainer.Panel2.Height - panel_head.Height);
+            pif.Show();
+            this.splitContainer.Panel2.Controls.Add(pif);
         }
 
         private void btn_periodontal_Click(object sender, EventArgs e)
