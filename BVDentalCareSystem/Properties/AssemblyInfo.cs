@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("BVDentalCareSystem")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("本软件信息说明")]
+[assembly: AssemblyDescription("软件维护人员联系方式: 18129921101")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BVDentalCareSystem")]
+[assembly: AssemblyCompany("深圳邦沃信息技术有限公司")]
+[assembly: AssemblyProduct("邦沃口腔诊疗管理平台")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Bangvo")]
 [assembly: AssemblyCulture("")]
 
 // 将 ComVisible 设置为 false 会使此程序集中的类型

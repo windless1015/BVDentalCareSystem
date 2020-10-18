@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BVDentalCareSystem.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,7 +20,11 @@ namespace BVDentalCareSystem
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
         {
-
+            //Button a = new Button();
+            //a.Text = "text";
+            //a.Location = new Point(0, 100);
+            //a.Show();
+            //this.splitContainer.Panel2.Controls.Add(a);
         }
 
         private void btn_periodontal_Click(object sender, EventArgs e)
@@ -34,17 +39,21 @@ namespace BVDentalCareSystem
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
-
+            System.Environment.Exit(0);
         }
 
-        private void btn_help_Click(object sender, EventArgs e)
+
+        private void panel_help_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void btn_about_Click(object sender, EventArgs e)
+        private void panel_about_Click(object sender, EventArgs e)
         {
-
+            AboutBox aboutWindow = new AboutBox();
+            aboutWindow.StartPosition = FormStartPosition.CenterScreen;
+            aboutWindow.Show();
         }
+
     }
 }
