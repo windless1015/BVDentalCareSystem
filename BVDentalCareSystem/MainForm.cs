@@ -16,5 +16,35 @@ namespace BVDentalCareSystem
         {
             InitializeComponent();
         }
+
+        private void btn_patientInfo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_periodontal_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_oralView_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_exit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_help_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_about_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

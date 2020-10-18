@@ -119,5 +119,26 @@
   <ItemGroup>
     <None Include="Resources\periodontal_unselected.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\firm_logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\firm_logo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\邦沃口腔诊疗管理平台.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\headTopBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\帮助.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\关于.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
