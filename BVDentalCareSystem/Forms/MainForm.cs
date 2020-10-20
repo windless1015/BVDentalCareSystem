@@ -16,6 +16,8 @@ namespace BVDentalCareSystem
         public MainForm()
         {
             InitializeComponent();
+            imageVideoBrowserSideBar.dataPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\尚涛_2_2020-07-22";
+            imageVideoBrowserSideBar.SortOrderByDataPath();
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
