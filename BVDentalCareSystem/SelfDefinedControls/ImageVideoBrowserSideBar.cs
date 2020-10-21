@@ -130,7 +130,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             Dictionary<string, List<ItemDiscriptor>> groupDateDictionary = new Dictionary<string, List<ItemDiscriptor>>();
             //此时默认list是降序排列的,遍历一次list即可完成所有的日期的分组
             DateTime traverseDt = itemsList.First().itemCreationTime; //把每一个日期和这个进行比较,不同就新创建一个日期
-            int itemIdx = 1;
+            int itemIdx = 0;
             foreach (var item in itemsList)
             {
                 item.index = itemIdx++;
