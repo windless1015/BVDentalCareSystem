@@ -36,11 +36,11 @@ namespace BVDentalCareSystem
             this.btn_oralView = new System.Windows.Forms.Button();
             this.btn_periodontal = new System.Windows.Forms.Button();
             this.btn_patientInfo = new System.Windows.Forms.Button();
-            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             this.panel_head = new System.Windows.Forms.Panel();
             this.panel_about = new System.Windows.Forms.Panel();
             this.panel_help = new System.Windows.Forms.Panel();
             this.panel_platformName = new System.Windows.Forms.Panel();
+            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -147,16 +147,6 @@ namespace BVDentalCareSystem
             this.btn_patientInfo.UseVisualStyleBackColor = false;
             this.btn_patientInfo.Click += new System.EventHandler(this.btn_patientInfo_Click);
             // 
-            // imageVideoBrowserSideBar
-            // 
-            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
-            this.imageVideoBrowserSideBar.dataPath = null;
-            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1334, 96);
-            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
-            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(318, 984);
-            this.imageVideoBrowserSideBar.TabIndex = 3;
-            // 
             // panel_head
             // 
             this.panel_head.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.headBackgroundBar;
@@ -201,6 +191,16 @@ namespace BVDentalCareSystem
             this.panel_platformName.Name = "panel_platformName";
             this.panel_platformName.Size = new System.Drawing.Size(475, 36);
             this.panel_platformName.TabIndex = 0;
+            // 
+            // imageVideoBrowserSideBar
+            // 
+            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
+            this.imageVideoBrowserSideBar.dataPath = null;
+            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1288, 96);
+            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
+            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
+            this.imageVideoBrowserSideBar.TabIndex = 3;
             // 
             // MainForm
             // 

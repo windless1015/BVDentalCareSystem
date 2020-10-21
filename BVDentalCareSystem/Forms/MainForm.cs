@@ -16,8 +16,8 @@ namespace BVDentalCareSystem
         public MainForm()
         {
             InitializeComponent();
-            //imageVideoBrowserSideBar.dataPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\尚涛_2_2020-07-22";
-            imageVideoBrowserSideBar.dataPath = @"F:\projects\Bangvo\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟1_1_2020-03-16";
+            imageVideoBrowserSideBar.dataPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟_1_2020-07-22";
+            //imageVideoBrowserSideBar.dataPath = @"F:\projects\Bangvo\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟1_1_2020-03-16";
             imageVideoBrowserSideBar.SortOrderByTimeDescend();
             imageVideoBrowserSideBar.GroupItemByDate();
         }

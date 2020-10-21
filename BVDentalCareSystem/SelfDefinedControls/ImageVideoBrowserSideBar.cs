@@ -23,13 +23,15 @@ namespace BVDentalCareSystem.SelfDefinedControls
     {
         public ItemTypeEnum itemType { set; get; } //item类型：avi视频， jpg图片
         public string itemPath { set; get; } //item完整路径
+        public string itemName { set; get; } //item的名字
+        public int index { set; get; }  //item的序号
         public DateTime itemCreationTime { set; get; } //item的创建时间
         public Bitmap thumbnail; //缩略图
         public ItemDiscriptor(string _itemPath)
         {
             itemPath = _itemPath;
             CheckItemType(ref _itemPath);
-            SetItemCreationFile();
+            SetItemProperty();
             if (itemType == ItemTypeEnum.IMAGE)
             {
                 GetThumbnailFromImage();
@@ -46,10 +48,11 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 thumbnail.Dispose();
         }
 
-        private void SetItemCreationFile()
+        private void SetItemProperty()
         {
             FileInfo fileInfo = new FileInfo(itemPath);
             itemCreationTime = fileInfo.CreationTime;
+            itemName = fileInfo.Name;
         }
 
         //根据完整文件路径判断类型
@@ -113,7 +116,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
             var fileArray = Directory.EnumerateFiles(dataPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".avi") || s.EndsWith(".jpg"));
             foreach (string currentFile in fileArray)
             {
-                //ItemDiscriptor a = new ItemDiscriptor(currentFile);
                 itemsList.Add(new ItemDiscriptor(currentFile)); //读取一个新的文件到list中
             }
             //把item根据时间降序排列
@@ -123,14 +125,16 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //根据日期对于所有list中的照片进行分组显示, 例如 2020-9-10 的所有照片会在一个组内
         public void GroupItemByDate()
         {
-            
             ///////1. 在数据逻辑端更新数据////////
             //key是日期字符串, value是这个日期对应的list
             Dictionary<string, List<ItemDiscriptor>> groupDateDictionary = new Dictionary<string, List<ItemDiscriptor>>();
             //此时默认list是降序排列的,遍历一次list即可完成所有的日期的分组
             DateTime traverseDt = itemsList.First().itemCreationTime; //把每一个日期和这个进行比较,不同就新创建一个日期
+            int itemIdx = 1;
             foreach (var item in itemsList)
             {
+                item.index = itemIdx++;
+                thumbnailImageList.Images.Add(item.thumbnail);
                 TimeSpan ts = traverseDt.Subtract(item.itemCreationTime);
                 if (0 != ts.Days) //如果两个DateTime的日期天数不一样,则就要更新数据
                 {
@@ -166,6 +170,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 foreach (var item in oneList.Value)
                 {
                     ListViewItem oneListViewItem = new ListViewItem();
+                    oneListViewItem.ImageIndex = item.index;
+                    oneListViewItem.Text = item.itemName;
                     listView_showItems.Groups[oneList.Key].Items.Add(oneListViewItem);
                     listView_showItems.Items.Add(oneListViewItem);
                 }
