@@ -6,8 +6,8 @@ using System.IO;
 using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 using Accord.Video.FFMPEG;
 
 namespace BVDentalCareSystem.SelfDefinedControls
@@ -29,6 +29,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             itemPath = _itemPath;
             CheckItemType(ref _itemPath);
+            SetItemCreationFile();
             if (itemType == ItemTypeEnum.IMAGE)
             {
                 GetThumbnailFromImage();
@@ -43,6 +44,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             if(thumbnail != null)
                 thumbnail.Dispose();
+        }
+
+        private void SetItemCreationFile()
+        {
+            FileInfo fileInfo = new FileInfo(itemPath);
+            itemCreationTime = fileInfo.CreationTime;
         }
 
         //根据完整文件路径判断类型
@@ -93,9 +100,11 @@ namespace BVDentalCareSystem.SelfDefinedControls
     public partial class ImageVideoBrowserSideBar : UserControl
     {
         public string dataPath { set; get; } //控件当前需要显示图像和视频的路径
+        public ImageList thumbnailImageList; //需要显示的所列图图片列表
+        private List<ItemDiscriptor> itemsList; //所有items的列表
 
-        //根据dataPath进行排序
-        public void SortOrder()
+        //根据dataPath进行时间降序排序
+        public void SortOrderByTimeDescend()
         {
             DirectoryInfo dirInfo = new DirectoryInfo(dataPath);
             if (!dirInfo.Exists)
@@ -104,17 +113,79 @@ namespace BVDentalCareSystem.SelfDefinedControls
             var fileArray = Directory.EnumerateFiles(dataPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".avi") || s.EndsWith(".jpg"));
             foreach (string currentFile in fileArray)
             {
-                ItemDiscriptor a = new ItemDiscriptor(currentFile);
+                //ItemDiscriptor a = new ItemDiscriptor(currentFile);
+                itemsList.Add(new ItemDiscriptor(currentFile)); //读取一个新的文件到list中
             }
+            //把item根据时间降序排列
+            itemsList.Sort((x, y) => y.itemCreationTime.CompareTo(x.itemCreationTime));
         }
 
+        //根据日期对于所有list中的照片进行分组显示, 例如 2020-9-10 的所有照片会在一个组内
+        public void GroupItemByDate()
+        {
+            
+            ///////1. 在数据逻辑端更新数据////////
+            //key是日期字符串, value是这个日期对应的list
+            Dictionary<string, List<ItemDiscriptor>> groupDateDictionary = new Dictionary<string, List<ItemDiscriptor>>();
+            //此时默认list是降序排列的,遍历一次list即可完成所有的日期的分组
+            DateTime traverseDt = itemsList.First().itemCreationTime; //把每一个日期和这个进行比较,不同就新创建一个日期
+            foreach (var item in itemsList)
+            {
+                TimeSpan ts = traverseDt.Subtract(item.itemCreationTime);
+                if (0 != ts.Days) //如果两个DateTime的日期天数不一样,则就要更新数据
+                {
+                    traverseDt = item.itemCreationTime;
+                }
+                string dateKey = item.itemCreationTime.ToString("d");
+                //还要判断字典中是否有这个value了
+                if (groupDateDictionary.ContainsKey(dateKey)) //有则添加,没有则创建
+                {
+                    groupDateDictionary[dateKey].Add(item);
+                }
+                else
+                {
+                    List<ItemDiscriptor> newDate = new List<ItemDiscriptor>();
+                    newDate.Add(item);
+                    groupDateDictionary[dateKey] = newDate;
+                }
+            }
 
+            /////////2.在ListView的显示端进行更新数据//////////
+            listView_showItems.Items.Clear();
+            listView_showItems.BeginUpdate();
+            foreach (var oneList in groupDateDictionary)
+            {
+                //创建这个日期的 分组 listviewGroup
+                ListViewGroup curDateLVG = new ListViewGroup(); //创建当前日期的listviewgroup分组
+                curDateLVG.Header = oneList.Key;  //设置组的标题为当前日期。
+                curDateLVG.Name = oneList.Key;
+                curDateLVG.HeaderAlignment = HorizontalAlignment.Left;   //设置组标题文本的对齐方式。（默认为Left）
+                listView_showItems.Groups.Add(curDateLVG);   //把当前日期分组添加到listview中 
+
+                //然后遍历这个日期的List,对于每一个item创建listviewitem
+                foreach (var item in oneList.Value)
+                {
+                    ListViewItem oneListViewItem = new ListViewItem();
+                    listView_showItems.Groups[oneList.Key].Items.Add(oneListViewItem);
+                    listView_showItems.Items.Add(oneListViewItem);
+                }
+            }
+
+            listView_showItems.LargeImageList = thumbnailImageList;
+            listView_showItems.EndUpdate();
+        }
 
 
 
         public ImageVideoBrowserSideBar()
         {
             InitializeComponent();
+            thumbnailImageList = new ImageList(); //创建显示的集合
+            thumbnailImageList.ImageSize = new Size(128, 128); //设置imagelist的 属性
+            thumbnailImageList.ColorDepth = ColorDepth.Depth24Bit;
+
+            itemsList = new List<ItemDiscriptor>();  //创建图片,视频items的集合 
+
             //记得要设置ShowGroups属性为true（默认是false），否则显示不出分组 
             listView_showItems.ShowGroups = true;
         }
