@@ -51,7 +51,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
         private void SetItemProperty()
         {
             FileInfo fileInfo = new FileInfo(itemPath);
-            itemCreationTime = fileInfo.CreationTime;
+            //itemCreationTime = fileInfo.CreationTime;
+            itemCreationTime = fileInfo.LastWriteTime; //这里用LastWriteTime 更合理
             itemName = fileInfo.Name;
         }
 
@@ -105,6 +106,15 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public string dataPath { set; get; } //控件当前需要显示图像和视频的路径
         public ImageList thumbnailImageList; //需要显示的所列图图片列表
         private List<ItemDiscriptor> itemsList; //所有items的列表
+
+        public delegate void DeleteImgNotifyHandler();
+        //声明事件,用户双击一个item触发显示这个item的.
+        public event DeleteImgNotifyHandler DeleteImgNotify;
+
+        public delegate void DoubleClickOpenItemNotifyHandler();
+        //声明双击打开一个Item（图片，视频）
+        public event DoubleClickOpenItemNotifyHandler DBClickOpenItemNotify;
+
 
         //根据dataPath进行时间降序排序
         public void SortOrderByTimeDescend()
