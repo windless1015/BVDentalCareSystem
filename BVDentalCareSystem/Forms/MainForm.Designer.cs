@@ -36,11 +36,13 @@ namespace BVDentalCareSystem
             this.btn_oralView = new System.Windows.Forms.Button();
             this.btn_periodontal = new System.Windows.Forms.Button();
             this.btn_patientInfo = new System.Windows.Forms.Button();
+            this.panel_bottom = new System.Windows.Forms.Panel();
+            this.panel_seperate = new System.Windows.Forms.Panel();
+            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             this.panel_head = new System.Windows.Forms.Panel();
             this.panel_about = new System.Windows.Forms.Panel();
             this.panel_help = new System.Windows.Forms.Panel();
             this.panel_platformName = new System.Windows.Forms.Panel();
-            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -68,6 +70,8 @@ namespace BVDentalCareSystem
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.splitContainer.Panel2.Controls.Add(this.panel_bottom);
+            this.splitContainer.Panel2.Controls.Add(this.panel_seperate);
             this.splitContainer.Panel2.Controls.Add(this.imageVideoBrowserSideBar);
             this.splitContainer.Panel2.Controls.Add(this.panel_head);
             this.splitContainer.Size = new System.Drawing.Size(1920, 1080);
@@ -147,6 +151,32 @@ namespace BVDentalCareSystem
             this.btn_patientInfo.UseVisualStyleBackColor = false;
             this.btn_patientInfo.Click += new System.EventHandler(this.btn_patientInfo_Click);
             // 
+            // panel_bottom
+            // 
+            this.panel_bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel_bottom.Location = new System.Drawing.Point(0, 1050);
+            this.panel_bottom.Name = "panel_bottom";
+            this.panel_bottom.Size = new System.Drawing.Size(1288, 30);
+            this.panel_bottom.TabIndex = 5;
+            // 
+            // panel_seperate
+            // 
+            this.panel_seperate.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_seperate.Location = new System.Drawing.Point(0, 96);
+            this.panel_seperate.Name = "panel_seperate";
+            this.panel_seperate.Size = new System.Drawing.Size(1288, 30);
+            this.panel_seperate.TabIndex = 4;
+            // 
+            // imageVideoBrowserSideBar
+            // 
+            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
+            this.imageVideoBrowserSideBar.dataPath = null;
+            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1288, 96);
+            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
+            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
+            this.imageVideoBrowserSideBar.TabIndex = 3;
+            // 
             // panel_head
             // 
             this.panel_head.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.headBackgroundBar;
@@ -192,16 +222,6 @@ namespace BVDentalCareSystem
             this.panel_platformName.Size = new System.Drawing.Size(475, 36);
             this.panel_platformName.TabIndex = 0;
             // 
-            // imageVideoBrowserSideBar
-            // 
-            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
-            this.imageVideoBrowserSideBar.dataPath = null;
-            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1288, 96);
-            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
-            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
-            this.imageVideoBrowserSideBar.TabIndex = 3;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -235,6 +255,8 @@ namespace BVDentalCareSystem
         private System.Windows.Forms.Panel panel_about;
         private System.Windows.Forms.Panel panel_help;
         private SelfDefinedControls.ImageVideoBrowserSideBar imageVideoBrowserSideBar;
+        private System.Windows.Forms.Panel panel_bottom;
+        private System.Windows.Forms.Panel panel_seperate;
     }
 }
 
