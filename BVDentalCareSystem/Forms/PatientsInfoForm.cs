@@ -36,5 +36,10 @@ namespace BVDentalCareSystem.Forms
         {
 
         }
+
+        private void PatientsInfoForm_Resize(object sender, EventArgs e)
+        {
+            this.DataView_Patients.Height = this.Height - this.GroupBox_Operation.Height - 10;
+        }
     }
 }

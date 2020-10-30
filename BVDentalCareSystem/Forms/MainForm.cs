@@ -27,8 +27,9 @@ namespace BVDentalCareSystem
             PatientsInfoForm pif = new PatientsInfoForm();
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
-            pif.Location = new Point(0, panel_head.Height + 14);
-            pif.Size = new Size(this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10, this.splitContainer.Panel2.Height - panel_head.Height);
+            pif.Location = new Point(0, panel_head.Height + 34);
+            pif.Size = new Size(this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10, 
+                this.splitContainer.Panel2.Height - panel_head.Height - panel_seperate.Height - panel_bottom.Height);
             pif.Show();
             this.splitContainer.Panel2.Controls.Add(pif);
         }
