@@ -33,7 +33,7 @@
             this.openImgContainingFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openImgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delCurImgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listView_showItems = new System.Windows.Forms.ListView();
+            this.doubleBufferListView = new DoubleBufferListView();
             this.contextMenuStrip_openImg.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,22 +64,22 @@
             this.delCurImgToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.delCurImgToolStripMenuItem.Text = "删除本图片";
             // 
-            // listView_showItems
+            // doubleBufferListView
             // 
-            this.listView_showItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_showItems.HideSelection = false;
-            this.listView_showItems.Location = new System.Drawing.Point(0, 0);
-            this.listView_showItems.Name = "listView_showItems";
-            this.listView_showItems.Size = new System.Drawing.Size(193, 501);
-            this.listView_showItems.TabIndex = 1;
-            this.listView_showItems.UseCompatibleStateImageBehavior = false;
-            this.listView_showItems.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView_showItems_MouseClick);
+            this.doubleBufferListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.doubleBufferListView.HideSelection = false;
+            this.doubleBufferListView.Location = new System.Drawing.Point(0, 0);
+            this.doubleBufferListView.Name = "doubleBufferListView";
+            this.doubleBufferListView.Size = new System.Drawing.Size(193, 501);
+            this.doubleBufferListView.TabIndex = 1;
+            this.doubleBufferListView.UseCompatibleStateImageBehavior = false;
+            this.doubleBufferListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.doubleBufferListView_MouseClick);
             // 
             // ImageVideoBrowserSideBar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.listView_showItems);
+            this.Controls.Add(this.doubleBufferListView);
             this.Name = "ImageVideoBrowserSideBar";
             this.Size = new System.Drawing.Size(193, 501);
             this.contextMenuStrip_openImg.ResumeLayout(false);
@@ -93,6 +93,6 @@
         private System.Windows.Forms.ToolStripMenuItem openImgContainingFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openImgToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem delCurImgToolStripMenuItem;
-        private System.Windows.Forms.ListView listView_showItems;
+        DoubleBufferListView doubleBufferListView = new DoubleBufferListView();
     }
 }

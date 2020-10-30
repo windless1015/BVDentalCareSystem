@@ -18,6 +18,17 @@ namespace BVDentalCareSystem.SelfDefinedControls
         VIDEO = 1,
     }
 
+    public class DoubleBufferListView : ListView
+    {
+        public DoubleBufferListView()
+        {
+            SetStyle(ControlStyles.DoubleBuffer |
+              ControlStyles.OptimizedDoubleBuffer |
+              ControlStyles.AllPaintingInWmPaint, true);
+            UpdateStyles();
+        }
+    }
+
     //一个条目的描述器
     class ItemDiscriptor
     {
@@ -165,8 +176,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
             }
 
             /////////2.在ListView的显示端进行更新数据//////////
-            listView_showItems.Items.Clear();
-            listView_showItems.BeginUpdate();
+            doubleBufferListView.Items.Clear();
+            doubleBufferListView.BeginUpdate();
             foreach (var oneList in groupDateDictionary)
             {
                 //创建这个日期的 分组 listviewGroup
@@ -174,7 +185,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 curDateLVG.Header = oneList.Key;  //设置组的标题为当前日期。
                 curDateLVG.Name = oneList.Key;
                 curDateLVG.HeaderAlignment = HorizontalAlignment.Left;   //设置组标题文本的对齐方式。（默认为Left）
-                listView_showItems.Groups.Add(curDateLVG);   //把当前日期分组添加到listview中 
+                doubleBufferListView.Groups.Add(curDateLVG);   //把当前日期分组添加到listview中 
 
                 //然后遍历这个日期的List,对于每一个item创建listviewitem
                 foreach (var item in oneList.Value)
@@ -182,13 +193,13 @@ namespace BVDentalCareSystem.SelfDefinedControls
                     ListViewItem oneListViewItem = new ListViewItem();
                     oneListViewItem.ImageIndex = item.index;
                     oneListViewItem.Text = item.itemName;
-                    listView_showItems.Groups[oneList.Key].Items.Add(oneListViewItem);
-                    listView_showItems.Items.Add(oneListViewItem);
+                    doubleBufferListView.Groups[oneList.Key].Items.Add(oneListViewItem);
+                    doubleBufferListView.Items.Add(oneListViewItem);
                 }
             }
 
-            listView_showItems.LargeImageList = thumbnailImageList;
-            listView_showItems.EndUpdate();
+            doubleBufferListView.LargeImageList = thumbnailImageList;
+            doubleBufferListView.EndUpdate();
         }
 
 
@@ -203,17 +214,17 @@ namespace BVDentalCareSystem.SelfDefinedControls
             itemsList = new List<ItemDiscriptor>();  //创建图片,视频items的集合 
 
             //记得要设置ShowGroups属性为true（默认是false），否则显示不出分组 
-            listView_showItems.ShowGroups = true;
+            doubleBufferListView.ShowGroups = true;
         }
 
         //在listview上单击显示右键菜单
-        private void listView_showItems_MouseClick(object sender, MouseEventArgs e)
+        private void doubleBufferListView_MouseClick(object sender, MouseEventArgs e)
         {
-            listView_showItems.MultiSelect = false;
+            doubleBufferListView.MultiSelect = false;
             if (e.Button == MouseButtons.Right)
             {
                 Point p = new Point(e.X, e.Y);
-                contextMenuStrip_openImg.Show(listView_showItems, p);
+                contextMenuStrip_openImg.Show(doubleBufferListView, p);
             }
         }
     }
