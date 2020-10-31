@@ -14,6 +14,7 @@ namespace BVDentalCareSystem
 {
     public partial class MainForm : Form
     {
+        VideoPlayer vp = null;
         public MainForm()
         {
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace BVDentalCareSystem
 
         private void btn_oralView_Click(object sender, EventArgs e)
         {
-            VideoPlayer vp = new VideoPlayer();
+            vp = new VideoPlayer();
             vp.Parent = this.splitContainer.Panel2;
             vp.Location = new Point(0, panel_head.Height + 34);
             int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
@@ -70,5 +71,19 @@ namespace BVDentalCareSystem
             aboutWindow.Show();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (button1.Text == "录像")
+            {
+                vp.StartRecord("D://ttttt.avi");
+                button1.Text = "停止";
+            }
+            else
+            {
+                vp.FinishRecord();
+                button1.Text = "录像";
+
+            }
+        }
     }
 }

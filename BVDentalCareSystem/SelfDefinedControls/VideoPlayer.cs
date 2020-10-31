@@ -28,13 +28,14 @@ namespace BVDentalCareSystem.SelfDefinedControls
     {
         //private System.Windows.Forms.Timer timer;
         //private Stopwatch stopWatch = null;
-
+        private bool isRecording = false; //是否在录制
+        private VideoFileWriter aviWriter = null;
+        private DateTime? _firstFrameTime;
+        //private DateTime flickerDTime;
         public VideoPlayer()
         {
             InitializeComponent();
-            //timer = new Timer();
-            this.
-            this.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer_NewFrame);
+            this.NewFrame += new NewFrameHandler(this.videoSourcePlayer_NewFrame);
         }
 
         //打开本地的设备, MJPEG, 本地文件夹
@@ -58,6 +59,36 @@ namespace BVDentalCareSystem.SelfDefinedControls
             return true;
         }
 
+        public void StartRecord(string aviSavedFile)
+        {
+            _firstFrameTime = null;
+            aviWriter = new VideoFileWriter();
+            aviWriter.Open(aviSavedFile, 1280, 720, 25, VideoCodec.MPEG4, 4000 * 1000);
+            isRecording = true;
+            //flickerDTime = DateTime.Now;
+        }
+
+        public void FinishRecord()
+        {
+            isRecording = false;
+            aviWriter.Close();
+            aviWriter.Dispose();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private bool OpenLocalDevice(string deviceName)
         {
             bool isFindDevice = false;
@@ -77,6 +108,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             if (!isFindDevice)
                 return false;
             var videoSource = new VideoCaptureDevice(targetDeviceMonikerString);
+            //VideoCapabilities[] vc = videoSource.VideoCapabilities;
             OpenVideoSource(videoSource);
             return true;
         }
@@ -146,31 +178,33 @@ namespace BVDentalCareSystem.SelfDefinedControls
             }
         }
 
-        private void videoSourcePlayer_NewFrame(object sender, NewFrameEventArgs args)
+        private void videoSourcePlayer_NewFrame(object sender, ref Bitmap image)
         {
-            DateTime now = DateTime.Now;
-            Graphics g = Graphics.FromImage(args.Frame);
 
-            // paint current time
-            SolidBrush brush = new SolidBrush(Color.Red);
-            g.DrawString(now.ToString(), this.Font, brush, new PointF(5, 5));
-            brush.Dispose();
-
-            g.Dispose();
-
-
-            if (isNeedRecord)
+            if (isRecording)
             {
-                using (var bitmap = (Bitmap)args.Frame.Clone())
+                DateTime now = DateTime.Now;
+                Graphics g = Graphics.FromImage(image);
+
+                SolidBrush brush = new SolidBrush(Color.Red);
+                g.DrawString(now.ToString(), this.Font, brush, new PointF(30, 10)); //画当前时间
+                //if ((int)(now.Subtract(flickerDTime).TotalSeconds) == 3)
+                //{
+                //    g.FillRectangle(brush, new Rectangle(10, 10, 10, 10)); // 画闪烁的红色的实心方框
+                //    flickerDTime = now;
+                //}
+                brush.Dispose();
+                g.Dispose();
+
+                using (var bitmap = (Bitmap)image.Clone())
                 {
                     if (_firstFrameTime != null)
                     {
-                        //_writer.WriteVideoFrame(bitmap, DateTime.Now - _firstFrameTime.Value);
-                        _writer.WriteVideoFrame(bitmap);
+                        aviWriter.WriteVideoFrame(bitmap);
                     }
                     else
                     {
-                        _writer.WriteVideoFrame(bitmap);
+                        aviWriter.WriteVideoFrame(bitmap);
                         _firstFrameTime = DateTime.Now;
                     }
                 }

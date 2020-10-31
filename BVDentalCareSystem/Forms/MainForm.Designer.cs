@@ -38,11 +38,12 @@ namespace BVDentalCareSystem
             this.btn_patientInfo = new System.Windows.Forms.Button();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel_seperate = new System.Windows.Forms.Panel();
-            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             this.panel_head = new System.Windows.Forms.Panel();
             this.panel_about = new System.Windows.Forms.Panel();
             this.panel_help = new System.Windows.Forms.Panel();
             this.panel_platformName = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
+            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -61,6 +62,7 @@ namespace BVDentalCareSystem
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.splitContainer.Panel1.Controls.Add(this.button1);
             this.splitContainer.Panel1.Controls.Add(this.pictureBox_logo);
             this.splitContainer.Panel1.Controls.Add(this.btn_exit);
             this.splitContainer.Panel1.Controls.Add(this.btn_oralView);
@@ -167,16 +169,6 @@ namespace BVDentalCareSystem
             this.panel_seperate.Size = new System.Drawing.Size(1290, 30);
             this.panel_seperate.TabIndex = 4;
             // 
-            // imageVideoBrowserSideBar
-            // 
-            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
-            this.imageVideoBrowserSideBar.dataPath = null;
-            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1290, 96);
-            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
-            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
-            this.imageVideoBrowserSideBar.TabIndex = 3;
-            // 
             // panel_head
             // 
             this.panel_head.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.headBackgroundBar;
@@ -222,6 +214,26 @@ namespace BVDentalCareSystem
             this.panel_platformName.Size = new System.Drawing.Size(475, 36);
             this.panel_platformName.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(92, 758);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 67;
+            this.button1.Text = "录像";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // imageVideoBrowserSideBar
+            // 
+            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
+            this.imageVideoBrowserSideBar.dataPath = null;
+            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1290, 96);
+            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
+            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
+            this.imageVideoBrowserSideBar.TabIndex = 3;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -257,6 +269,7 @@ namespace BVDentalCareSystem
         private SelfDefinedControls.ImageVideoBrowserSideBar imageVideoBrowserSideBar;
         private System.Windows.Forms.Panel panel_bottom;
         private System.Windows.Forms.Panel panel_seperate;
+        private System.Windows.Forms.Button button1;
     }
 }
 
