@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BVDentalCareSystem.SelfDefinedControls;
 
 namespace BVDentalCareSystem
 {
@@ -36,12 +37,19 @@ namespace BVDentalCareSystem
 
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         private void btn_oralView_Click(object sender, EventArgs e)
         {
-
+            VideoPlayer vp = new VideoPlayer();
+            vp.Parent = this.splitContainer.Panel2;
+            vp.Location = new Point(0, panel_head.Height + 34);
+            int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+            int h = w * 720 / 1280;
+            vp.Size = new Size(w, h);
+            vp.PlayVideo("SKT-OL400C-13A");
+            this.splitContainer.Panel2.Controls.Add(vp);
         }
 
         private void btn_exit_Click(object sender, EventArgs e)

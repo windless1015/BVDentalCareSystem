@@ -150,6 +150,12 @@
     <Compile Include="SelfDefinedControls\ImageVideoBrowserSideBar.Designer.cs">
       <DependentUpon>ImageVideoBrowserSideBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelfDefinedControls\VideoPlayer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SelfDefinedControls\VideoPlayer.Designer.cs">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -177,6 +183,9 @@
     </Compile>
     <EmbeddedResource Include="SelfDefinedControls\ImageVideoBrowserSideBar.resx">
       <DependentUpon>ImageVideoBrowserSideBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelfDefinedControls\VideoPlayer.resx">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
