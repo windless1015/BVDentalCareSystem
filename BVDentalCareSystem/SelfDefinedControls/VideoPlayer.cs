@@ -38,6 +38,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             InitializeComponent();
             this.NewFrame += new NewFrameHandler(this.videoSourcePlayer_NewFrame);
             doubleClickChangeSize = false;
+            this.KeepAspectRatio = true;
         }
 
         //打开本地的设备, MJPEG, 本地文件夹
@@ -78,15 +79,19 @@ namespace BVDentalCareSystem.SelfDefinedControls
             aviWriter.Dispose();
         }
 
-        public void TakeSnapshot(string file)
+        public Bitmap TakeSnapshot(string file, bool isNeedReturenSnapshot)
         {
             Bitmap singleFrame = this.GetCurrentVideoFrame();
             singleFrame.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+            if (isNeedReturenSnapshot)
+                return singleFrame;
+            else
+                return null;
         }
 
         public void PauseVideo()
         {
-            this.Stop();
+            this.SignalToStop();
         }
 
         public void ReStartVideo()

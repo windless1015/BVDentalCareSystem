@@ -14,7 +14,9 @@ namespace BVDentalCareSystem
 {
     public partial class MainForm : Form
     {
-        VideoPlayer vp = null;
+        VideoPlayer videoPlayer = null;
+        Accord.Controls.PictureBox picBox = null;
+        
         public MainForm()
         {
             InitializeComponent();
@@ -43,15 +45,15 @@ namespace BVDentalCareSystem
 
         private void btn_oralView_Click(object sender, EventArgs e)
         {
-            vp = new VideoPlayer();
-            vp.Parent = this.splitContainer.Panel2;
-            vp.Location = new Point(0, panel_head.Height + 34);
+            videoPlayer = new VideoPlayer();
+            videoPlayer.Parent = this.splitContainer.Panel2;
+            videoPlayer.Location = new Point(0, panel_head.Height + 34);
             int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
             int h = w * 720 / 1280;
-            vp.Size = new Size(w, h);
-            vp.PlayVideo("SKT-OL400C-13A");
+            videoPlayer.Size = new Size(w, h);
+            videoPlayer.PlayVideo("SKT-OL400C-13A");
             //vp.PlayVideo("http://10.10.10.254:8080");
-            this.splitContainer.Panel2.Controls.Add(vp);
+            this.splitContainer.Panel2.Controls.Add(videoPlayer);
         }
 
         private void btn_exit_Click(object sender, EventArgs e)
@@ -76,12 +78,12 @@ namespace BVDentalCareSystem
         {
             if (button1.Text == "录像")
             {
-                vp.StartRecord("D://ttttt.avi");
+                videoPlayer.StartRecord("D://ttttt.avi");
                 button1.Text = "停止";
             }
             else
             {
-                vp.FinishRecord();
+                videoPlayer.FinishRecord();
                 button1.Text = "录像";
 
             }
@@ -89,7 +91,35 @@ namespace BVDentalCareSystem
 
         private void button2_Click(object sender, EventArgs e)
         {
-            vp.TakeSnapshot("D:/snapshot.jpg");
+            //进行视频流播放和截图显示之间的切换
+            if (picBox == null)
+            {
+                string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                //1. 主窗口移除掉videoPlayer这个控件，添加pictureBox控件
+                Bitmap snapShotImg = videoPlayer.TakeSnapshot(@"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟_1_2020-07-22\" + dateTime + ".jpg", true);
+                this.splitContainer.Panel2.Controls.Remove(videoPlayer);
+                //2. 重新排序
+                imageVideoBrowserSideBar.SortOrderByTimeDescend();
+                imageVideoBrowserSideBar.GroupItemByDate();
+
+                //3.创建显示的pictureBox
+                picBox = new Accord.Controls.PictureBox();
+                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                int h = w * 720 / 1280;
+                picBox.Location = new Point(0, panel_head.Height + 34);
+                picBox.Size = new Size(w, h);
+                picBox.Image = snapShotImg;
+                picBox.Show();
+                this.splitContainer.Panel2.Controls.Add(picBox);
+            }
+            else  //这时候picBox 已经实例化了，那么需要dispose, 重新恢复视频的播放
+            {
+                //1.清除pictureBox
+                picBox.Dispose();
+                picBox = null;
+                //2.重新把视频播放器add进来
+                this.splitContainer.Panel2.Controls.Add(videoPlayer);
+            }
         }
     }
 }

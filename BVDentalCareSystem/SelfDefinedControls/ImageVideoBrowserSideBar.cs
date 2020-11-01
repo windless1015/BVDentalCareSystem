@@ -133,6 +133,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             DirectoryInfo dirInfo = new DirectoryInfo(dataPath);
             if (!dirInfo.Exists)
                 return;
+            itemsList.Clear();
             //只保留avi和jpg后缀的
             var fileArray = Directory.EnumerateFiles(dataPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".avi") || s.EndsWith(".jpg"));
             foreach (string currentFile in fileArray)
