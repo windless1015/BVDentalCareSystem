@@ -50,6 +50,7 @@ namespace BVDentalCareSystem
             int h = w * 720 / 1280;
             vp.Size = new Size(w, h);
             vp.PlayVideo("SKT-OL400C-13A");
+            //vp.PlayVideo("http://10.10.10.254:8080");
             this.splitContainer.Panel2.Controls.Add(vp);
         }
 
@@ -84,6 +85,11 @@ namespace BVDentalCareSystem
                 button1.Text = "录像";
 
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            vp.TakeSnapshot("D:/snapshot.jpg");
         }
     }
 }

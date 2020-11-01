@@ -26,16 +26,18 @@ namespace BVDentalCareSystem.SelfDefinedControls
     //继承Accord.Controls.VideoSourcePlayer， 增加录像，截图等功能
     public partial class VideoPlayer :  VideoSourcePlayer
     {
-        //private System.Windows.Forms.Timer timer;
-        //private Stopwatch stopWatch = null;
+        public bool doubleClickChangeSize { get; set; } //双击改变窗口size
+
         private bool isRecording = false; //是否在录制
         private VideoFileWriter aviWriter = null;
-        private DateTime? _firstFrameTime;
-        //private DateTime flickerDTime;
+        private DateTime? _firstFrameTime = null;
+        private Size frameSize; //帧的size
+
         public VideoPlayer()
         {
             InitializeComponent();
             this.NewFrame += new NewFrameHandler(this.videoSourcePlayer_NewFrame);
+            doubleClickChangeSize = false;
         }
 
         //打开本地的设备, MJPEG, 本地文件夹
@@ -47,10 +49,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
             else if (vt == VideoType.LOCAL_DEVICE)
             {
                 OpenLocalDevice(inputStr);
+                frameSize = new Size(1280, 720);
             }
             else if (vt == VideoType.MJPEG)
             {
                 OpenMJPEGDevice(inputStr);
+                frameSize = new Size(640, 480);
             }
             else if (vt == VideoType.VIDEO_FILE)
             {
@@ -63,9 +67,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             _firstFrameTime = null;
             aviWriter = new VideoFileWriter();
-            aviWriter.Open(aviSavedFile, 1280, 720, 25, VideoCodec.MPEG4, 4000 * 1000);
+            aviWriter.Open(aviSavedFile, frameSize.Width, frameSize.Height, 25, VideoCodec.MPEG4, 4000 * 1000);
             isRecording = true;
-            //flickerDTime = DateTime.Now;
         }
 
         public void FinishRecord()
@@ -75,18 +78,21 @@ namespace BVDentalCareSystem.SelfDefinedControls
             aviWriter.Dispose();
         }
 
+        public void TakeSnapshot(string file)
+        {
+            Bitmap singleFrame = this.GetCurrentVideoFrame();
+            singleFrame.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
 
+        public void PauseVideo()
+        {
+            this.Stop();
+        }
 
-
-
-
-
-
-
-
-
-
-
+        public void ReStartVideo()
+        {
+            this.Start();
+        }
 
 
         private bool OpenLocalDevice(string deviceName)
@@ -115,10 +121,10 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private bool OpenMJPEGDevice(string ip)
         {
-            bool isPingOk = PingTest();
+            bool isPingOk = PingTest(ref ip);
             if (!isPingOk)
                 return false;
-            MJPEGStream mjpegSource = new MJPEGStream("http://10.10.10.254:8080");
+            MJPEGStream mjpegSource = new MJPEGStream(ip);
             OpenVideoSource(mjpegSource);
             return true;
         }
@@ -135,24 +141,13 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //打开视频
         private void OpenVideoSource(IVideoSource source)
         {
-            // set busy cursor
             this.Cursor = Cursors.WaitCursor;
-
-            // stop current video source
             CloseCurrentVideoSource();
 
-            // start new video source
             this.VideoSource = source;
             this.Start();
 
-            // reset stop watch
-            //stopWatch = null;
-
-            // start timer
-           // timer.Start();
-
             this.Cursor = Cursors.Default;
-
         }
 
         private void CloseCurrentVideoSource()
@@ -161,7 +156,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
             {
                 this.SignalToStop();
 
-                // wait ~ 3 seconds
                 for (int i = 0; i < 30; i++)
                 {
                     if (!this.IsRunning)
@@ -180,7 +174,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private void videoSourcePlayer_NewFrame(object sender, ref Bitmap image)
         {
-
             if (isRecording)
             {
                 DateTime now = DateTime.Now;
@@ -213,8 +206,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         }
 
-
-        public bool PingTest()
+        public bool PingTest(ref string ip)
         {
             System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
             System.Net.NetworkInformation.PingReply pingStatus =
@@ -270,6 +262,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 return VideoType.UNKNOWN;
         }
 
-
+        private void VideoPlayer_DoubleClick(object sender, EventArgs e)
+        {
+            if (!doubleClickChangeSize)
+                return;
+            //this.ClientRectangle
+            this.Size = new Size(800, 800);
+        }
     }
 }
