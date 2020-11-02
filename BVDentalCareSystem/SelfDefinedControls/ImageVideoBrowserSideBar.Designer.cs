@@ -51,18 +51,21 @@
             this.openImgContainingFolderToolStripMenuItem.Name = "openImgContainingFolderToolStripMenuItem";
             this.openImgContainingFolderToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openImgContainingFolderToolStripMenuItem.Text = "打开所在目录";
+            this.openImgContainingFolderToolStripMenuItem.Click += new System.EventHandler(this.openImgContainingFolderToolStripMenuItem_Click);
             // 
             // openImgToolStripMenuItem
             // 
             this.openImgToolStripMenuItem.Name = "openImgToolStripMenuItem";
             this.openImgToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.openImgToolStripMenuItem.Text = "打开图片";
+            this.openImgToolStripMenuItem.Click += new System.EventHandler(this.openImgToolStripMenuItem_Click);
             // 
             // delCurImgToolStripMenuItem
             // 
             this.delCurImgToolStripMenuItem.Name = "delCurImgToolStripMenuItem";
             this.delCurImgToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.delCurImgToolStripMenuItem.Text = "删除本图片";
+            this.delCurImgToolStripMenuItem.Click += new System.EventHandler(this.delCurImgToolStripMenuItem_Click);
             // 
             // doubleBufferListView
             // 
@@ -74,6 +77,7 @@
             this.doubleBufferListView.TabIndex = 1;
             this.doubleBufferListView.UseCompatibleStateImageBehavior = false;
             this.doubleBufferListView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.doubleBufferListView_MouseClick);
+            this.doubleBufferListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.doubleBufferListView_DBMouseClick);
             // 
             // ImageVideoBrowserSideBar
             // 

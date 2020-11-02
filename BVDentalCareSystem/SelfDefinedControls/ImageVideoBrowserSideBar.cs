@@ -122,7 +122,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //声明事件,用户双击一个item触发显示这个item的.
         public event DeleteImgNotifyHandler DeleteImgNotify;
 
-        public delegate void DoubleClickOpenItemNotifyHandler();
+        public delegate void DoubleClickOpenItemNotifyHandler(string itemPath);
         //声明双击打开一个Item（图片，视频）
         public event DoubleClickOpenItemNotifyHandler DBClickOpenItemNotify;
 
@@ -153,6 +153,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             //此时默认list是降序排列的,遍历一次list即可完成所有的日期的分组
             DateTime traverseDt = itemsList.First().itemCreationTime; //把每一个日期和这个进行比较,不同就新创建一个日期
             int itemIdx = 0;
+            thumbnailImageList.Images.Clear();
             foreach (var item in itemsList)
             {
                 item.index = itemIdx++;
@@ -194,6 +195,11 @@ namespace BVDentalCareSystem.SelfDefinedControls
                     ListViewItem oneListViewItem = new ListViewItem();
                     oneListViewItem.ImageIndex = item.index;
                     oneListViewItem.Text = item.itemName;
+                    //写入文件完成的路径
+                    oneListViewItem.SubItems.Add(item.itemPath);
+                    //string fileType = item.itemName.Substring(item.itemName.LastIndexOf("."));//写入图片格式, .jpg
+                    //oneListViewItem.SubItems.Add(fileType);
+
                     doubleBufferListView.Groups[oneList.Key].Items.Add(oneListViewItem);
                     doubleBufferListView.Items.Add(oneListViewItem);
                 }
@@ -228,5 +234,87 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 contextMenuStrip_openImg.Show(doubleBufferListView, p);
             }
         }
+
+        //双击打开相关的item
+        private void doubleBufferListView_DBMouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right) //右键双击返回，必须要左键双击
+                return;
+            ListViewHitTestInfo itemInfo = doubleBufferListView.HitTest(e.X, e.Y);
+            if (itemInfo.Item != null)
+            {
+                //string fileName = itemInfo.Item.SubItems[0].Text; //文件名
+                string fileAbsPath = itemInfo.Item.SubItems[1].Text; //文件完整路径
+                //string fileType = itemInfo.Item.SubItems[2].Text; //文件类型
+
+                DBClickOpenItemNotify(fileAbsPath); //向外界传递双击打开图片的消息
+
+            }
+        }
+
+
+        //右键打开所在目录
+        private void openImgContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (doubleBufferListView.SelectedItems.Count == 0)
+                return;
+            try
+            {
+                System.Diagnostics.Process.Start(dataPath);
+            }
+            catch (Exception msg) //异常处理
+            {
+                MessageBox.Show(msg.Message);
+            }
+
+        }
+
+        //打开文件
+        private void openImgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (doubleBufferListView.SelectedItems.Count == 0)
+                return;
+            string fullPath = dataPath + @"/" + doubleBufferListView.SelectedItems[0].Text; //获取选中文件名
+            try
+            {
+                //实例化一个新的Process类 命名空间using System.Diagnostics;
+                using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+                {
+                    p.StartInfo.FileName = fullPath; //指定要启动的文件路径
+                    p.StartInfo.CreateNoWindow = false; //在当前窗口启动程序
+                    p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal; //指定窗口的显示样式
+                    p.StartInfo.UseShellExecute = true; //使用操作系统的shell启动进程
+                    p.Start(); //开始打开文件
+                }
+            }
+            catch (Exception msg) //异常处理
+            {
+                MessageBox.Show(msg.Message);
+            }
+        }
+
+        //删除当前图片
+        private void delCurImgToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (doubleBufferListView.SelectedItems.Count == 0)
+                return;
+            string filePath = dataPath + @"/" + doubleBufferListView.SelectedItems[0].Text; //获取选中文件名
+            try
+            {
+                ////删除文件，送入recycle bin，调用的是visual basic的接口
+                ////Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullPath, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                ////    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                File.Delete(filePath);
+                //需要向外界发送信息，不然外界的数据就会混乱
+                //DeleteImgNotify();
+            }
+            catch (Exception msg) //异常处理
+            {
+                MessageBox.Show(msg.Message);
+            }
+}
+
+
+
     }
 }

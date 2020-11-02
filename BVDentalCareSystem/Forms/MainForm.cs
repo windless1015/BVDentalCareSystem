@@ -24,6 +24,9 @@ namespace BVDentalCareSystem
             //imageVideoBrowserSideBar.dataPath = @"F:\projects\Bangvo\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟1_1_2020-03-16";
             imageVideoBrowserSideBar.SortOrderByTimeDescend();
             imageVideoBrowserSideBar.GroupItemByDate();
+
+            imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
+
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
@@ -103,14 +106,7 @@ namespace BVDentalCareSystem
                 imageVideoBrowserSideBar.GroupItemByDate();
 
                 //3.创建显示的pictureBox
-                picBox = new Accord.Controls.PictureBox();
-                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-                int h = w * 720 / 1280;
-                picBox.Location = new Point(0, panel_head.Height + 34);
-                picBox.Size = new Size(w, h);
-                picBox.Image = snapShotImg;
-                picBox.Show();
-                this.splitContainer.Panel2.Controls.Add(picBox);
+                DisplayJPEGImage(ref snapShotImg);
             }
             else  //这时候picBox 已经实例化了，那么需要dispose, 重新恢复视频的播放
             {
@@ -121,5 +117,71 @@ namespace BVDentalCareSystem
                 this.splitContainer.Panel2.Controls.Add(videoPlayer);
             }
         }
+
+        private void DisplayJPEGImage(ref Bitmap snapShot)
+        {
+            picBox = new Accord.Controls.PictureBox();
+            int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+            int h = w * 720 / 1280;
+            picBox.Location = new Point(0, panel_head.Height + 34);
+            picBox.Size = new Size(w, h);
+            picBox.Image = snapShot;
+            picBox.Show();
+            this.splitContainer.Panel2.Controls.Add(picBox);
+        }
+
+        private void DoubleClickOpenProcessing(string itemPath)
+        {
+            //先判断是否有别的控件
+            string fileType = itemPath.Substring(itemPath.LastIndexOf("."));//写入图片格式, .jpg
+            if (fileType == ".jpg")
+            {
+                if (this.splitContainer.Panel2.Controls.Contains(videoPlayer))
+                {
+                    this.splitContainer.Panel2.Controls.Remove(videoPlayer);
+                }
+
+                if (picBox != null)
+                {
+                    picBox.Dispose();
+                    picBox = null;
+                }
+
+                picBox = new Accord.Controls.PictureBox();
+                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                int h = w * 720 / 1280;
+                picBox.Location = new Point(0, panel_head.Height + 34);
+                picBox.Size = new Size(w, h);
+                picBox.Image = (Bitmap)Image.FromFile(itemPath);
+                picBox.Show();
+                this.splitContainer.Panel2.Controls.Add(picBox);
+            }
+            else if (fileType == ".avi")
+            {
+                if (this.splitContainer.Panel2.Controls.Contains(picBox))
+                {
+                    this.splitContainer.Panel2.Controls.Remove(picBox);
+                }
+                if (videoPlayer != null)
+                {
+                    videoPlayer.Dispose();
+                    videoPlayer = null;
+                }
+
+                videoPlayer = new VideoPlayer();
+                videoPlayer.Parent = this.splitContainer.Panel2;
+                videoPlayer.Location = new Point(0, panel_head.Height + 34);
+                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                int h = w * 720 / 1280;
+                videoPlayer.Size = new Size(w, h);
+                videoPlayer.PlayVideo(itemPath);
+                this.splitContainer.Panel2.Controls.Add(videoPlayer);
+            }
+
+
+
+            
+        }
+
     }
 }
