@@ -16,7 +16,7 @@ namespace BVDentalCareSystem
     {
         VideoPlayer videoPlayer = null;
         Accord.Controls.PictureBox picBox = null;
-        
+        string displayImageAbsPath = null;
         public MainForm()
         {
             InitializeComponent();
@@ -121,6 +121,7 @@ namespace BVDentalCareSystem
         private void DisplayJPEGImage(ref Bitmap snapShot)
         {
             picBox = new Accord.Controls.PictureBox();
+            picBox.MouseDoubleClick += PicBox_MouseDoubleClick;
             int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
             int h = w * 720 / 1280;
             picBox.Location = new Point(0, panel_head.Height + 34);
@@ -128,6 +129,23 @@ namespace BVDentalCareSystem
             picBox.Image = snapShot;
             picBox.Show();
             this.splitContainer.Panel2.Controls.Add(picBox);
+        }
+
+        //双击全屏显式
+        private void PicBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            //private ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
+            //                                 //绑定图片窗口关闭的事件
+            //imgBrowser.CloseFormNotify += new ImageBrowser.CloseThisFormHandle(SubFormCloseEvent);
+            //imgBrowser.curImageAbsPath = fileAbsPath;
+            //string dataPath = fileAbsPath.Substring(0, fileAbsPath.LastIndexOf(@"\"));
+            //imgBrowser.curDataAbsPath = dataPath;
+            //imgBrowser.Show();
+
+            ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
+            imgBrowser.curImageAbsPath = displayImageAbsPath;
+            imgBrowser.curDataAbsPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟_1_2020-07-22";
+            imgBrowser.Show();
         }
 
         private void DoubleClickOpenProcessing(string itemPath)
@@ -148,6 +166,7 @@ namespace BVDentalCareSystem
                 }
 
                 picBox = new Accord.Controls.PictureBox();
+                picBox.MouseDoubleClick += PicBox_MouseDoubleClick;
                 int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
                 int h = w * 720 / 1280;
                 picBox.Location = new Point(0, panel_head.Height + 34);
@@ -155,6 +174,7 @@ namespace BVDentalCareSystem
                 picBox.Image = (Bitmap)Image.FromFile(itemPath);
                 picBox.Show();
                 this.splitContainer.Panel2.Controls.Add(picBox);
+                displayImageAbsPath = itemPath;
             }
             else if (fileType == ".avi")
             {
