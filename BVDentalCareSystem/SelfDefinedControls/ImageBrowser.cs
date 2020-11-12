@@ -33,7 +33,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         private void btnImgBrwExit_Click(object sender, EventArgs e)
         {
             Close();
-            CloseFormNotify();
+            //CloseFormNotify();
         }
 
         private void btnImgBrsGoHead_Click(object sender, EventArgs e)
@@ -66,10 +66,22 @@ namespace BVDentalCareSystem.SelfDefinedControls
                     return a.CreationTime.CompareTo(b.CreationTime);
                 }));
             }
-
+            //加载当前图片
             if (curImageAbsPath != null)
             {
-                pictureBox.Load(curImageAbsPath);
+                //获取当前牙齿的大小
+                Image curImg = Image.FromFile(curImageAbsPath);
+                if (System.Math.Abs(curImg.Width - curImg.Height) < 20) //正方形
+                {
+                    pictureBox.ClientSize = new Size(1080, 1080);
+                }
+                else
+                {
+                    pictureBox.Location = new Point(0, 0);
+                    pictureBox.ClientSize = new Size(1920, 1080);
+                }
+                //pictureBox.Load(curImg);
+                pictureBox.Image = curImg;
             }
         }
 
@@ -131,5 +143,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
             }
         }
 
+        private void ImageBrowser_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

@@ -50,6 +50,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.btnImgBrsBack.Size = new System.Drawing.Size(80, 80);
             this.btnImgBrsBack.TabIndex = 3;
             this.btnImgBrsBack.UseVisualStyleBackColor = false;
+            this.btnImgBrsBack.Click += new System.EventHandler(this.btnImgBrsBack_Click);
             // 
             // btnImgBrsGoHead
             // 
@@ -64,6 +65,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.btnImgBrsGoHead.Size = new System.Drawing.Size(80, 80);
             this.btnImgBrsGoHead.TabIndex = 2;
             this.btnImgBrsGoHead.UseVisualStyleBackColor = false;
+            this.btnImgBrsGoHead.Click += new System.EventHandler(this.btnImgBrsGoHead_Click);
             // 
             // btnImgBrwExit
             // 
@@ -78,6 +80,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.btnImgBrwExit.Size = new System.Drawing.Size(80, 80);
             this.btnImgBrwExit.TabIndex = 1;
             this.btnImgBrwExit.UseVisualStyleBackColor = false;
+            this.btnImgBrwExit.Click += new System.EventHandler(this.btnImgBrwExit_Click);
             // 
             // pictureBox
             // 
@@ -102,6 +105,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.Name = "ImageBrowser";
             this.Text = "ImageBrowser";
             this.Load += new System.EventHandler(this.ImageBrowser_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ImageBrowser_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
