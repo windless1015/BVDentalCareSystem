@@ -74,6 +74,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.btnImgBrwExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnImgBrwExit.FlatAppearance.BorderSize = 0;
             this.btnImgBrwExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImgBrwExit.ForeColor = System.Drawing.Color.Transparent;
             this.btnImgBrwExit.Location = new System.Drawing.Point(50, 50);
             this.btnImgBrwExit.Margin = new System.Windows.Forms.Padding(2);
             this.btnImgBrwExit.Name = "btnImgBrwExit";

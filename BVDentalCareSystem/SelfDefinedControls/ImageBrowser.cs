@@ -28,6 +28,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
+            btnImgBrwExit.BringToFront();
+            btnImgBrsBack.BringToFront();
+            btnImgBrsGoHead.BringToFront();
         }
 
         private void btnImgBrwExit_Click(object sender, EventArgs e)
@@ -38,18 +41,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private void btnImgBrsGoHead_Click(object sender, EventArgs e)
         {
-            //寻找比当前文件创建时间晚的第一个文件
-            string nextPath = FindNeighborhoodImage(ref curImageAbsPath, true);
-            curImageAbsPath = nextPath;
-            pictureBox.Load(curImageAbsPath);
+            ShowCurImage(true);
         }
 
         private void btnImgBrsBack_Click(object sender, EventArgs e)
         {
-            //寻找比当前文件创建时间早的第一个文件
-            string prevPath = FindNeighborhoodImage(ref curImageAbsPath, false);
-            curImageAbsPath = prevPath;
-            pictureBox.Load(curImageAbsPath);
+            ShowCurImage(false);
         }
 
         private void ImageBrowser_Load(object sender, EventArgs e)
@@ -80,9 +77,28 @@ namespace BVDentalCareSystem.SelfDefinedControls
                     pictureBox.Location = new Point(0, 0);
                     pictureBox.ClientSize = new Size(1920, 1080);
                 }
-                //pictureBox.Load(curImg);
                 pictureBox.Image = curImg;
             }
+        }
+
+        private void ShowCurImage(bool isNext)
+        {
+            //寻找比当前文件创建时间早的第一个文件
+            string prevPath = FindNeighborhoodImage(ref curImageAbsPath, isNext);
+            curImageAbsPath = prevPath;
+
+            Image curImg = Image.FromFile(curImageAbsPath);
+            if (System.Math.Abs(curImg.Width - curImg.Height) < 20) //正方形
+            {
+                pictureBox.Location = new Point(1920 / 2, 0);
+                pictureBox.ClientSize = new Size(1080, 1080);
+            }
+            else
+            {
+                pictureBox.Location = new Point(0, 0);
+                pictureBox.ClientSize = new Size(1920, 1080);
+            }
+            pictureBox.Image = curImg;
         }
 
         private string FindNeighborhoodImage(ref string curFilePath, bool isNext)
