@@ -32,6 +32,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
         private VideoFileWriter aviWriter = null;
         private DateTime? _firstFrameTime = null;
         private Size frameSize; //帧的size
+        private VideoType vt;
+        private string inputString = null;
 
         public VideoPlayer()
         {
@@ -44,7 +46,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //打开本地的设备, MJPEG, 本地文件夹
         public bool PlayVideo(string inputStr)
         {
-            VideoType vt = CheckVideoType(inputStr);
+            inputString = inputStr;
+            vt = CheckVideoType(inputStr);
             if (vt == VideoType.UNKNOWN)
                 return false;
             else if (vt == VideoType.LOCAL_DEVICE)
@@ -267,12 +270,22 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 return VideoType.UNKNOWN;
         }
 
-        private void VideoPlayer_DoubleClick(object sender, EventArgs e)
+
+        //双击播放器区域
+        private void VideoPlayer_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (!doubleClickChangeSize)
-                return;
+            //只有当在播放本地文件的时候，双击才有用
+            //if (!doubleClickChangeSize)
+            //    return;
+            if (vt == VideoType.VIDEO_FILE)
+            {
+                VideoPlayerForm vpf = new VideoPlayerForm();
+                vpf.StartPlayVideoFile(ref inputString);
+                vpf.Show();
+            }
+            
             //this.ClientRectangle
-            this.Size = new Size(800, 800);
+            //this.Size = new Size(800, 800);
         }
     }
 }

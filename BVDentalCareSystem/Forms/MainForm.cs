@@ -131,7 +131,7 @@ namespace BVDentalCareSystem
             this.splitContainer.Panel2.Controls.Add(picBox);
         }
 
-        //双击全屏显式
+        //双击图片全屏显式
         private void PicBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             //private ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
@@ -147,6 +147,9 @@ namespace BVDentalCareSystem
             imgBrowser.curDataAbsPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟_1_2020-07-22";
             imgBrowser.Show();
         }
+
+        //private void 
+
 
         private void DoubleClickOpenProcessing(string itemPath)
         {

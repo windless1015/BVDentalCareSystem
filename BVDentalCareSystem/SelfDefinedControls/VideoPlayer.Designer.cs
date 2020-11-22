@@ -33,10 +33,12 @@
             // VideoPlayer
             // 
             this.Size = new System.Drawing.Size(493, 494);
-            this.DoubleClick += new System.EventHandler(this.VideoPlayer_DoubleClick);
+            //this.DoubleClick += new System.EventHandler(this.VideoPlayer_DoubleClick);
             this.ResumeLayout(false);
-
+            //this.MouseDoubleClick += new System.MouseEventHandler(this.VideoPlayer_MouseDoubleClick);
+            this.MouseDoubleClick += VideoPlayer_MouseDoubleClick;
         }
+
 
         #endregion
     }
