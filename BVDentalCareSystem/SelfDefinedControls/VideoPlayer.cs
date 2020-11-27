@@ -28,7 +28,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
     {
         public bool doubleClickChangeSize { get; set; } //双击改变窗口size
 
-        private bool isRecording = false; //是否在录制
+        public bool isRecording = false; //是否在录制
+        public bool isPlaying = false; //是否正在播放
         private VideoFileWriter aviWriter = null;
         private DateTime? _firstFrameTime = null;
         private Size frameSize; //帧的size
@@ -54,11 +55,13 @@ namespace BVDentalCareSystem.SelfDefinedControls
             {
                 OpenLocalDevice(inputStr);
                 frameSize = new Size(1280, 720);
+                isPlaying = true;
             }
             else if (vt == VideoType.MJPEG)
             {
                 OpenMJPEGDevice(inputStr);
                 frameSize = new Size(640, 480);
+                isPlaying = true;
             }
             else if (vt == VideoType.VIDEO_FILE)
             {
@@ -178,6 +181,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
                 this.VideoSource = null;
             }
+            isPlaying = false;
         }
 
         private void videoSourcePlayer_NewFrame(object sender, ref Bitmap image)
@@ -279,8 +283,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
             //    return;
             if (vt == VideoType.VIDEO_FILE)
             {
+                CloseCurrentVideoSource();
                 VideoPlayerForm vpf = new VideoPlayerForm();
-                vpf.StartPlayVideoFile(ref inputString);
+               vpf.StartPlayVideoFile(ref inputString);
                 vpf.Show();
             }
             

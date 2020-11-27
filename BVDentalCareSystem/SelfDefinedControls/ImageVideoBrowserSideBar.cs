@@ -150,6 +150,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
             ///////1. 在数据逻辑端更新数据////////
             //key是日期字符串, value是这个日期对应的list
             Dictionary<string, List<ItemDiscriptor>> groupDateDictionary = new Dictionary<string, List<ItemDiscriptor>>();
+            if (itemsList.Count == 0)
+                return;
             //此时默认list是降序排列的,遍历一次list即可完成所有的日期的分组
             DateTime traverseDt = itemsList.First().itemCreationTime; //把每一个日期和这个进行比较,不同就新创建一个日期
             int itemIdx = 0;

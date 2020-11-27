@@ -13,7 +13,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 {
     public partial class VideoPlayerForm : Form
     {
-        private Video video;
+        private Video video = null;
 
         public VideoPlayerForm()
         {
@@ -54,14 +54,16 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         public void StartPlayVideoFile(ref string videoFile)
         {
-            if (video != null)
-            {
-                video.Dispose();
-                video = null;
-            }
-            video = new Video(videoFile, false);
-            video.Owner = playPanel;
-            video.Play();
+            //int a = 1;
+            //if (video != null)
+            //{
+            //    video.Dispose();
+            //    video = null;
+            //}
+            //video = new Video(videoFile, false);
+            //video.Owner = playPanel;
+            //video.Play();
+
         }
 
     }

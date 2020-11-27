@@ -98,6 +98,9 @@
     <Reference Include="Accord.Vision, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Vision.3.8.0\lib\net45\Accord.Vision.dll</HintPath>
     </Reference>
+    <Reference Include="LibUsbDotNet.LibUsbDotNet, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c677239abe1e02a9, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibUsbDotNet.2.2.29\lib\net45\LibUsbDotNet.LibUsbDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DirectX_VideoPlayer_DLL\Microsoft.DirectX.dll</HintPath>
@@ -122,6 +125,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandParse\SerialPortHelper.cs" />
+    <Compile Include="CommandParse\StringOperator.cs" />
+    <Compile Include="CommandParse\USBHelper.cs" />
     <Compile Include="Forms\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -281,6 +287,10 @@
     <Content Include="ProductLogo.ico" />
     <Content Include="Resources\backWard.png" />
     <Content Include="Resources\forward.png" />
+    <None Include="Resources\recordStop.png" />
+    <None Include="Resources\returnPreview.png" />
+    <None Include="Resources\record.png" />
+    <None Include="Resources\takePhoto.png" />
     <None Include="Resources\playVideoResume.png" />
     <None Include="Resources\playVideoPause.png" />
     <Content Include="Resources\quit.png" />
