@@ -54,7 +54,15 @@ namespace BVDentalCareSystem.SelfDefinedControls
             else if (vt == VideoType.LOCAL_DEVICE)
             {
                 OpenLocalDevice(inputStr);
-                frameSize = new Size(1280, 720);
+                //还要判断是是哪个设备
+                if (inputStr == "BV USB Camera")
+                {
+                    frameSize = new Size(400, 400);
+                }
+                else
+                {
+                    frameSize = new Size(1280, 720);
+                }
                 isPlaying = true;
             }
             else if (vt == VideoType.MJPEG)
@@ -125,7 +133,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
             if (!isFindDevice)
                 return false;
             var videoSource = new VideoCaptureDevice(targetDeviceMonikerString);
-            //VideoCapabilities[] vc = videoSource.VideoCapabilities;
             OpenVideoSource(videoSource);
             return true;
         }
@@ -285,7 +292,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             {
                 CloseCurrentVideoSource();
                 VideoPlayerForm vpf = new VideoPlayerForm();
-               vpf.StartPlayVideoFile(ref inputString);
+                vpf.StartPlayVideoFile(ref inputString);
                 vpf.Show();
             }
             

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BVDentalCareSystem.SelfDefinedControls;
 using System.IO;
+using BVDentalCareSystem.CommandParse;
+using Accord.Video.DirectShow;
 
 namespace BVDentalCareSystem
 {
@@ -47,41 +49,61 @@ namespace BVDentalCareSystem
         //牙周观察
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
-            return;
-            if (videoCamera != null)
-            {
-                videoCamera.Dispose();
-                videoCamera = null;
-            }
-            videoCamera = new VideoPlayer();
-            videoCamera.Parent = this.splitContainer.Panel2;
-            int horizontalOffset = (1280 - 720) / 2;
-            videoCamera.Location = new Point(horizontalOffset, panel_head.Height + 34);
-            int w = 720;
-            int h = 720;
-            videoCamera.Size = new Size(w, h);
-            videoCamera.PlayVideo("BV USB Camera");
-            this.splitContainer.Panel2.Controls.Add(videoCamera);
+            PressCameraButton(1);
         }
 
         //口腔观察
         private void btn_oralView_Click(object sender, EventArgs e)
         {
+            PressCameraButton(2);
+        }
+
+        //deviceType 为1表示牙周，2表示口腔
+        private void PressCameraButton( int deviceType)
+        {
+            if (!CheckDeviceAvailable(deviceType))
+            {
+                string caption = (deviceType == 1) ? "牙周观察仪不存在，请检查设备连接！":"口腔观察仪不存在，请检查设备连接！";
+                MessageBox.Show(caption, "连接设备出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (picBox != null)
+            {
+                picBox.Dispose();
+                picBox = null;
+                this.splitContainer.Panel2.Controls.Add(videoCamera);
+                return;
+            }
             if (videoCamera != null)
             {
+                this.splitContainer.Panel2.Controls.Remove(videoCamera);
+                videoCamera.SignalToStop();
                 videoCamera.Dispose();
                 videoCamera = null;
             }
             videoCamera = new VideoPlayer();
             videoCamera.Parent = this.splitContainer.Panel2;
-            videoCamera.Location = new Point(0, panel_head.Height + 34);
-            int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-            int h = w * 720 / 1280;
+            int w = 0, h = 0;
+            if (deviceType == 1)
+            {
+                w = 720;
+                h = 720;
+                videoCamera.Location = new Point((1280 - 720) / 2, panel_head.Height + 34);
+            }
+            else if (deviceType == 2)
+            {
+                w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                h = w * 720 / 1280;
+                videoCamera.Location = new Point(0, panel_head.Height + 34);
+            }
             videoCamera.Size = new Size(w, h);
-            videoCamera.PlayVideo("SKT-OL400C-13A");
+            string deviceName = (deviceType == 1) ? "BV USB Camera" : "SKT-OL400C-13A";
+            videoCamera.PlayVideo(deviceName);
             //vp.PlayVideo("http://10.10.10.254:8080");
             this.splitContainer.Panel2.Controls.Add(videoCamera);
+
         }
+
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
@@ -102,14 +124,26 @@ namespace BVDentalCareSystem
         }
 
 
-        private void DisplayJPEGImage(ref Bitmap snapShot)
+        //第二个参数是这个照片是来自于什么设备拍照的， 1表示口腔观察， 2表示牙周观察
+        private void DisplayJPEGImage(ref Bitmap snapShot, int imgFromDeviceType)
         {
             picBox = new Accord.Controls.PictureBox();
             picBox.MouseDoubleClick += PicBox_MouseDoubleClick;
-            int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-            int h = w * 720 / 1280;
-            picBox.Location = new Point(0, panel_head.Height + 34);
+            int w = 0, h = 0;
+            if (imgFromDeviceType == 2)
+            {
+                w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                h = w * 720 / 1280;
+                picBox.Location = new Point(0, panel_head.Height + 34);
+            }
+            else if(imgFromDeviceType == 1)
+            {
+                w = 720;
+                h = 720;
+                picBox.Location = new Point((1280 - 720) / 2, panel_head.Height + 34);
+            }
             picBox.Size = new Size(w, h);
+            picBox.SizeMode = PictureBoxSizeMode.StretchImage;
             picBox.Image = snapShot;
             picBox.Show();
             this.splitContainer.Panel2.Controls.Add(picBox);
@@ -151,11 +185,22 @@ namespace BVDentalCareSystem
 
                 picBox = new Accord.Controls.PictureBox();
                 picBox.MouseDoubleClick += PicBox_MouseDoubleClick;
-                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-                int h = w * 720 / 1280;
-                picBox.Location = new Point(0, panel_head.Height + 34);
-                picBox.Size = new Size(w, h);
                 picBox.Image = (Bitmap)Image.FromFile(itemPath);
+                int w = 0, h = 0;
+                if (picBox.Image.Width == picBox.Image.Height) //牙周观察 
+                {
+                    w = 720;
+                    h = 720;
+                    picBox.Location = new Point((1280 - 720) / 2, panel_head.Height + 34);
+                }
+                else 
+                {
+                    w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                    h = w * 720 / 1280;
+                    picBox.Location = new Point(0, panel_head.Height + 34);
+                }
+                picBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                picBox.Size = new Size(w, h);
                 picBox.Show();
                 this.splitContainer.Panel2.Controls.Add(picBox);
                 displayImageAbsPath = itemPath;
@@ -190,21 +235,25 @@ namespace BVDentalCareSystem
         //拍照
         private void btnSnapshot_Click(object sender, EventArgs e)
         {
+            //如果没在播放
+            if (videoCamera == null)
+                return;
+
             //进行视频流播放和截图显示之间的切换
             if (picBox == null)
             {
                 string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
                 //1. 主窗口移除掉videoPlayer这个控件，添加pictureBox控件
-                //string snapShotImgPath = @"E:\project\DSDentalEndoscopeViewer\DSDentalEndoscopeViewer\bin\x64\Debug\PatientInfoDir\李伟_1_2020-07-22\" + dateTime + ".jpg";
                 string snapShotImgPath = rootPath  + dateTime + ".jpg";
                 displayImageAbsPath = snapShotImgPath;
                 Bitmap snapShotImg = videoCamera.TakeSnapshot(snapShotImgPath, true);
+                int imgFromDeviceType = (snapShotImg.Width == snapShotImg.Height) ? 1 : 2; //照片宽高相等表示牙周观察仪
                 this.splitContainer.Panel2.Controls.Remove(videoCamera);
                 //2. 重新排序
                 imageVideoBrowserSideBar.SortOrderByTimeDescend();
                 imageVideoBrowserSideBar.GroupItemByDate();
                 //3.创建显示的pictureBox
-                DisplayJPEGImage(ref snapShotImg);
+                DisplayJPEGImage(ref snapShotImg, imgFromDeviceType);
                 //4. 图标切换
                 btnSnapshot.BackgroundImage = Properties.Resources.returnPreview;
             }
@@ -223,6 +272,8 @@ namespace BVDentalCareSystem
         //录像
         private void btnRecord_Click(object sender, EventArgs e)
         {
+            if (videoCamera == null)
+                return;
             if (picBox != null) //说明此时有截图的pictureBox遮挡，提示用户先返回视频流
             {
                 MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回实时视频流！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -246,6 +297,26 @@ namespace BVDentalCareSystem
                 imageVideoBrowserSideBar.GroupItemByDate();
             }
         }
+
+        //牙周是1， 口腔观察是 2
+        private bool  CheckDeviceAvailable(int deviceType)
+        {
+            var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (var device in videoDevices)
+            {
+                string deviceName = device.Name;
+                if (deviceName == "SKT-OL400C-13A" && deviceType == 2)
+                {
+                    return true;
+                }
+                if (deviceName == "BV USB Camera" && deviceType == 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
     }
 }

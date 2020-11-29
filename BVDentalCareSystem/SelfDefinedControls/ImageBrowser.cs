@@ -129,7 +129,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            return;
             if (beginMove)
             {
                 this.Left += MousePosition.X - currentXPosition;//根据鼠标x坐标确定窗体的左边坐标x

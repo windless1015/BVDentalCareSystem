@@ -111,6 +111,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -140,23 +141,11 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\OralViewCapture.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\OralViewCapture.Designer.cs">
-      <DependentUpon>OralViewCapture.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\PatientsInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\PatientsInfoForm.Designer.cs">
       <DependentUpon>PatientsInfoForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PeriodontalEndoscopeCapture.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PeriodontalEndoscopeCapture.Designer.cs">
-      <DependentUpon>PeriodontalEndoscopeCapture.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -184,18 +173,13 @@
     </Compile>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\OralViewCapture.resx">
-      <DependentUpon>OralViewCapture.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PatientsInfoForm.resx">
       <DependentUpon>PatientsInfoForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PeriodontalEndoscopeCapture.resx">
-      <DependentUpon>PeriodontalEndoscopeCapture.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
