@@ -19,6 +19,7 @@ namespace BVDentalCareSystem
     {
         VideoPlayer videoCamera = null;
         Accord.Controls.PictureBox picBox = null;
+        PatientsInfoForm pif = null;
         string displayImageAbsPath = null;
         public bool isTakingPicturePause = false; //是否是拍照暂停了
         string rootPath = @"D:\PatientInfoDir\李伟_1_2020-07-22\";
@@ -36,14 +37,25 @@ namespace BVDentalCareSystem
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
         {
-            PatientsInfoForm pif = new PatientsInfoForm();
+            //先把观察仪的界面关闭
+            this.splitContainer.Panel2.Controls.Remove(videoCamera); //摄像头界面
+            this.splitContainer.Panel2.Controls.Remove(panel_lower); //底层按钮面板
+            if(picBox != null)
+                this.splitContainer.Panel2.Controls.Remove(picBox);
+            if (pif != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(pif);
+                pif.Dispose();
+                pif = null;
+            }
+            pif = new PatientsInfoForm();
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
             pif.Location = new Point(0, panel_head.Height + 34);
             pif.Size = new Size(this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10, 
-                this.splitContainer.Panel2.Height - panel_head.Height - panel_seperate.Height - panel_bottom.Height);
-            pif.Show();
+                this.splitContainer.Panel2.Height - panel_head.Height - panel_seperate.Height - 10);
             this.splitContainer.Panel2.Controls.Add(pif);
+            pif.Show();
         }
 
         //牙周观察
@@ -77,9 +89,16 @@ namespace BVDentalCareSystem
             if (videoCamera != null)
             {
                 this.splitContainer.Panel2.Controls.Remove(videoCamera);
-                videoCamera.SignalToStop();
+                videoCamera.Stop();
                 videoCamera.Dispose();
                 videoCamera = null;
+            }
+            //如果有病例列表的情况
+            if (pif != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(pif);
+                pif.Dispose();
+                pif = null;
             }
             videoCamera = new VideoPlayer();
             videoCamera.Parent = this.splitContainer.Panel2;
@@ -101,7 +120,7 @@ namespace BVDentalCareSystem
             videoCamera.PlayVideo(deviceName);
             //vp.PlayVideo("http://10.10.10.254:8080");
             this.splitContainer.Panel2.Controls.Add(videoCamera);
-
+            this.splitContainer.Panel2.Controls.Add(panel_lower);
         }
 
 
