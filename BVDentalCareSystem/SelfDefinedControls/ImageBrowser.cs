@@ -21,9 +21,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         List<FileInfo> imgFileList = null;
 
-        public delegate void CloseThisFormHandle();
+        //public delegate void CloseThisFormHandle();
         //关闭窗口
-        public event CloseThisFormHandle CloseFormNotify;
+        //public event CloseThisFormHandle CloseFormNotify;
         public ImageBrowser()
         {
             InitializeComponent();

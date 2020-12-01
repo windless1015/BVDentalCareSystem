@@ -118,14 +118,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public ImageList thumbnailImageList; //需要显示的所列图图片列表
         private List<ItemDiscriptor> itemsList; //所有items的列表
 
-        public delegate void DeleteImgNotifyHandler();
-        //声明事件,用户双击一个item触发显示这个item的.
-        public event DeleteImgNotifyHandler DeleteImgNotify;
-
         public delegate void DoubleClickOpenItemNotifyHandler(string itemPath);
         //声明双击打开一个Item（图片，视频）
         public event DoubleClickOpenItemNotifyHandler DBClickOpenItemNotify;
-
 
         //根据dataPath进行时间降序排序
         public void SortOrderByTimeDescend()
@@ -206,7 +201,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
                     doubleBufferListView.Items.Add(oneListViewItem);
                 }
             }
-
             doubleBufferListView.LargeImageList = thumbnailImageList;
             doubleBufferListView.EndUpdate();
         }
@@ -308,7 +302,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 ////    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 File.Delete(filePath);
                 //需要向外界发送信息，不然外界的数据就会混乱
-                DeleteImgNotify();
+                SortOrderByTimeDescend();
+                GroupItemByDate();
             }
             catch (Exception msg) //异常处理
             {

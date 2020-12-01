@@ -57,7 +57,7 @@
             // 
             this.openImgToolStripMenuItem.Name = "openImgToolStripMenuItem";
             this.openImgToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.openImgToolStripMenuItem.Text = "打开图片";
+            this.openImgToolStripMenuItem.Text = "打开条目";
             this.openImgToolStripMenuItem.Click += new System.EventHandler(this.openImgToolStripMenuItem_Click);
             // 
             // delCurImgToolStripMenuItem
