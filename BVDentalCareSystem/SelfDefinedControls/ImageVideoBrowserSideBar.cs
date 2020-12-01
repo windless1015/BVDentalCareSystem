@@ -308,7 +308,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 ////    Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 File.Delete(filePath);
                 //需要向外界发送信息，不然外界的数据就会混乱
-                //DeleteImgNotify();
+                DeleteImgNotify();
             }
             catch (Exception msg) //异常处理
             {

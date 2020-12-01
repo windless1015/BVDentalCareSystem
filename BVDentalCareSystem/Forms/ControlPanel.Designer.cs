@@ -50,6 +50,7 @@
             this.MicroLensModeBtn.Size = new System.Drawing.Size(130, 50);
             this.MicroLensModeBtn.TabIndex = 74;
             this.MicroLensModeBtn.UseVisualStyleBackColor = true;
+            this.MicroLensModeBtn.Click += new System.EventHandler(this.MicroLensModeBtn_Click);
             // 
             // NormalModeBtn
             // 
@@ -62,6 +63,7 @@
             this.NormalModeBtn.Size = new System.Drawing.Size(130, 50);
             this.NormalModeBtn.TabIndex = 74;
             this.NormalModeBtn.UseVisualStyleBackColor = true;
+            this.NormalModeBtn.Click += new System.EventHandler(this.NormalModeBtn_Click);
             // 
             // FigureModeBtn
             // 
@@ -74,6 +76,7 @@
             this.FigureModeBtn.Size = new System.Drawing.Size(130, 50);
             this.FigureModeBtn.TabIndex = 74;
             this.FigureModeBtn.UseVisualStyleBackColor = true;
+            this.FigureModeBtn.Click += new System.EventHandler(this.FigureModeBtn_Click);
             // 
             // btnRecord
             // 
@@ -88,6 +91,7 @@
             this.btnRecord.Size = new System.Drawing.Size(110, 110);
             this.btnRecord.TabIndex = 73;
             this.btnRecord.UseVisualStyleBackColor = true;
+            this.btnRecord.Click += new System.EventHandler(this.btnRecord_Click);
             // 
             // btnSnapshot
             // 
@@ -102,6 +106,7 @@
             this.btnSnapshot.Size = new System.Drawing.Size(110, 110);
             this.btnSnapshot.TabIndex = 72;
             this.btnSnapshot.UseVisualStyleBackColor = true;
+            this.btnSnapshot.Click += new System.EventHandler(this.btnSnapshot_Click);
             // 
             // panelAirPump
             // 
