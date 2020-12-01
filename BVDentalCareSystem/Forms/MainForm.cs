@@ -17,9 +17,10 @@ namespace BVDentalCareSystem
 {
     public partial class MainForm : Form
     {
-        VideoPlayer videoCamera = null;
-        Accord.Controls.PictureBox picBox = null;
-        PatientsInfoForm pif = null;
+        VideoPlayer videoCamera = null; //显示视频的camera form
+        Accord.Controls.PictureBox picBox = null; //显示图片的picturebox form
+        PatientsInfoForm pif = null; //病历列表的form
+        ControlPanel controlPanelForm = null; //控制面板的form
         string displayImageAbsPath = null;
         public bool isTakingPicturePause = false; //是否是拍照暂停了
         string rootPath = @"D:\PatientInfoDir\李伟_1_2020-07-22\";
@@ -39,7 +40,6 @@ namespace BVDentalCareSystem
         {
             //先把观察仪的界面关闭
             this.splitContainer.Panel2.Controls.Remove(videoCamera); //摄像头界面
-            this.splitContainer.Panel2.Controls.Remove(panel_lower); //底层按钮面板
             if(picBox != null)
                 this.splitContainer.Panel2.Controls.Remove(picBox);
             if (pif != null)
@@ -48,6 +48,13 @@ namespace BVDentalCareSystem
                 pif.Dispose();
                 pif = null;
             }
+            if (controlPanelForm != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(controlPanelForm);
+                controlPanelForm.Dispose();
+                controlPanelForm = null;
+            }
+
             pif = new PatientsInfoForm();
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
@@ -79,6 +86,7 @@ namespace BVDentalCareSystem
                 MessageBox.Show(caption, "连接设备出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            //如果当前显示的是静态截图照片的处理
             if (picBox != null)
             {
                 picBox.Dispose();
@@ -86,6 +94,7 @@ namespace BVDentalCareSystem
                 this.splitContainer.Panel2.Controls.Add(videoCamera);
                 return;
             }
+            //如果当前正在播放视频，再次点击
             if (videoCamera != null)
             {
                 this.splitContainer.Panel2.Controls.Remove(videoCamera);
@@ -93,7 +102,7 @@ namespace BVDentalCareSystem
                 videoCamera.Dispose();
                 videoCamera = null;
             }
-            //如果有病例列表的情况
+            //如果当前显示的是病历列表
             if (pif != null)
             {
                 this.splitContainer.Panel2.Controls.Remove(pif);
@@ -120,9 +129,85 @@ namespace BVDentalCareSystem
             videoCamera.PlayVideo(deviceName);
             //vp.PlayVideo("http://10.10.10.254:8080");
             this.splitContainer.Panel2.Controls.Add(videoCamera);
-            this.splitContainer.Panel2.Controls.Add(panel_lower);
+
+            //加载控制面板
+            if(controlPanelForm != null) 
+            {
+                this.splitContainer.Panel2.Controls.Remove(controlPanelForm);
+                controlPanelForm.Dispose();
+                controlPanelForm = null;
+            }
+            controlPanelForm = new ControlPanel(deviceType);
+            controlPanelForm.PressSnapShotBtn += ControlPanelForm_PressSnapShotBtn;
+            controlPanelForm.PressRecordBtn += ControlPanelForm_PressRecordBtn;
+            controlPanelForm.Location = new Point(0, 870);
+            controlPanelForm.Show();
+            this.splitContainer.Panel2.Controls.Add(controlPanelForm);
         }
 
+        //点击截图按钮
+        private void ControlPanelForm_PressSnapShotBtn()
+        {
+            //如果没在播放
+            if (videoCamera == null)
+                return;
+
+            //进行视频流播放和截图显示之间的切换
+            if (picBox == null)
+            {
+                string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                //1. 主窗口移除掉videoPlayer这个控件，添加pictureBox控件
+                string snapShotImgPath = rootPath + dateTime + ".jpg";
+                displayImageAbsPath = snapShotImgPath;
+                Bitmap snapShotImg = videoCamera.TakeSnapshot(snapShotImgPath, true);
+                int imgFromDeviceType = (snapShotImg.Width == snapShotImg.Height) ? 1 : 2; //照片宽高相等表示牙周观察仪
+                this.splitContainer.Panel2.Controls.Remove(videoCamera);
+                //2. 重新排序
+                imageVideoBrowserSideBar.SortOrderByTimeDescend();
+                imageVideoBrowserSideBar.GroupItemByDate();
+                //3.创建显示的pictureBox
+                DisplayJPEGImage(ref snapShotImg, imgFromDeviceType);
+                //4. 图标切换
+                controlPanelForm.ChangeSnapshotBtnImg(Properties.Resources.returnPreview);
+            }
+            else  //这时候picBox 已经实例化了，那么需要dispose, 重新恢复视频的播放
+            {
+                //1.清除pictureBox
+                picBox.Dispose();
+                picBox = null;
+                //2.重新把视频播放器add进来
+                this.splitContainer.Panel2.Controls.Add(videoCamera);
+                controlPanelForm.ChangeSnapshotBtnImg(Properties.Resources.takePhoto);
+            }
+        }
+
+        private void ControlPanelForm_PressRecordBtn()
+        {
+            if (videoCamera == null)
+                return;
+            if (picBox != null) //说明此时有截图的pictureBox遮挡，提示用户先返回视频流
+            {
+                MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回实时视频流！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            //正在播放 且 没有在录像
+            if (videoCamera.isPlaying && !videoCamera.isRecording)
+            {
+                string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string aviFileName = rootPath + dateTime + ".avi";
+                videoCamera.StartRecord(aviFileName);
+                controlPanelForm.ChangeRecordBtnImg(Properties.Resources.recordStop);
+            }
+            else
+            {
+                videoCamera.FinishRecord();
+                controlPanelForm.ChangeRecordBtnImg(Properties.Resources.record);
+                //重新排序
+                imageVideoBrowserSideBar.SortOrderByTimeDescend();
+                imageVideoBrowserSideBar.GroupItemByDate();
+            }
+        }
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
@@ -249,72 +334,6 @@ namespace BVDentalCareSystem
 
 
             
-        }
-
-        //拍照
-        private void btnSnapshot_Click(object sender, EventArgs e)
-        {
-            //如果没在播放
-            if (videoCamera == null)
-                return;
-
-            //进行视频流播放和截图显示之间的切换
-            if (picBox == null)
-            {
-                string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-                //1. 主窗口移除掉videoPlayer这个控件，添加pictureBox控件
-                string snapShotImgPath = rootPath  + dateTime + ".jpg";
-                displayImageAbsPath = snapShotImgPath;
-                Bitmap snapShotImg = videoCamera.TakeSnapshot(snapShotImgPath, true);
-                int imgFromDeviceType = (snapShotImg.Width == snapShotImg.Height) ? 1 : 2; //照片宽高相等表示牙周观察仪
-                this.splitContainer.Panel2.Controls.Remove(videoCamera);
-                //2. 重新排序
-                imageVideoBrowserSideBar.SortOrderByTimeDescend();
-                imageVideoBrowserSideBar.GroupItemByDate();
-                //3.创建显示的pictureBox
-                DisplayJPEGImage(ref snapShotImg, imgFromDeviceType);
-                //4. 图标切换
-                btnSnapshot.BackgroundImage = Properties.Resources.returnPreview;
-            }
-            else  //这时候picBox 已经实例化了，那么需要dispose, 重新恢复视频的播放
-            {
-                //1.清除pictureBox
-                picBox.Dispose();
-                picBox = null;
-                //2.重新把视频播放器add进来
-                this.splitContainer.Panel2.Controls.Add(videoCamera);
-                btnSnapshot.BackgroundImage = Properties.Resources.takePhoto;
-            }
-
-        }
-
-        //录像
-        private void btnRecord_Click(object sender, EventArgs e)
-        {
-            if (videoCamera == null)
-                return;
-            if (picBox != null) //说明此时有截图的pictureBox遮挡，提示用户先返回视频流
-            {
-                MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回实时视频流！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-                //正在播放 且 没有在录像
-            if (videoCamera.isPlaying && !videoCamera.isRecording)
-            {
-                string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string aviFileName = rootPath + dateTime + ".avi";
-                videoCamera.StartRecord(aviFileName);
-                btnRecord.BackgroundImage = Properties.Resources.recordStop;
-            }
-            else
-            {
-                videoCamera.FinishRecord();
-                btnRecord.BackgroundImage = Properties.Resources.record;
-                //重新排序
-                imageVideoBrowserSideBar.SortOrderByTimeDescend();
-                imageVideoBrowserSideBar.GroupItemByDate();
-            }
         }
 
         //牙周是1， 口腔观察是 2

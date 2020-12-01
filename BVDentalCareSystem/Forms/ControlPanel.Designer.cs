@@ -45,7 +45,7 @@
             this.MicroLensModeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.MicroLensModeBtn.FlatAppearance.BorderSize = 0;
             this.MicroLensModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.MicroLensModeBtn.Location = new System.Drawing.Point(22, 84);
+            this.MicroLensModeBtn.Location = new System.Drawing.Point(3, 81);
             this.MicroLensModeBtn.Name = "MicroLensModeBtn";
             this.MicroLensModeBtn.Size = new System.Drawing.Size(130, 50);
             this.MicroLensModeBtn.TabIndex = 74;
@@ -58,7 +58,7 @@
             this.NormalModeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.NormalModeBtn.FlatAppearance.BorderSize = 0;
             this.NormalModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.NormalModeBtn.Location = new System.Drawing.Point(183, 84);
+            this.NormalModeBtn.Location = new System.Drawing.Point(139, 81);
             this.NormalModeBtn.Name = "NormalModeBtn";
             this.NormalModeBtn.Size = new System.Drawing.Size(130, 50);
             this.NormalModeBtn.TabIndex = 74;
@@ -71,7 +71,7 @@
             this.FigureModeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.FigureModeBtn.FlatAppearance.BorderSize = 0;
             this.FigureModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.FigureModeBtn.Location = new System.Drawing.Point(349, 84);
+            this.FigureModeBtn.Location = new System.Drawing.Point(275, 81);
             this.FigureModeBtn.Name = "FigureModeBtn";
             this.FigureModeBtn.Size = new System.Drawing.Size(130, 50);
             this.FigureModeBtn.TabIndex = 74;
@@ -85,7 +85,7 @@
             this.btnRecord.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnRecord.FlatAppearance.BorderSize = 0;
             this.btnRecord.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRecord.Location = new System.Drawing.Point(831, 54);
+            this.btnRecord.Location = new System.Drawing.Point(800, 51);
             this.btnRecord.Margin = new System.Windows.Forms.Padding(2);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(110, 110);
@@ -100,7 +100,7 @@
             this.btnSnapshot.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btnSnapshot.FlatAppearance.BorderSize = 0;
             this.btnSnapshot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSnapshot.Location = new System.Drawing.Point(553, 54);
+            this.btnSnapshot.Location = new System.Drawing.Point(449, 51);
             this.btnSnapshot.Margin = new System.Windows.Forms.Padding(2);
             this.btnSnapshot.Name = "btnSnapshot";
             this.btnSnapshot.Size = new System.Drawing.Size(110, 110);

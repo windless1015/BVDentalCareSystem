@@ -20,7 +20,21 @@ namespace BVDentalCareSystem.Forms
         public ControlPanel(int deviceType)
         {
             InitializeComponent();
-            if (deviceType == 1)
+            if (deviceType == 1) //牙周
+            {
+                MicroLensModeBtn.Hide();
+                FigureModeBtn.Hide();
+                NormalModeBtn.Hide();
+                labAirPump.Hide();
+                labWaterPump.Hide();
+                panelAirPump.Hide();
+                panelWaterPump.Hide();
+                labAirPump.Show();
+                panelAirPump.Show();
+                labWaterPump.Show();
+                panelWaterPump.Show();
+            }
+            else //口腔观察
             {
                 MicroLensModeBtn.Show();
                 FigureModeBtn.Show();
@@ -29,15 +43,9 @@ namespace BVDentalCareSystem.Forms
                 labWaterPump.Show();
                 panelAirPump.Show();
                 panelWaterPump.Show();
-            }
-            else 
-            {
-                MicroLensModeBtn.Hide();
-                FigureModeBtn.Hide();
-                NormalModeBtn.Hide();
                 labAirPump.Hide();
-                labWaterPump.Hide();
                 panelAirPump.Hide();
+                labWaterPump.Hide();
                 panelWaterPump.Hide();
             }
         }
@@ -71,5 +79,16 @@ namespace BVDentalCareSystem.Forms
         {
             PressRecordBtn();
         }
+
+        public void ChangeSnapshotBtnImg(Bitmap bm)
+        {
+            btnSnapshot.BackgroundImage = bm;
+        }
+
+        public void ChangeRecordBtnImg(Bitmap bm)
+        {
+            btnRecord.BackgroundImage = bm;
+        }
+
     }
 }
