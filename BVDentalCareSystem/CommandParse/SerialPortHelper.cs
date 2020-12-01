@@ -14,6 +14,9 @@ namespace BVDentalCareSystem.CommandParse
         public static extern int GetPrivateProfileString(string section, string key, string def,
                                                       StringBuilder retVal, int size, string filePath);
 
+        [DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string section, string key, string val, string filePath);
+
         //此处是设置初始状态false表示无信号状态，true表示有信号状态
         private ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
         public SerialPort comPortDevice = null; //真正可以通信的串口
@@ -94,6 +97,7 @@ namespace BVDentalCareSystem.CommandParse
                     string RecvCmd = StringOperator.ByteArrayToString(curByte);
                     RecvCommandChangedEventArgs args = new RecvCommandChangedEventArgs();
                     args.ReceivedCommand = RecvCmd;
+                    args.deviceType = 1; //1表示牙周观察
                     SerialPortCmdRecvEvent(args);
                 }
 
@@ -140,10 +144,15 @@ namespace BVDentalCareSystem.CommandParse
             //return false;
 
             //读取ini文件
-            StringBuilder temp = new StringBuilder(255);
+            StringBuilder comName = new StringBuilder(255);
             string path = System.Environment.CurrentDirectory + @"\COM.INI";
-            int i = GetPrivateProfileString("COM", "PORT", "", temp, 255, path);
-            InitPort(temp.ToString()); //先打开设备
+            //判断INI文件是否存在
+            if (!System.IO.File.Exists(path))
+            {
+                WritePrivateProfileString("COM", "PORT", "COM3", path);
+            }
+            int i = GetPrivateProfileString("COM", "PORT", "", comName, 255, path);
+            InitPort(comName.ToString()); //先打开设备
             return true;
 
         }
@@ -178,5 +187,6 @@ namespace BVDentalCareSystem.CommandParse
     public class RecvCommandChangedEventArgs : EventArgs
     {
         public string ReceivedCommand { get; set; }
+        public int deviceType { get; set; }
     }
 }

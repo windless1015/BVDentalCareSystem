@@ -23,6 +23,11 @@ namespace BVDentalCareSystem
         ControlPanel controlPanelForm = null; //控制面板的form
         string displayImageAbsPath = null;
         public bool isTakingPicturePause = false; //是否是拍照暂停了
+
+        //数据通信
+        const string heartBeatSendCmd = "0101000101040000";
+        private USBHelper usbHelperInstance = null;
+        private SerialPortHelper serialPort = null;
         string rootPath = @"D:\PatientInfoDir\李伟_1_2020-07-22\";
         public MainForm()
         {
@@ -69,12 +74,14 @@ namespace BVDentalCareSystem
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
             PressCameraButton(1);
+            BuildCommunication(1);
         }
 
         //口腔观察
         private void btn_oralView_Click(object sender, EventArgs e)
         {
             PressCameraButton(2);
+            BuildCommunication(2);
         }
 
         //deviceType 为1表示牙周，2表示口腔
@@ -140,9 +147,118 @@ namespace BVDentalCareSystem
             controlPanelForm = new ControlPanel(deviceType);
             controlPanelForm.PressSnapShotBtn += ControlPanelForm_PressSnapShotBtn;
             controlPanelForm.PressRecordBtn += ControlPanelForm_PressRecordBtn;
+            controlPanelForm.cmdOutProcessing += ControlPanelForm_cmdOutProcessing;
             controlPanelForm.Location = new Point(0, 870);
             controlPanelForm.Show();
             this.splitContainer.Panel2.Controls.Add(controlPanelForm);
+        }
+
+        private void ControlPanelForm_cmdOutProcessing(ref string cmd)
+        {
+            usbHelperInstance.Write(cmd);
+        }
+
+        private void BuildCommunication(int deviceType)
+        {
+            if (deviceType == 1)
+            {
+                if (serialPort != null)
+                {
+                    serialPort.ClosePort();
+                    serialPort = null;
+                }
+                serialPort = new SerialPortHelper();
+                serialPort.FindDevice(); //寻找本地INI文件
+                serialPort.SerialPortRecvCmdEvent += OnRecvCurrentCommand;//设置命令接受处理函数
+
+            }
+            else
+            {
+                if (usbHelperInstance != null)
+                {
+                    usbHelperInstance.CloseDevice();
+                    usbHelperInstance = null;
+                }
+                usbHelperInstance = new USBHelper();
+                usbHelperInstance.OpenDevice(0x10c4, 0x8846);
+
+                //绑定指令处理函数
+                usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
+            }
+        }
+
+        private void OnRecvCurrentCommand(object sender, RecvCommandChangedEventArgs e)
+        {
+            //接受到字符串的命令指令
+            string RecvCmdString = e.ReceivedCommand;
+            int deviceType = e.deviceType;
+            ParseRecvCommandsAndSetButtons(ref RecvCmdString, ref deviceType);
+        }
+
+        //解析收到的指令,然后设置对应的按钮
+        private void ParseRecvCommandsAndSetButtons(ref string cmd, ref int deviceType)
+        {
+            //这里分成牙周观察和口腔观察
+            if (deviceType == 1)
+                PeriCmdParse(ref cmd);
+            else
+                OralCmdParse(ref cmd);
+        }
+
+        //牙周观察
+        private void PeriCmdParse(ref string cmd)
+        {
+            if (cmd == "5AA508F1A100A55A") //水泵关闭信号
+            {
+                serialPort.SendReplay("5AA508F1A200A55A");
+            }
+            else if (cmd == "5AA508F2A100A55A") //气泵关闭信号
+            {
+                serialPort.SendReplay("5AA508F2A200A55A");
+            }
+            else if (cmd == "5AA508F1A111A55A") //水泵打开
+            {
+                serialPort.SendReplay("5AA508F1A211A55A");
+            }
+            else if (cmd == "5AA508F2A111A55A") //气泵打开
+            {
+                serialPort.SendReplay("5AA508F2A211A55A");
+            }
+            else if (cmd == "5AA508F0A111A55A") //拍照指令
+            {
+                serialPort.SendReplay("5AA508F0A211A55A");
+                Action actionDelegate;
+                actionDelegate = () => { ControlPanelForm_PressSnapShotBtn(); };
+                this.Invoke(actionDelegate);
+            }
+            controlPanelForm.SetAirWaterPumpBtnImg(ref cmd);
+        }
+
+        //口腔观察解析
+        private void OralCmdParse(ref string cmd)
+        {
+            if (cmd == "0101010101010101") //休眠指令
+            {
+                timer_timeout.Stop(); //信号灯的超时连接定时器
+
+                videoCamera.Stop();
+                videoCamera.isStopped = true; //停止状态
+            }
+            else //非休眠指令
+            {
+                if (cmd == "0001000000010000" || cmd == "0104000000050000" || cmd == "020a0000000c0000")
+                {
+                    if (controlPanelForm != null)
+                        controlPanelForm.ModeSwitchByRecvAndSend(ref cmd);
+                }
+                //拍照指令
+                if (cmd == "0002000000020000")
+                {
+                    Action actionDelegate;
+                    actionDelegate = () => { ControlPanelForm_PressSnapShotBtn(); };
+                    this.Invoke(actionDelegate);
+                }
+            }
         }
 
         //点击截图按钮
@@ -256,14 +372,6 @@ namespace BVDentalCareSystem
         //双击图片全屏显式
         private void PicBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //private ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
-            //                                 //绑定图片窗口关闭的事件
-            //imgBrowser.CloseFormNotify += new ImageBrowser.CloseThisFormHandle(SubFormCloseEvent);
-            //imgBrowser.curImageAbsPath = fileAbsPath;
-            //string dataPath = fileAbsPath.Substring(0, fileAbsPath.LastIndexOf(@"\"));
-            //imgBrowser.curDataAbsPath = dataPath;
-            //imgBrowser.Show();
-
             ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
             imgBrowser.curImageAbsPath = displayImageAbsPath;
             imgBrowser.curDataAbsPath = rootPath;
@@ -355,6 +463,22 @@ namespace BVDentalCareSystem
             return false;
         }
 
+        //每隔2s发送一次心跳指令---发送1,1,0,1,1,4,0,0, 设备收到后回复11110000
+        private void timer_heartbeat_Tick(object sender, EventArgs e)
+        {
+            usbHelperInstance.Write(heartBeatSendCmd);
+            timer_timeout.Start();
+        }
 
+        private void timer_timeout_Tick(object sender, EventArgs e)
+        {
+            timer_timeout.Stop();
+        }
+
+        //222
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            timer_heartbeat.Stop();
+        }
     }
 }

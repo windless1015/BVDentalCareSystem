@@ -68,12 +68,15 @@ namespace BVDentalCareSystem.CommandParse
         public void OnRxEndPointData(object sender, EndpointDataEventArgs e)
         {
             string currentCommand = StringOperator.ByteArrayToString2(e.Buffer);
-            //Console.WriteLine(currentCommand);
+            if (currentCommand.Equals("0000000000000000"))
+                return;
             if (!LastCommand.Equals(currentCommand))
             {
                 RecvCommandChangedEventArgs args = new RecvCommandChangedEventArgs();
                 args.ReceivedCommand = LastCommand = currentCommand;
+                args.deviceType = 2; //1表示口腔观察
                 OnRecvCommandChanged(args);
+                //Console.WriteLine(currentCommand);
             }
         }
 

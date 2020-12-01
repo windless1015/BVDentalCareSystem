@@ -67,7 +67,7 @@
             // 
             // FigureModeBtn
             // 
-            this.FigureModeBtn.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.figure_unselected1;
+            this.FigureModeBtn.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.figure_unselected;
             this.FigureModeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.FigureModeBtn.FlatAppearance.BorderSize = 0;
             this.FigureModeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

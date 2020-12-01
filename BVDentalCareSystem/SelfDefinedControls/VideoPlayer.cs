@@ -27,7 +27,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
     public partial class VideoPlayer :  VideoSourcePlayer
     {
         public bool doubleClickChangeSize { get; set; } //双击改变窗口size
-
+        public bool isStopped = false; //是否已经停止
         public bool isRecording = false; //是否在录制
         public bool isPlaying = false; //是否正在播放
         private VideoFileWriter aviWriter = null;

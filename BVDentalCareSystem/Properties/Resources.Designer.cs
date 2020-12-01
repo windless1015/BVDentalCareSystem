@@ -173,9 +173,9 @@ namespace BVDentalCareSystem.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap figure_unselected1 {
+        internal static System.Drawing.Bitmap figure_unselected {
             get {
-                object obj = ResourceManager.GetObject("figure_unselected1", resourceCulture);
+                object obj = ResourceManager.GetObject("figure_unselected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
