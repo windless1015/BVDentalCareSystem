@@ -38,13 +38,28 @@ namespace BVDentalCareSystem
             imageVideoBrowserSideBar.SortOrderByTimeDescend();
             imageVideoBrowserSideBar.GroupItemByDate();
             imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
-
+            CheckRootDataDirectory();
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
         {
-            //先把观察仪的界面关闭
-            this.splitContainer.Panel2.Controls.Remove(videoCamera); //摄像头界面
+            if (controlPanelForm != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(controlPanelForm);
+                controlPanelForm.Dispose();
+                controlPanelForm = null;
+            }
+            //把摄像头关闭
+            if (videoCamera != null)
+            {
+                btn_periodontal.BackgroundImage = Properties.Resources.periodontal_unselected;
+                btn_oralView.BackgroundImage = Properties.Resources.oralView_unselected;
+                this.splitContainer.Panel2.Controls.Remove(videoCamera); //摄像头界面
+                videoCamera.Stop();
+                videoCamera.Dispose();
+                videoCamera = null;
+            }
+            
             if(picBox != null)
                 this.splitContainer.Panel2.Controls.Remove(picBox);
             if (pif != null)
@@ -53,13 +68,9 @@ namespace BVDentalCareSystem
                 pif.Dispose();
                 pif = null;
             }
-            if (controlPanelForm != null)
-            {
-                this.splitContainer.Panel2.Controls.Remove(controlPanelForm);
-                controlPanelForm.Dispose();
-                controlPanelForm = null;
-            }
-
+            
+            
+            btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_selected;
             pif = new PatientsInfoForm();
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
@@ -73,15 +84,26 @@ namespace BVDentalCareSystem
         //牙周观察
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
+            try
+            {
+                BuildCommunication(1);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
             PressCameraButton(1);
-            BuildCommunication(1);
+            
         }
 
         //口腔观察
         private void btn_oralView_Click(object sender, EventArgs e)
         {
-            PressCameraButton(2);
             BuildCommunication(2);
+            PressCameraButton(2);
+            
         }
 
         //deviceType 为1表示牙周，2表示口腔
@@ -124,12 +146,18 @@ namespace BVDentalCareSystem
                 w = 720;
                 h = 720;
                 videoCamera.Location = new Point((1280 - 720) / 2, panel_head.Height + 34);
+                btn_periodontal.BackgroundImage = Properties.Resources.periodontal_selected;
+                btn_oralView.BackgroundImage = Properties.Resources.oralView_unselected;
+                btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
             }
             else if (deviceType == 2)
             {
                 w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
                 h = w * 720 / 1280;
                 videoCamera.Location = new Point(0, panel_head.Height + 34);
+                btn_periodontal.BackgroundImage = Properties.Resources.periodontal_unselected;
+                btn_oralView.BackgroundImage = Properties.Resources.oralView_selected;
+                btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
             }
             videoCamera.Size = new Size(w, h);
             string deviceName = (deviceType == 1) ? "BV USB Camera" : "SKT-OL400C-13A";
@@ -241,8 +269,8 @@ namespace BVDentalCareSystem
             {
                 timer_timeout.Stop(); //信号灯的超时连接定时器
 
-                videoCamera.Stop();
-                videoCamera.isStopped = true; //停止状态
+                //videoCamera.Stop();
+                //videoCamera.isStopped = true; //停止状态
             }
             else //非休眠指令
             {
@@ -283,6 +311,7 @@ namespace BVDentalCareSystem
                 imageVideoBrowserSideBar.GroupItemByDate();
                 //3.创建显示的pictureBox
                 DisplayJPEGImage(ref snapShotImg, imgFromDeviceType);
+                new System.Media.SoundPlayer(Properties.Resources.kaca).Play();
                 //4. 图标切换
                 controlPanelForm.ChangeSnapshotBtnImg(Properties.Resources.returnPreview);
             }
@@ -479,6 +508,15 @@ namespace BVDentalCareSystem
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             timer_heartbeat.Stop();
+        }
+
+
+        //判断根数据目录是否存在
+        private void CheckRootDataDirectory()
+        {
+            string localDataDir = Environment.CurrentDirectory + @"\PatientInfoDir";
+            if (!Directory.Exists(localDataDir))//如果没有这个文件夹还要创建
+                Directory.CreateDirectory(localDataDir);
         }
     }
 }

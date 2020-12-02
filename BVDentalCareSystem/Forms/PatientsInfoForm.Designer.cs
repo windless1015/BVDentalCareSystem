@@ -374,6 +374,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "PatientsInfoForm";
             this.Text = "PatientsInfoForm";
+            this.Load += new System.EventHandler(this.PatientsInfoForm_Load);
             this.Resize += new System.EventHandler(this.PatientsInfoForm_Resize);
             this.GroupBox_Operation.ResumeLayout(false);
             this.GroupBox_Operation.PerformLayout();
