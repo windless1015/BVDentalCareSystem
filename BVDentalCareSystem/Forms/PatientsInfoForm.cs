@@ -477,6 +477,8 @@ namespace BVDentalCareSystem.Forms
         {
             if (DataView_Patients.RowCount <= 0)
                 return "";
+            if (DataView_Patients.Rows[rowIndex].Cells[7].Value == null)
+                return"";
             string caseFileName = DataView_Patients.Rows[rowIndex].Cells[7].Value.ToString();
             caseFileName = rootPath + caseFileName;
             return caseFileName;
