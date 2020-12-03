@@ -13,67 +13,58 @@ namespace BVDentalCareSystem.Interfaces
         private SQLiteConnection connection = null;
         private SQLiteCommand selectCommand = null;
         private SQLiteDataAdapter dataAdapter = null;
-        private SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
+        private SQLiteConnectionStringBuilder sb = null;
         private string connectionString = null;
 
         //数据库所在的路径,为exe同级目录
         private string dbFilePath = Environment.CurrentDirectory + @"\patientInfo_t.db";
         public SqliteHelper()
         {
-            sb.DataSource = Environment.CurrentDirectory + @"\patientInfo_t.db";
-            connectionString = sb.ToString();
+            // SQLiteDataAdapter 是对数据库进行增加表，删除， 修改等操作，不是对某一个具体的数据表
+            dataAdapter = new SQLiteDataAdapter();
         }
 
+        ~SqliteHelper()
+        {
+            sb = null;
+            dataAdapter.Dispose();
+            dataAdapter = null;
+        }
+
+        public void InitDB()
+        {
+            sb = new SQLiteConnectionStringBuilder();
+            sb.DataSource = dbFilePath;
+            connectionString = sb.ToString();
+            connection = new SQLiteConnection(@"Data Source =" + dbFilePath);//创建数据库实例，指定文件位置
+            connection.Open();//打开数据库，若文件不存在会自动创建 
+        }
+
+
+        //创建数据库文件
         public void CreateDBFile()
         {
-            if (IsDataBaseFileExist()) //存在
-                return;
-            SQLiteConnection conn = new SQLiteConnection(@"Data Source =" + dbFilePath);//创建数据库实例，指定文件位置
-            conn.Open();//打开数据库，若文件不存在会自动创建 
-            SQLiteCommand cmd = new SQLiteCommand(conn);//实例化SQL命令 
-            string createSqlString = @"CREATE TABLE IF NOT EXISTS patientInfo_t 
+            //if (IsDataBaseFileExist())
+            //    return;
+            SQLiteCommand cmd = new SQLiteCommand(connection);//实例化SQL命令 
+            string createSqlString = @"CREATE TABLE IF NOT EXISTS patientInfo_t
                 (id INTEGER PRIMARY KEY, name VARCHAR(50) NOT NULL, gender VARCHAR(10),
                 birth_date VARCHAR(15), identity_number VARCHAR(50), phone VARCHAR(40),
-                create_time VARCHAR(20))";
+                create_time VARCHAR(20), case_file_name VARCHAR(50))";
             cmd.CommandText = createSqlString;
             int res = cmd.ExecuteNonQuery();  //-1表示没有生效,即数据库中已经有这个数据表了,不需要重新创建
         }
 
-        //public static int ExecuteNonQuery(string sql)
-        //{
-        //        SQLiteCommand cmd;
-        //        cmd = new SQLiteCommand(sql, dbConnection());
-        //        cmd.ExecuteNonQuery().ToString();
-        //        return 1;
-        //}
-
         public DataTable QuerySqlTable()
         {
-
-            //connection = new SQLiteConnection(connectionString);
-            //selectCommand = connection.CreateCommand();
-            //selectCommand.CommandText = "SELECT * FROM patientInfo_t";
-            //dataAdapter = new SQLiteDataAdapter();// SQLiteDataAdapter 是对数据库进行增加表，删除， 修改等操作，不是对某一个具体的数据表
-            //dataAdapter.SelectCommand = selectCommand;
-            //dt = new DataTable();
-            //dataAdapter.Fill(dt);
-
-            try
-            {
-                SQLiteCommand sqlcmd = new SQLiteCommand(connectionString);
-                connection = new SQLiteConnection(connectionString);
-                selectCommand = connection.CreateCommand();
-                selectCommand.CommandText = "SELECT * FROM patientInfo_t";
-                dataAdapter = new SQLiteDataAdapter();// SQLiteDataAdapter 是对数据库进行增加表，删除， 修改等操作，不是对某一个具体的数据表
-                dataAdapter.SelectCommand = selectCommand;
-                DataTable dt = new DataTable();
-                dataAdapter.Fill(dt);
-                return dt;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+               SQLiteCommand sqlcmd = new SQLiteCommand(connectionString);
+               selectCommand = connection.CreateCommand();
+               selectCommand.CommandText = "SELECT * FROM patientInfo_t";
+               
+               dataAdapter.SelectCommand = selectCommand;
+               DataTable dt = new DataTable();
+               dataAdapter.Fill(dt);
+               return dt;
         }
 
         public void InsertData(ref DataTable dt)

@@ -296,6 +296,7 @@
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
     <Content Include="ProductLogo.ico" />
+    <None Include="Resources\add1.png" />
     <Content Include="Resources\backWard.png" />
     <None Include="Resources\takePhoto.wav" />
     <None Include="Resources\水泵_绿.png" />
@@ -305,6 +306,8 @@
     <None Include="Resources\figure_unselected.png" />
     <None Include="Resources\figure_unselected1.png" />
     <None Include="Resources\figure_selected.png" />
+    <None Include="Resources\confirm.png" />
+    <None Include="Resources\del1.png" />
     <Content Include="Resources\forward.png" />
     <None Include="Resources\recordStop.png" />
     <None Include="Resources\returnPreview.png" />
@@ -317,6 +320,8 @@
     <None Include="Resources\normal_unselected.png" />
     <None Include="Resources\normal_selected.png" />
     <None Include="Resources\normal_selected1.png" />
+    <None Include="Resources\modify1.png" />
+    <None Include="Resources\query1.png" />
     <Content Include="Resources\quit.png" />
   </ItemGroup>
   <ItemGroup />

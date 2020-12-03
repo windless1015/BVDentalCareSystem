@@ -125,6 +125,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //根据dataPath进行时间降序排序
         public void SortOrderByTimeDescend()
         {
+            if (dataPath == "")
+                return;
             DirectoryInfo dirInfo = new DirectoryInfo(dataPath);
             if (!dirInfo.Exists)
                 return;
@@ -309,9 +311,15 @@ namespace BVDentalCareSystem.SelfDefinedControls
             {
                 MessageBox.Show(msg.Message);
             }
-}
+        }
 
-
+        public void Clear()
+        {
+            itemsList.Clear();
+            thumbnailImageList.Images.Clear();
+            doubleBufferListView.Items.Clear();
+            dataPath = null;
+        }
 
     }
 }

@@ -23,22 +23,17 @@ namespace BVDentalCareSystem
         ControlPanel controlPanelForm = null; //控制面板的form
         string displayImageAbsPath = null;
         public bool isTakingPicturePause = false; //是否是拍照暂停了
-
+        string rootPath = Environment.CurrentDirectory + @"\PatientInfoDir\";
+        string curPatientPath = null;
         //数据通信
         const string heartBeatSendCmd = "0101000101040000";
         private USBHelper usbHelperInstance = null;
         private SerialPortHelper serialPort = null;
-        string rootPath = @"D:\PatientInfoDir\李伟_1_2020-07-22\";
+        
         public MainForm()
         {
-            InitializeComponent();
-            if(!Directory.Exists(rootPath))
-                Directory.CreateDirectory(rootPath);//创建该文件夹　　 
-            imageVideoBrowserSideBar.dataPath = rootPath;
-            imageVideoBrowserSideBar.SortOrderByTimeDescend();
-            imageVideoBrowserSideBar.GroupItemByDate();
+            InitializeComponent();　 
             imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
-            CheckRootDataDirectory();
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
@@ -72,6 +67,7 @@ namespace BVDentalCareSystem
             
             btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_selected;
             pif = new PatientsInfoForm();
+            pif.SideBarDataReorderNotify += ProcessSideBarRecord;
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
             pif.Location = new Point(0, panel_head.Height + 34);
@@ -115,6 +111,12 @@ namespace BVDentalCareSystem
                 MessageBox.Show(caption, "连接设备出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (curPatientPath == null)
+            {
+                MessageBox.Show("请选择一个患者!", "选择患者", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             //如果当前显示的是静态截图照片的处理
             if (picBox != null)
             {
@@ -301,7 +303,7 @@ namespace BVDentalCareSystem
             {
                 string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
                 //1. 主窗口移除掉videoPlayer这个控件，添加pictureBox控件
-                string snapShotImgPath = rootPath + dateTime + ".jpg";
+                string snapShotImgPath = curPatientPath + "\\" + dateTime + ".jpg";
                 displayImageAbsPath = snapShotImgPath;
                 Bitmap snapShotImg = videoCamera.TakeSnapshot(snapShotImgPath, true);
                 int imgFromDeviceType = (snapShotImg.Width == snapShotImg.Height) ? 1 : 2; //照片宽高相等表示牙周观察仪
@@ -340,7 +342,7 @@ namespace BVDentalCareSystem
             if (videoCamera.isPlaying && !videoCamera.isRecording)
             {
                 string dateTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string aviFileName = rootPath + dateTime + ".avi";
+                string aviFileName = curPatientPath + "\\" + dateTime + ".avi";
                 videoCamera.StartRecord(aviFileName);
                 controlPanelForm.ChangeRecordBtnImg(Properties.Resources.recordStop);
             }
@@ -511,12 +513,14 @@ namespace BVDentalCareSystem
         }
 
 
-        //判断根数据目录是否存在
-        private void CheckRootDataDirectory()
+        private void ProcessSideBarRecord(string dataPath)
         {
-            string localDataDir = Environment.CurrentDirectory + @"\PatientInfoDir";
-            if (!Directory.Exists(localDataDir))//如果没有这个文件夹还要创建
-                Directory.CreateDirectory(localDataDir);
+            curPatientPath = dataPath;
+            imageVideoBrowserSideBar.Clear();
+            imageVideoBrowserSideBar.dataPath = dataPath;
+            imageVideoBrowserSideBar.SortOrderByTimeDescend();
+            imageVideoBrowserSideBar.GroupItemByDate();
         }
+
     }
 }

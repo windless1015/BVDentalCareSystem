@@ -113,6 +113,16 @@ namespace BVDentalCareSystem.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap btn_confirm {
+            get {
+                object obj = ResourceManager.GetObject("btn_confirm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap btn_del_record {
             get {
                 object obj = ResourceManager.GetObject("btn_del_record", resourceCulture);
@@ -355,6 +365,16 @@ namespace BVDentalCareSystem.Properties {
         internal static System.Drawing.Bitmap playVideoResume {
             get {
                 object obj = ResourceManager.GetObject("playVideoResume", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap query1 {
+            get {
+                object obj = ResourceManager.GetObject("query1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
