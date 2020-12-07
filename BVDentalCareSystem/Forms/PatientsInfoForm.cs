@@ -150,7 +150,7 @@ namespace BVDentalCareSystem.Forms
                 SelectOnePatient(rowSize - 1);
                 //创建该文件夹
                 Directory.CreateDirectory(rootPath + case_file_name);
-
+                EnableOrDisableInputControls(false);
                 Button_add.Tag = "add";
                 Button_add.BackgroundImage = Properties.Resources.btn_add_record;
             }
@@ -160,14 +160,7 @@ namespace BVDentalCareSystem.Forms
         {
             if (Button_modify.Tag.ToString() == "modify")
             {
-                //先判断当前是否有选中的人如果没有提示
-                //if ("" != "")
-                //{
-                //    MessageBox.Show("请先选中一个患者！");
-                //    return;
-                //}
                 EnableOrDisableInputControls(true);
-                DisableOrEnableFourButtons(false, false, true, false);
                 Button_modify.Tag = "confirm";
                 Button_modify.BackgroundImage = Properties.Resources.btn_confirm;
                 return;
@@ -194,12 +187,13 @@ namespace BVDentalCareSystem.Forms
                 }
                 else  //修改了用户的姓名
                 {
-                    string originalFileName = dataTablePatientInfo.Rows[curRowIndex][7].ToString();
                     System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
                     string timeStamp = Convert.ToInt32((DateTime.Now - startTime).TotalSeconds).ToString(); // 相差秒数
                     string newFileName = textBox_name.Text + "_" + timeStamp;
                     //修改这个用户所对应的文件夹的名字
-                    //Directory.Move(originalFileName, newFileName);
+                    string originalFileName = rootPath + dataTablePatientInfo.Rows[curRowIndex][7].ToString();
+                    string newFileNameAbsPath = rootPath + newFileName;
+                    Directory.Move(originalFileName, newFileNameAbsPath);
 
                     //更新数据库中 姓名,case_file_name 这两个个字段
                     dataTablePatientInfo.Rows[curRowIndex][1] = textBox_name.Text;
@@ -208,7 +202,6 @@ namespace BVDentalCareSystem.Forms
                 }
                 Button_modify.Tag = "modify";
                 Button_modify.BackgroundImage = Properties.Resources.btn_modify_record;
-                
             }
         }
 
@@ -238,7 +231,6 @@ namespace BVDentalCareSystem.Forms
             }
             //递归删除文件夹
             DelectDir(ref dataPath);
-
             dataTablePatientInfo.Rows[needDeleteIdx].Delete();
             sqlHeperInstance.DeleteData(ref dataTablePatientInfo);
             dataTablePatientInfo.AcceptChanges();

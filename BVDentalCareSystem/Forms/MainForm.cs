@@ -91,7 +91,6 @@ namespace BVDentalCareSystem
             }
             
             PressCameraButton(1);
-            
         }
 
         //口腔观察
@@ -334,7 +333,7 @@ namespace BVDentalCareSystem
                 return;
             if (picBox != null) //说明此时有截图的pictureBox遮挡，提示用户先返回视频流
             {
-                MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回实时视频流！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回视频显示状态！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
