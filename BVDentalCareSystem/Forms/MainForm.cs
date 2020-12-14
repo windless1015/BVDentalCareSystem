@@ -12,6 +12,7 @@ using BVDentalCareSystem.SelfDefinedControls;
 using System.IO;
 using BVDentalCareSystem.CommandParse;
 using Accord.Video.DirectShow;
+using System.Diagnostics;
 
 namespace BVDentalCareSystem
 {
@@ -327,14 +328,14 @@ namespace BVDentalCareSystem
             }
         }
 
-        private void ControlPanelForm_PressRecordBtn()
+        private int ControlPanelForm_PressRecordBtn()
         {
             if (videoCamera == null)
-                return;
+                return -1;
             if (picBox != null) //说明此时有截图的pictureBox遮挡，提示用户先返回视频流
             {
                 MessageBox.Show("当前处于浏览照片状态，请点击拍照按钮先返回视频显示状态！", "浏览照片", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return -1;
             }
 
             //正在播放 且 没有在录像
@@ -344,6 +345,7 @@ namespace BVDentalCareSystem
                 string aviFileName = curPatientPath + "\\" + dateTime + ".avi";
                 videoCamera.StartRecord(aviFileName);
                 controlPanelForm.ChangeRecordBtnImg(Properties.Resources.recordStop);
+                return 0;
             }
             else
             {
@@ -352,6 +354,7 @@ namespace BVDentalCareSystem
                 //重新排序
                 imageVideoBrowserSideBar.SortOrderByTimeDescend();
                 imageVideoBrowserSideBar.GroupItemByDate();
+                return 1;
             }
         }
 
@@ -459,14 +462,24 @@ namespace BVDentalCareSystem
                     videoCamera = null;
                 }
 
-                videoCamera = new VideoPlayer();
-                videoCamera.Parent = this.splitContainer.Panel2;
-                videoCamera.Location = new Point(0, panel_head.Height + 34);
-                int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-                int h = w * 720 / 1280;
-                videoCamera.Size = new Size(w, h);
-                videoCamera.PlayVideo(itemPath);
-                this.splitContainer.Panel2.Controls.Add(videoCamera);
+                //videoCamera = new VideoPlayer();
+                //videoCamera.Parent = this.splitContainer.Panel2;
+                //videoCamera.Location = new Point(0, panel_head.Height + 34);
+                //int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+                //int h = w * 720 / 1280;
+                //videoCamera.Size = new Size(w, h);
+                //videoCamera.PlayVideo(itemPath);
+                //this.splitContainer.Panel2.Controls.Add(videoCamera);
+                //videoCamera.Show();
+
+                //string strA = "hello" + "," + "world";
+                System.Diagnostics.Process pro = new System.Diagnostics.Process();
+                pro.StartInfo.FileName = @"DXVideoPlayer.exe";
+                int aa = itemPath.LastIndexOf('\\');
+                string fileName = itemPath.Substring(aa + 1);
+                string folderPath = itemPath.Substring(0, aa);
+                pro.StartInfo.Arguments = folderPath + " " + fileName;
+                pro.Start();//开启程序
             }
 
 

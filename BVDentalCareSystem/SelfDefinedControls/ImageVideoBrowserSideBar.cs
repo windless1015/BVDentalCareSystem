@@ -99,14 +99,21 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private void GetThumbnailFromVideo()
         {
-            VideoFileReader videoFileReader = new VideoFileReader();
-            videoFileReader.Open(itemPath);
-            Bitmap videoFrame = videoFileReader.ReadVideoFrame();
-            Image myThumbnailImg = videoFrame.GetThumbnailImage(128, 72, () => { return false; }, IntPtr.Zero);
-            thumbnail = new Bitmap(myThumbnailImg);
-            videoFrame.Dispose();
-            myThumbnailImg.Dispose();
-            videoFileReader.Dispose();
+            try
+            {
+                VideoFileReader videoFileReader = new VideoFileReader();
+                videoFileReader.Open(itemPath);
+                Bitmap videoFrame = videoFileReader.ReadVideoFrame();
+                Image myThumbnailImg = videoFrame.GetThumbnailImage(128, 72, () => { return false; }, IntPtr.Zero);
+                thumbnail = new Bitmap(myThumbnailImg);
+                videoFrame.Dispose();
+                myThumbnailImg.Dispose();
+                videoFileReader.Dispose();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
     }

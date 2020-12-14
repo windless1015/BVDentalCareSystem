@@ -43,9 +43,9 @@ namespace BVDentalCareSystem
             this.panel_about = new System.Windows.Forms.Panel();
             this.panel_help = new System.Windows.Forms.Panel();
             this.panel_platformName = new System.Windows.Forms.Panel();
-            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             this.timer_heartbeat = new System.Windows.Forms.Timer(this.components);
             this.timer_timeout = new System.Windows.Forms.Timer(this.components);
+            this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -214,16 +214,6 @@ namespace BVDentalCareSystem
             this.panel_platformName.Size = new System.Drawing.Size(475, 36);
             this.panel_platformName.TabIndex = 0;
             // 
-            // imageVideoBrowserSideBar
-            // 
-            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
-            this.imageVideoBrowserSideBar.dataPath = null;
-            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1290, 96);
-            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
-            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
-            this.imageVideoBrowserSideBar.TabIndex = 3;
-            // 
             // timer_heartbeat
             // 
             this.timer_heartbeat.Interval = 2000;
@@ -233,6 +223,16 @@ namespace BVDentalCareSystem
             // 
             this.timer_timeout.Interval = 3000;
             this.timer_timeout.Tick += new System.EventHandler(this.timer_timeout_Tick);
+            // 
+            // imageVideoBrowserSideBar
+            // 
+            this.imageVideoBrowserSideBar.BackColor = System.Drawing.Color.White;
+            this.imageVideoBrowserSideBar.dataPath = null;
+            this.imageVideoBrowserSideBar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.imageVideoBrowserSideBar.Location = new System.Drawing.Point(1290, 96);
+            this.imageVideoBrowserSideBar.Name = "imageVideoBrowserSideBar";
+            this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
+            this.imageVideoBrowserSideBar.TabIndex = 3;
             // 
             // MainForm
             // 

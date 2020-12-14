@@ -15,7 +15,7 @@ namespace BVDentalCareSystem.Forms
         public delegate void SnapShotHandler();
         public event SnapShotHandler PressSnapShotBtn;
 
-        public delegate void RecordHandler();
+        public delegate int RecordHandler(); //result是返回的
         public event RecordHandler PressRecordBtn;
 
         public delegate void CmdOutHandler(ref string cmd);
@@ -89,7 +89,15 @@ namespace BVDentalCareSystem.Forms
         //录像
         private void btnRecord_Click(object sender, EventArgs e)
         {
-            PressRecordBtn();
+            int res = PressRecordBtn();
+            if (res == 0) //正在录像
+            {
+                btnSnapshot.Enabled = false;
+            }
+            if (res == 1) //结束录像
+            {
+                btnSnapshot.Enabled = true;
+            }
         }
 
         public void ChangeSnapshotBtnImg(Bitmap bm)
