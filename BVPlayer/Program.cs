@@ -17,6 +17,9 @@ namespace vlc.net
             Form1 instance = new Form1();
             instance.needPlayFile = args[0];
             instance.folderPath = args[1];
+
+            //instance.needPlayFile = @"E:\testVideo\20201219125139.avi";
+            //instance.folderPath = @"E:\testVideo\";
             Application.Run(instance);
         }
     }

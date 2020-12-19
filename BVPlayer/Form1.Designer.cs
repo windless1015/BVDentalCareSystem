@@ -39,6 +39,7 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.videoList = new System.Windows.Forms.ListBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_playProgress)).BeginInit();
             this.SuspendLayout();
@@ -49,10 +50,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_player.BackColor = System.Drawing.Color.Black;
-            this.panel_player.Location = new System.Drawing.Point(61, 15);
+            this.panel_player.Location = new System.Drawing.Point(298, 13);
             this.panel_player.Margin = new System.Windows.Forms.Padding(4);
             this.panel_player.Name = "panel_player";
-            this.panel_player.Size = new System.Drawing.Size(1511, 1005);
+            this.panel_player.Size = new System.Drawing.Size(1313, 995);
             this.panel_player.TabIndex = 0;
             // 
             // panel2
@@ -66,16 +67,16 @@
             this.panel2.Controls.Add(this.trackBar_playProgress);
             this.panel2.Controls.Add(this.btnReset);
             this.panel2.Controls.Add(this.btnStart);
-            this.panel2.Location = new System.Drawing.Point(1, 1028);
+            this.panel2.Location = new System.Drawing.Point(298, 1028);
             this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1634, 110);
+            this.panel2.Size = new System.Drawing.Size(1337, 99);
             this.panel2.TabIndex = 1;
             // 
             // btn_fastBackward
             // 
             this.btn_fastBackward.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_fastBackward.Location = new System.Drawing.Point(659, 37);
+            this.btn_fastBackward.Location = new System.Drawing.Point(654, 25);
             this.btn_fastBackward.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_fastBackward.Name = "btn_fastBackward";
             this.btn_fastBackward.Size = new System.Drawing.Size(100, 42);
@@ -87,7 +88,7 @@
             // btn_fastForward
             // 
             this.btn_fastForward.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_fastForward.Location = new System.Drawing.Point(497, 37);
+            this.btn_fastForward.Location = new System.Drawing.Point(494, 25);
             this.btn_fastForward.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_fastForward.Name = "btn_fastForward";
             this.btn_fastForward.Size = new System.Drawing.Size(100, 42);
@@ -99,7 +100,7 @@
             // btnPauseOrResume
             // 
             this.btnPauseOrResume.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnPauseOrResume.Location = new System.Drawing.Point(335, 37);
+            this.btnPauseOrResume.Location = new System.Drawing.Point(334, 25);
             this.btnPauseOrResume.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnPauseOrResume.Name = "btnPauseOrResume";
             this.btnPauseOrResume.Size = new System.Drawing.Size(100, 42);
@@ -112,29 +113,30 @@
             // 
             this.tbVideoTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbVideoTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbVideoTime.Location = new System.Drawing.Point(1486, 9);
+            this.tbVideoTime.Location = new System.Drawing.Point(1189, 9);
             this.tbVideoTime.Margin = new System.Windows.Forms.Padding(4);
             this.tbVideoTime.Name = "tbVideoTime";
             this.tbVideoTime.ReadOnly = true;
             this.tbVideoTime.Size = new System.Drawing.Size(144, 18);
             this.tbVideoTime.TabIndex = 6;
+            this.tbVideoTime.Text = "00:00:00/00:00:00";
             // 
             // trackBar_playProgress
             // 
             this.trackBar_playProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_playProgress.AutoSize = false;
-            this.trackBar_playProgress.Location = new System.Drawing.Point(0, 4);
+            this.trackBar_playProgress.Location = new System.Drawing.Point(780, 35);
             this.trackBar_playProgress.Margin = new System.Windows.Forms.Padding(4);
             this.trackBar_playProgress.Name = "trackBar_playProgress";
-            this.trackBar_playProgress.Size = new System.Drawing.Size(1488, 31);
+            this.trackBar_playProgress.Size = new System.Drawing.Size(533, 41);
             this.trackBar_playProgress.TabIndex = 3;
             this.trackBar_playProgress.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar_playProgress.Scroll += new System.EventHandler(this.trackBar_playProgress_Scroll);
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(173, 34);
+            this.btnReset.Location = new System.Drawing.Point(174, 25);
             this.btnReset.Margin = new System.Windows.Forms.Padding(4);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(100, 42);
@@ -145,7 +147,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(11, 34);
+            this.btnStart.Location = new System.Drawing.Point(14, 25);
             this.btnStart.Margin = new System.Windows.Forms.Padding(4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(100, 42);
@@ -159,17 +161,34 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // videoList
+            // 
+            this.videoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.videoList.FormattingEnabled = true;
+            this.videoList.ItemHeight = 15;
+            this.videoList.Location = new System.Drawing.Point(12, 13);
+            this.videoList.Margin = new System.Windows.Forms.Padding(4);
+            this.videoList.Name = "videoList";
+            this.videoList.Size = new System.Drawing.Size(262, 1114);
+            this.videoList.TabIndex = 13;
+            this.videoList.SelectedIndexChanged += new System.EventHandler(this.videoList_SelectedIndexChanged);
+            this.videoList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.videoList_MouseDoubleClick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1635, 1134);
+            this.Controls.Add(this.videoList);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel_player);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_playProgress)).EndInit();
@@ -189,6 +208,7 @@
         private System.Windows.Forms.Button btn_fastBackward;
         private System.Windows.Forms.Button btn_fastForward;
         private System.Windows.Forms.Button btnPauseOrResume;
+        private System.Windows.Forms.ListBox videoList;
     }
 }
 
