@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DXVideoPlayer
+namespace vlc.net
 {
     static class Program
     {
@@ -17,8 +15,8 @@ namespace DXVideoPlayer
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Form1 instance = new Form1();
-            instance.folderPath = @"E:\testVideo";
-            instance.needPlayFile = @"E:\testVideo\20201219125139.avi";
+            instance.needPlayFile = args[0];
+            instance.folderPath = args[1];
             Application.Run(instance);
         }
     }

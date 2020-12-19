@@ -474,11 +474,11 @@ namespace BVDentalCareSystem
 
                 //string strA = "hello" + "," + "world";
                 System.Diagnostics.Process pro = new System.Diagnostics.Process();
-                pro.StartInfo.FileName = @"DXVideoPlayer.exe";
+                pro.StartInfo.FileName = @"BVPlayer.exe";
                 int aa = itemPath.LastIndexOf('\\');
-                string fileName = itemPath.Substring(aa + 1);
+                string fileName = itemPath;
                 string folderPath = itemPath.Substring(0, aa);
-                pro.StartInfo.Arguments = folderPath + " " + fileName;
+                pro.StartInfo.Arguments = fileName + " " + folderPath;
                 pro.Start();//开启程序
             }
 
