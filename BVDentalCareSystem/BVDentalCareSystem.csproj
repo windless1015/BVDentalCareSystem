@@ -108,14 +108,6 @@
     <Reference Include="LibUsbDotNet.LibUsbDotNet, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c677239abe1e02a9, processorArchitecture=MSIL">
       <HintPath>..\packages\LibUsbDotNet.2.2.29\lib\net45\LibUsbDotNet.LibUsbDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DirectX_VideoPlayer_DLL\Microsoft.DirectX.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.AudioVideoPlayback, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DirectX_VideoPlayer_DLL\Microsoft.DirectX.AudioVideoPlayback.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -194,12 +186,6 @@
     <Compile Include="SelfDefinedControls\VideoPlayer.Designer.cs">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
     </Compile>
-    <Compile Include="SelfDefinedControls\VideoPlayerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelfDefinedControls\VideoPlayerForm.Designer.cs">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -226,9 +212,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelfDefinedControls\VideoPlayer.resx">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SelfDefinedControls\VideoPlayerForm.resx">
-      <DependentUpon>VideoPlayerForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

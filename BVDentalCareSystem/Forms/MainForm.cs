@@ -36,6 +36,11 @@ namespace BVDentalCareSystem
             InitializeComponent();　 
             imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
         }
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            //检测数据文件夹是否存在,如果不存在就创建
+            TestDataRootDirectoryExist();
+        }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
         {
@@ -123,7 +128,7 @@ namespace BVDentalCareSystem
                 picBox.Dispose();
                 picBox = null;
                 this.splitContainer.Panel2.Controls.Add(videoCamera);
-                return;
+                //return;
             }
             //如果当前正在播放视频，再次点击
             if (videoCamera != null)
@@ -406,8 +411,9 @@ namespace BVDentalCareSystem
         private void PicBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ImageBrowser imgBrowser = new ImageBrowser(); //图片浏览器
-            imgBrowser.curImageAbsPath = displayImageAbsPath;
-            imgBrowser.curDataAbsPath = rootPath;
+            imgBrowser.curImageAbsPath = displayImageAbsPath; //当前图片的绝对路径
+            string curPatientDataPath = displayImageAbsPath.Substring(0, displayImageAbsPath.LastIndexOf(@"\"));
+            imgBrowser.curDataAbsPath = curPatientDataPath; //当前病例数据文件夹的路径
             imgBrowser.Show();
         }
 
@@ -420,6 +426,10 @@ namespace BVDentalCareSystem
                 if (this.splitContainer.Panel2.Controls.Contains(videoCamera))
                 {
                     this.splitContainer.Panel2.Controls.Remove(videoCamera);
+                }
+                if (splitContainer.Panel2.Controls.Contains(pif))
+                {
+                    splitContainer.Panel2.Controls.Remove(pif);
                 }
 
                 if (picBox != null)
@@ -461,18 +471,6 @@ namespace BVDentalCareSystem
                     videoCamera.Dispose();
                     videoCamera = null;
                 }
-
-                //videoCamera = new VideoPlayer();
-                //videoCamera.Parent = this.splitContainer.Panel2;
-                //videoCamera.Location = new Point(0, panel_head.Height + 34);
-                //int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-                //int h = w * 720 / 1280;
-                //videoCamera.Size = new Size(w, h);
-                //videoCamera.PlayVideo(itemPath);
-                //this.splitContainer.Panel2.Controls.Add(videoCamera);
-                //videoCamera.Show();
-
-                //string strA = "hello" + "," + "world";
                 System.Diagnostics.Process pro = new System.Diagnostics.Process();
                 pro.StartInfo.FileName = @"BVPlayer.exe";
                 int aa = itemPath.LastIndexOf('\\');
@@ -481,10 +479,6 @@ namespace BVDentalCareSystem
                 pro.StartInfo.Arguments = fileName + " " + folderPath;
                 pro.Start();//开启程序
             }
-
-
-
-            
         }
 
         //牙周是1， 口腔观察是 2
@@ -532,6 +526,14 @@ namespace BVDentalCareSystem
             imageVideoBrowserSideBar.dataPath = dataPath;
             imageVideoBrowserSideBar.SortOrderByTimeDescend();
             imageVideoBrowserSideBar.GroupItemByDate();
+        }
+
+        private void TestDataRootDirectoryExist()
+        {
+            if (!Directory.Exists(rootPath))
+            {
+                Directory.CreateDirectory(rootPath);
+            }
         }
 
     }
