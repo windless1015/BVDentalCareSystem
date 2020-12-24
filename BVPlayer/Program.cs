@@ -18,8 +18,8 @@ namespace vlc.net
             instance.needPlayFile = args[0];
             instance.folderPath = args[1];
 
-            instance.needPlayFile = @"E:\TestFiles\20201209222314";
-            instance.folderPath = @"E:\TestFiles\";
+            //instance.needPlayFile = @"E:\TestFiles\20201209222314";
+            //instance.folderPath = @"E:\TestFiles\";
             Application.Run(instance);
         }
     }
