@@ -290,10 +290,8 @@ namespace BVDentalCareSystem.SelfDefinedControls
             //    return;
             if (vt == VideoType.VIDEO_FILE)
             {
-                CloseCurrentVideoSource();
-                VideoPlayerForm vpf = new VideoPlayerForm();
-                vpf.StartPlayVideoFile(ref inputString);
-                vpf.Show();
+                //CloseCurrentVideoSource();
+
             }
             
             //this.ClientRectangle

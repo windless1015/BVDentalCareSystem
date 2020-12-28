@@ -422,6 +422,11 @@ namespace BVDentalCareSystem
                     this.splitContainer.Panel2.Controls.Remove(videoCamera);
                 }
 
+                if (this.splitContainer.Panel2.Controls.Contains(pif))
+                {
+                    this.splitContainer.Panel2.Controls.Remove(pif);
+                }
+
                 if (picBox != null)
                 {
                     picBox.Dispose();
