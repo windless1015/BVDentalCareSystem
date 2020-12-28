@@ -290,8 +290,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             //    return;
             if (vt == VideoType.VIDEO_FILE)
             {
-                //CloseCurrentVideoSource();
-
+                CloseCurrentVideoSource();
             }
             
             //this.ClientRectangle
