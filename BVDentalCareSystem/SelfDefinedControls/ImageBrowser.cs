@@ -70,6 +70,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 Image curImg = Image.FromFile(curImageAbsPath);
                 if (System.Math.Abs(curImg.Width - curImg.Height) < 20) //正方形
                 {
+                    pictureBox.Location = new Point((1920 - 1080)/2, 0);
                     pictureBox.ClientSize = new Size(1080, 1080);
                 }
                 else
@@ -90,7 +91,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             Image curImg = Image.FromFile(curImageAbsPath);
             if (System.Math.Abs(curImg.Width - curImg.Height) < 20) //正方形
             {
-                pictureBox.Location = new Point(1920 / 2, 0);
+                pictureBox.Location = new Point((1920 - 1080) / 2, 0);
                 pictureBox.ClientSize = new Size(1080, 1080);
             }
             else

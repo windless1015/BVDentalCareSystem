@@ -77,10 +77,12 @@ namespace BVDentalCareSystem
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
             pif.Location = new Point(0, panel_head.Height + 34);
-            pif.Size = new Size(this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10, 
-                this.splitContainer.Panel2.Height - panel_head.Height - panel_seperate.Height - 10);
-            this.splitContainer.Panel2.Controls.Add(pif);
+            int w = this.splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+            int h = this.splitContainer.Panel2.Height - panel_head.Height - panel_seperate.Height - 10;
+            pif.Size = new Size(w, h);
+
             pif.Show();
+            this.splitContainer.Panel2.Controls.Add(pif);
         }
 
         //牙周观察
@@ -365,6 +367,11 @@ namespace BVDentalCareSystem
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
+            Process[] procesRepo = Process.GetProcessesByName("BVPlayer");
+            if (procesRepo.Length > 0)
+            {
+                procesRepo[0].Kill();
+            }
             System.Environment.Exit(0);
         }
 
@@ -464,6 +471,8 @@ namespace BVDentalCareSystem
                 picBox.Show();
                 this.splitContainer.Panel2.Controls.Add(picBox);
                 displayImageAbsPath = itemPath;
+                if(controlPanelForm != null)//同时把拍照按钮的图标变成浏览模式
+                    controlPanelForm.ChangeSnapshotBtnImg(Properties.Resources.returnPreview);
             }
             else if (fileType == ".avi")
             {
@@ -476,6 +485,13 @@ namespace BVDentalCareSystem
                     videoCamera.Dispose();
                     videoCamera = null;
                 }
+                //先去进程库里查询是否有BVPlayer.exe进程存在
+                Process[] procesRepo = Process.GetProcessesByName("BVPlayer");
+                if (procesRepo.Length > 0)
+                {
+                    procesRepo[0].Kill();
+                }
+
                 System.Diagnostics.Process pro = new System.Diagnostics.Process();
                 pro.StartInfo.FileName = @"BVPlayer.exe";
                 int aa = itemPath.LastIndexOf('\\');

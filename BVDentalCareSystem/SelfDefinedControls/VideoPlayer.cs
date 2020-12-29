@@ -96,6 +96,11 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public Bitmap TakeSnapshot(string file, bool isNeedReturenSnapshot)
         {
             Bitmap singleFrame = this.GetCurrentVideoFrame();
+            if (singleFrame == null)
+            {
+                MessageBox.Show("请检查摄像头是否连接正常!");
+                return null;
+            }
             singleFrame.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
             if (isNeedReturenSnapshot)
                 return singleFrame;
@@ -286,15 +291,10 @@ namespace BVDentalCareSystem.SelfDefinedControls
         private void VideoPlayer_MouseDoubleClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             //只有当在播放本地文件的时候，双击才有用
-            //if (!doubleClickChangeSize)
-            //    return;
             if (vt == VideoType.VIDEO_FILE)
             {
                 CloseCurrentVideoSource();
             }
-            
-            //this.ClientRectangle
-            //this.Size = new Size(800, 800);
         }
     }
 }

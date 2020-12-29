@@ -50,36 +50,34 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_player.BackColor = System.Drawing.Color.Black;
-            this.panel_player.Location = new System.Drawing.Point(298, 13);
-            this.panel_player.Margin = new System.Windows.Forms.Padding(4);
+            this.panel_player.Location = new System.Drawing.Point(227, 10);
             this.panel_player.Name = "panel_player";
-            this.panel_player.Size = new System.Drawing.Size(1313, 995);
+            this.panel_player.Size = new System.Drawing.Size(902, 552);
             this.panel_player.TabIndex = 0;
             // 
             // panel2
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.Controls.Add(this.btn_fastBackward);
-            this.panel2.Controls.Add(this.btn_fastForward);
-            this.panel2.Controls.Add(this.btnPauseOrResume);
             this.panel2.Controls.Add(this.tbVideoTime);
             this.panel2.Controls.Add(this.trackBar_playProgress);
-            this.panel2.Controls.Add(this.btnReset);
+            this.panel2.Controls.Add(this.btn_fastBackward);
             this.panel2.Controls.Add(this.btnStart);
-            this.panel2.Location = new System.Drawing.Point(298, 1028);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.panel2.Controls.Add(this.btnPauseOrResume);
+            this.panel2.Controls.Add(this.btnReset);
+            this.panel2.Controls.Add(this.btn_fastForward);
+            this.panel2.Location = new System.Drawing.Point(224, 568);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1337, 99);
+            this.panel2.Size = new System.Drawing.Size(945, 81);
             this.panel2.TabIndex = 1;
             // 
             // btn_fastBackward
             // 
             this.btn_fastBackward.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_fastBackward.Location = new System.Drawing.Point(654, 25);
-            this.btn_fastBackward.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_fastBackward.Location = new System.Drawing.Point(446, 29);
+            this.btn_fastBackward.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_fastBackward.Name = "btn_fastBackward";
-            this.btn_fastBackward.Size = new System.Drawing.Size(100, 42);
+            this.btn_fastBackward.Size = new System.Drawing.Size(75, 34);
             this.btn_fastBackward.TabIndex = 21;
             this.btn_fastBackward.Text = "快退";
             this.btn_fastBackward.UseVisualStyleBackColor = true;
@@ -88,10 +86,10 @@
             // btn_fastForward
             // 
             this.btn_fastForward.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_fastForward.Location = new System.Drawing.Point(494, 25);
-            this.btn_fastForward.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_fastForward.Location = new System.Drawing.Point(339, 29);
+            this.btn_fastForward.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_fastForward.Name = "btn_fastForward";
-            this.btn_fastForward.Size = new System.Drawing.Size(100, 42);
+            this.btn_fastForward.Size = new System.Drawing.Size(75, 34);
             this.btn_fastForward.TabIndex = 20;
             this.btn_fastForward.Text = "快进";
             this.btn_fastForward.UseVisualStyleBackColor = true;
@@ -100,10 +98,10 @@
             // btnPauseOrResume
             // 
             this.btnPauseOrResume.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnPauseOrResume.Location = new System.Drawing.Point(334, 25);
-            this.btnPauseOrResume.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnPauseOrResume.Location = new System.Drawing.Point(125, 29);
+            this.btnPauseOrResume.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnPauseOrResume.Name = "btnPauseOrResume";
-            this.btnPauseOrResume.Size = new System.Drawing.Size(100, 42);
+            this.btnPauseOrResume.Size = new System.Drawing.Size(75, 34);
             this.btnPauseOrResume.TabIndex = 18;
             this.btnPauseOrResume.Text = "暂停/继续";
             this.btnPauseOrResume.UseVisualStyleBackColor = true;
@@ -113,11 +111,10 @@
             // 
             this.tbVideoTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.tbVideoTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbVideoTime.Location = new System.Drawing.Point(1189, 9);
-            this.tbVideoTime.Margin = new System.Windows.Forms.Padding(4);
+            this.tbVideoTime.Location = new System.Drawing.Point(797, 12);
             this.tbVideoTime.Name = "tbVideoTime";
             this.tbVideoTime.ReadOnly = true;
-            this.tbVideoTime.Size = new System.Drawing.Size(144, 18);
+            this.tbVideoTime.Size = new System.Drawing.Size(108, 14);
             this.tbVideoTime.TabIndex = 6;
             this.tbVideoTime.Text = "00:00:00/00:00:00";
             // 
@@ -126,20 +123,18 @@
             this.trackBar_playProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar_playProgress.AutoSize = false;
-            this.trackBar_playProgress.Location = new System.Drawing.Point(780, 35);
-            this.trackBar_playProgress.Margin = new System.Windows.Forms.Padding(4);
+            this.trackBar_playProgress.Location = new System.Drawing.Point(563, 32);
             this.trackBar_playProgress.Name = "trackBar_playProgress";
-            this.trackBar_playProgress.Size = new System.Drawing.Size(533, 41);
+            this.trackBar_playProgress.Size = new System.Drawing.Size(342, 33);
             this.trackBar_playProgress.TabIndex = 3;
             this.trackBar_playProgress.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar_playProgress.Scroll += new System.EventHandler(this.trackBar_playProgress_Scroll);
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(174, 25);
-            this.btnReset.Margin = new System.Windows.Forms.Padding(4);
+            this.btnReset.Location = new System.Drawing.Point(232, 29);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(100, 42);
+            this.btnReset.Size = new System.Drawing.Size(75, 34);
             this.btnReset.TabIndex = 2;
             this.btnReset.Text = "停止";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -147,10 +142,9 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(14, 25);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(4);
+            this.btnStart.Location = new System.Drawing.Point(18, 29);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(100, 42);
+            this.btnStart.Size = new System.Drawing.Size(75, 34);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -166,24 +160,25 @@
             this.videoList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.videoList.FormattingEnabled = true;
-            this.videoList.ItemHeight = 15;
-            this.videoList.Location = new System.Drawing.Point(12, 13);
-            this.videoList.Margin = new System.Windows.Forms.Padding(4);
+            this.videoList.ItemHeight = 12;
+            this.videoList.Location = new System.Drawing.Point(9, 10);
             this.videoList.Name = "videoList";
-            this.videoList.Size = new System.Drawing.Size(262, 1114);
+            this.videoList.Size = new System.Drawing.Size(198, 688);
             this.videoList.TabIndex = 13;
             this.videoList.SelectedIndexChanged += new System.EventHandler(this.videoList_SelectedIndexChanged);
             this.videoList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.videoList_MouseDoubleClick);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1635, 1134);
+            this.ClientSize = new System.Drawing.Size(1168, 661);
             this.Controls.Add(this.videoList);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel_player);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

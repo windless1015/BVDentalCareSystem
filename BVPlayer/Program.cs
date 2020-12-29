@@ -18,8 +18,8 @@ namespace vlc.net
             instance.needPlayFile = args[0];
             instance.folderPath = args[1];
 
-            //instance.needPlayFile = @"E:\TestFiles\20201209222314";
-            //instance.folderPath = @"E:\TestFiles\";
+            //instance.needPlayFile = @"E:\BVSoftware\BVDentalCareSystem\bin\x86\Debug\PatientInfoDir\张凯_1609174453\20201229015153.avi";
+            //instance.folderPath = @"E:\BVSoftware\BVDentalCareSystem\bin\x86\Debug\PatientInfoDir\张凯_1609174453\";
             Application.Run(instance);
         }
     }

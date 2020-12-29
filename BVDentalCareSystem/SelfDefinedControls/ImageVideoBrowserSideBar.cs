@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Accord.Video.FFMPEG;
+using BVDentalCareSystem.Interfaces;
 
 namespace BVDentalCareSystem.SelfDefinedControls
 {
@@ -41,16 +42,22 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public ItemDiscriptor(string _itemPath)
         {
             itemPath = _itemPath;
-            CheckItemType(ref _itemPath);
+        }
+
+        public bool CreateNewItem()
+        {
+            CheckItemType(itemPath);
             SetItemProperty();
+            bool res = false;
             if (itemType == ItemTypeEnum.IMAGE)
             {
-                GetThumbnailFromImage();
+                res = GetThumbnailFromImage();
             }
             else if (itemType == ItemTypeEnum.VIDEO)
             {
-                GetThumbnailFromVideo();
+                res = GetThumbnailFromVideo();
             }
+            return res;
         }
 
         ~ItemDiscriptor()
@@ -68,7 +75,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         }
 
         //根据完整文件路径判断类型
-        private void CheckItemType(ref string filePath)
+        private void CheckItemType(string filePath)
         {
             string fileStrType = filePath.Substring(filePath.LastIndexOf("."));
             if (fileStrType == ".jpg" || fileStrType == ".jpeg")
@@ -82,7 +89,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         }
 
         //从图像获取缩略图
-        private void GetThumbnailFromImage()
+        private bool GetThumbnailFromImage()
         {
             FileStream fs = File.OpenRead(itemPath); //OpenRead
             int filelength = 0;
@@ -95,10 +102,33 @@ namespace BVDentalCareSystem.SelfDefinedControls
             thumbnail = new Bitmap(myThumbnailImg);
             result.Dispose();
             myThumbnailImg.Dispose();
+            return true;
         }
 
-        private void GetThumbnailFromVideo()
+        private double CheckVideoDuration(string path)
         {
+            string pluginPath = System.Environment.CurrentDirectory + "\\plugins\\";
+            string plugin_arg = "--plugin-path=" + pluginPath;
+            string[] arguments = { "-I", "dummy", "--ignore-config", "--no-video-title", plugin_arg };
+            IntPtr libvlc_instance_ = LibVlcAPI.libvlc_new(arguments);
+            //IntPtr libvlc_media_player_ = LibVlcAPI.libvlc_media_player_new(libvlc_instance_);
+            IntPtr libvlc_media = LibVlcAPI.libvlc_media_new_path(libvlc_instance_, itemPath);
+            LibVlcAPI.libvlc_media_parse(libvlc_media);
+            double aviFileDuration = LibVlcAPI.libvlc_media_get_duration(libvlc_media);
+
+            LibVlcAPI.libvlc_media_release(libvlc_media);
+            LibVlcAPI.libvlc_release(libvlc_instance_);
+            return aviFileDuration;
+        }
+
+        private bool GetThumbnailFromVideo()
+        {
+            double duration = CheckVideoDuration(itemPath);
+            if (duration <= 0)
+            {
+                File.Delete(itemPath);
+                return false;
+            }
             try
             {
                 VideoFileReader videoFileReader = new VideoFileReader();
@@ -110,10 +140,11 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 myThumbnailImg.Dispose();
                 videoFileReader.Dispose();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
+            return true;
         }
 
     }
@@ -142,7 +173,12 @@ namespace BVDentalCareSystem.SelfDefinedControls
             var fileArray = Directory.EnumerateFiles(dataPath, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".avi") || s.EndsWith(".jpg"));
             foreach (string currentFile in fileArray)
             {
-                itemsList.Add(new ItemDiscriptor(currentFile)); //读取一个新的文件到list中
+                ItemDiscriptor newItem = new ItemDiscriptor(currentFile);
+                bool isCreate = newItem.CreateNewItem();
+                if (isCreate)
+                    itemsList.Add(newItem); //读取一个新的文件到list中
+                else
+                    newItem = null;
             }
             //把item根据时间降序排列
             itemsList.Sort((x, y) => y.itemCreationTime.CompareTo(x.itemCreationTime));
