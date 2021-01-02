@@ -28,9 +28,11 @@ namespace BVDentalCareSystem
         string curPatientPath = null;
         //数据通信
         const string heartBeatSendCmd = "0101000101040000";
+
         private USBHelper usbHelperInstance = null;
         private SerialPortHelper serialPort = null;
-        
+        private NetHelper netHelperInstance = null; //网络通信库
+
         public MainForm()
         {
             InitializeComponent();　 

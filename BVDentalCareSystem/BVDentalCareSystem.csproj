@@ -135,6 +135,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandParse\NetHelper.cs" />
     <Compile Include="CommandParse\SerialPortHelper.cs" />
     <Compile Include="CommandParse\StringOperator.cs" />
     <Compile Include="CommandParse\USBHelper.cs" />
