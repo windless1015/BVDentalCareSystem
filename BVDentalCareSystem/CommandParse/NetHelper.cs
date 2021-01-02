@@ -510,5 +510,29 @@ namespace BVDentalCareSystem.CommandParse
         }
 
         #endregion
+
+        #region 判断ping一个ip地址
+        /// <summary>
+        /// 向一个ip发送ping命令
+        /// </summary>
+        /// <param name="ip">需要ping的ip地址</param>
+        public bool PingTest(string ip)
+        {
+            System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+            System.Net.NetworkInformation.PingReply pingStatus =
+                ping.Send(System.Net.IPAddress.Parse(ip), 1000);  //"10.10.10.254"
+
+            if (pingStatus.Status == System.Net.NetworkInformation.IPStatus.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
     }
 }

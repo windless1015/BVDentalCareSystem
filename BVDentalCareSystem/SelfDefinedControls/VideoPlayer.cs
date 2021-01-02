@@ -144,9 +144,6 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private bool OpenMJPEGDevice(string ip)
         {
-            bool isPingOk = PingTest(ref ip);
-            if (!isPingOk)
-                return false;
             MJPEGStream mjpegSource = new MJPEGStream(ip);
             OpenVideoSource(mjpegSource);
             return true;
@@ -230,21 +227,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         }
 
-        public bool PingTest(ref string ip)
-        {
-            System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-            System.Net.NetworkInformation.PingReply pingStatus =
-                ping.Send(System.Net.IPAddress.Parse("10.10.10.254"), 1000);
-
-            if (pingStatus.Status == System.Net.NetworkInformation.IPStatus.Success)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
 
         // On timer event - gather statistics
         //private void timer_Tick(object sender, EventArgs e)

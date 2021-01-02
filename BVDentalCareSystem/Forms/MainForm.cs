@@ -90,16 +90,7 @@ namespace BVDentalCareSystem
         //牙周观察
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
-            try
-            {
-                BuildCommunication(1);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
+            BuildCommunication(1);
             PressCameraButton(1);
         }
 
@@ -112,7 +103,7 @@ namespace BVDentalCareSystem
         }
 
         //deviceType 为1表示牙周，2表示口腔
-        private void PressCameraButton( int deviceType)
+        private void PressCameraButton(int deviceType)
         {
             if (!CheckDeviceAvailable(deviceType))
             {
@@ -132,7 +123,6 @@ namespace BVDentalCareSystem
                 picBox.Dispose();
                 picBox = null;
                 this.splitContainer.Panel2.Controls.Add(videoCamera);
-                //return;
             }
             //如果当前正在播放视频，再次点击
             if (videoCamera != null)
@@ -171,9 +161,21 @@ namespace BVDentalCareSystem
                 btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
             }
             videoCamera.Size = new Size(w, h);
-            string deviceName = (deviceType == 1) ? "BV USB Camera" : "SKT-OL400C-13A";
+
+            string deviceName = null;
+            if (deviceType == 1)
+            {
+                deviceName = "BV USB Camera";
+            }
+            else if (deviceType == 2)
+            {
+                deviceName = "SKT-OL400C-13A";
+            }
+            else if(deviceType == 3)
+            {
+                deviceName = "http://10.10.10.254:8080";
+            }
             videoCamera.PlayVideo(deviceName);
-            //vp.PlayVideo("http://10.10.10.254:8080");
             this.splitContainer.Panel2.Controls.Add(videoCamera);
 
             //加载控制面板
@@ -197,33 +199,42 @@ namespace BVDentalCareSystem
             usbHelperInstance.Write(cmd);
         }
 
+        //deviceType: 1.牙周观察仪   2.口腔观察 usb  3.口腔观察 wifi
         private void BuildCommunication(int deviceType)
         {
-            if (deviceType == 1)
+            switch (deviceType)
             {
-                if (serialPort != null)
-                {
-                    serialPort.ClosePort();
-                    serialPort = null;
-                }
-                serialPort = new SerialPortHelper();
-                serialPort.FindDevice(); //寻找本地INI文件
-                serialPort.SerialPortRecvCmdEvent += OnRecvCurrentCommand;//设置命令接受处理函数
+                case 1:  //牙周观察
+                    if (serialPort != null)
+                    {
+                        serialPort.ClosePort();
+                        serialPort = null;
+                    }
+                    serialPort = new SerialPortHelper();
+                    serialPort.FindDevice(); //寻找本地INI文件
+                    serialPort.SerialPortRecvCmdEvent += OnRecvCurrentCommand;//设置命令接受处理函数
+                    break;
+                case 2:    //口腔观察 usb连接
+                    if (usbHelperInstance != null)
+                    {
+                        usbHelperInstance.CloseDevice();
+                        usbHelperInstance = null;
+                    }
+                    usbHelperInstance = new USBHelper();
+                    usbHelperInstance.OpenDevice(0x10c4, 0x8846);
+                    //绑定指令处理函数
+                    usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
+                    break;
 
+                default:  //口腔观察 wifi连接
+                    if (netHelperInstance != null)
+                    {
+                        
+                    }
+                    break;
             }
-            else
-            {
-                if (usbHelperInstance != null)
-                {
-                    usbHelperInstance.CloseDevice();
-                    usbHelperInstance = null;
-                }
-                usbHelperInstance = new USBHelper();
-                usbHelperInstance.OpenDevice(0x10c4, 0x8846);
 
-                //绑定指令处理函数
-                usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
-            }
+            
         }
 
         private void OnRecvCurrentCommand(object sender, RecvCommandChangedEventArgs e)
