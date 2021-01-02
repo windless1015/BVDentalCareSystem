@@ -201,6 +201,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "患者信息展示";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.PatientDisplayForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -21,7 +21,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public PatientDisplayForm()
         {
             InitializeComponent();
-            textBox_name.Focus();
+         
         }
 
         public void SetPatientInfoData(string opType, string name, string phone, string identityNum,
@@ -178,5 +178,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
             return true;
         }
 
+        private void PatientDisplayForm_Load(object sender, EventArgs e)
+        {
+            textBox_name.Select();
+        }
     }
 }

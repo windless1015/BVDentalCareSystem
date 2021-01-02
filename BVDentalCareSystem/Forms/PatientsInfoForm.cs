@@ -367,6 +367,11 @@ namespace BVDentalCareSystem.Forms
 
         public void SelectOnePatient(int rowIndex)
         {
+            DataGridViewRow oneRow = DataView_Patients.Rows[rowIndex];
+            object patientNameObj = oneRow.Cells[1].Value;
+            if (patientNameObj == null)
+                return;
+
             FillOneItmeToDisplay(rowIndex);
             //发送消息,告诉外界 窗体控件更新数据
             string dataPath = GetDataPath(rowIndex);
