@@ -61,12 +61,12 @@ namespace BVDentalCareSystem.CommandParse
             return hex.ToString();
         }
 
-        //01000100的8位byte[]转化为 " 01000100"的string字符串
+        //01000100的8位byte[]转化为 "01000100"的string字符串
         public static string ByteArrayToString3(byte[] ba)
         {
             StringBuilder hex = new StringBuilder(ba.Length);
             foreach (byte b in ba)
-                hex.AppendFormat("{0}", b);
+                hex.AppendFormat("{0:X1}", b);  //X1表示十六进制格式（大写），域宽1位
             return hex.ToString();
         }
 

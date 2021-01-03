@@ -135,7 +135,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandParse\CommandParse.cs" />
     <Compile Include="CommandParse\ConvertHelper.cs" />
+    <Compile Include="CommandParse\ICommunicationBase.cs" />
+    <Compile Include="CommandParse\INIOperation.cs" />
     <Compile Include="CommandParse\NetHelper.cs" />
     <Compile Include="CommandParse\SerialPortHelper.cs" />
     <Compile Include="CommandParse\StringOperator.cs" />

@@ -58,6 +58,7 @@ namespace BVDentalCareSystem.Forms
         {
             //上位机发给下位机的微距模式  01010200
             string cmd = "0001000100020000";
+            cmd = "01010200";
             ModeSwitchByRecvAndSend(ref cmd);
             cmdOutProcessing(ref cmd);
         }
@@ -66,6 +67,7 @@ namespace BVDentalCareSystem.Forms
         private void NormalModeBtn_Click(object sender, EventArgs e)
         {
             string cmd = "0104000100060000";
+            cmd = "14010600";
             //上位机发给下位机的normal模式  14010600
             ModeSwitchByRecvAndSend(ref cmd);
             cmdOutProcessing(ref cmd);
@@ -75,6 +77,7 @@ namespace BVDentalCareSystem.Forms
         private void FigureModeBtn_Click(object sender, EventArgs e)
         {
             string cmd = "020a0001000d0000";
+            cmd = "2A010D00";
             //上位机发给下位机的figure模式  2a010d00
             ModeSwitchByRecvAndSend(ref cmd);
             cmdOutProcessing(ref cmd);

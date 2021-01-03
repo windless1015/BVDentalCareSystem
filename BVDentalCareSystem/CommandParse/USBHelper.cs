@@ -1,18 +1,32 @@
 ﻿using System;
 using LibUsbDotNet;
 using LibUsbDotNet.Main;
+using BVDentalCareSystem.CommandParse;
 
 namespace BVDentalCareSystem.CommandParse
 {
-    class USBHelper
+    class USBHelper : ICommunicationBase
     {
         private UsbDevice MyUsbDevice = null;
         private UsbEndpointReader reader = null;
         private UsbEndpointWriter writer = null;
-        string LastCommand = "0001000000010000";
-        public bool OpenDevice(int vid, int pid)
+
+        private int deviceVid;
+        private int devicePid;
+        public event EventHandler<RecvMsgEventArgs> MsgReceivedHandler; //接受到数据
+        private RecvMsgEventArgs args = new RecvMsgEventArgs();
+
+        public USBHelper(int vid, int pid)
         {
-            UsbDeviceFinder myUsbFinder = new UsbDeviceFinder(vid, pid);
+            deviceVid = vid;
+            devicePid = pid;
+            args.deviceType = 2; //表示口腔观察
+        }
+
+
+        public bool Open()
+        {
+            UsbDeviceFinder myUsbFinder = new UsbDeviceFinder(deviceVid, devicePid);
             try
             {
                 MyUsbDevice = UsbDevice.OpenUsbDevice(myUsbFinder);
@@ -27,10 +41,10 @@ namespace BVDentalCareSystem.CommandParse
                 reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01, 8, EndpointType.Interrupt); //这里非常重要,设置为中断模式
                 writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
 
-                reader.DataReceived += (OnRxEndPointData);
                 reader.DataReceivedEnabled = true;
                 reader.ReadBufferSize = 8;//设置读取bufer的大小
                 reader.ReadThreadPriority = System.Threading.ThreadPriority.Highest;
+                reader.DataReceived += (OnRxEndPointData);
                 return true;
             }
             catch (Exception)
@@ -39,7 +53,7 @@ namespace BVDentalCareSystem.CommandParse
             }
         }
 
-        public void CloseDevice()
+        public void Close()
         {
             if (MyUsbDevice != null)
             {
@@ -57,34 +71,72 @@ namespace BVDentalCareSystem.CommandParse
             UsbDevice.Exit();
         }
 
-        public void Write(string cmd)
+        public void SendCmdMsg(string msg)
         {
-            byte[] bytesToWriteBuffer = StringOperator.ConvertStringToByteArray2(cmd);
+            Console.WriteLine(msg);
+            byte[] bytesToWriteBuffer = StringOperator.ConvertStringToByteArray(msg);
+            //byte[] writeBuffer = new byte[8];
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    if (i < msg.Length)
+            //    {
+            //        char ss = msg[i];
+            //        byte c = Convert.ToByte(msg[i]);
+
+            //        writeBuffer[i] = c;
+            //    }
+            //}
+
             int bytesWritten;
             writer.Write(bytesToWriteBuffer, 100, out bytesWritten);
         }
 
-        //本函数不停的刷新在
-        public void OnRxEndPointData(object sender, EndpointDataEventArgs e)
+
+        public byte[] RecvCmdMsg()
         {
-            string currentCommand = StringOperator.ByteArrayToString2(e.Buffer);
-            if (currentCommand.Equals("0000000000000000"))
-                return;
-            if (!LastCommand.Equals(currentCommand))
+            byte[] readBuffer = new byte[8];
+            try
             {
-                RecvCommandChangedEventArgs args = new RecvCommandChangedEventArgs();
-                args.ReceivedCommand = LastCommand = currentCommand;
-                args.deviceType = 2; //1表示口腔观察
-                OnRecvCommandChanged(args);
-                //Console.WriteLine(currentCommand);
+                if (MyUsbDevice.IsOpen)
+                {
+                    UsbEndpointReader reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                    int bytesRead;
+                    reader.Read(readBuffer, 100, out bytesRead);
+                    return readBuffer;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
             }
         }
 
-        protected virtual void OnRecvCommandChanged(RecvCommandChangedEventArgs e)
+        public void OnRxEndPointData(object sender, EndpointDataEventArgs e)
         {
-            RecvCommandChanged?.Invoke(this, e);
+            byte[] recvBytes = e.Buffer;
+            if (!isValid(ref recvBytes))
+                return;
+            string recvMsgStr = StringOperator.ByteArrayToString3(e.Buffer);
+            Console.WriteLine(recvMsgStr);
+            args.ReceivedMsg = recvMsgStr;
+            USBRecvMsgNotifyEvent(args);//向外通知usb收到了指令
         }
 
-        public event EventHandler<RecvCommandChangedEventArgs> RecvCommandChanged;
+        private bool isValid(ref byte[] msg)
+        {
+            bool res = false;
+            for (int i = 0; i < 8; i++)
+            {
+                if (msg[i] != 0)
+                    res = true;
+            }
+            return res;
+        }
+
+        protected virtual void USBRecvMsgNotifyEvent(RecvMsgEventArgs e)
+        {
+            MsgReceivedHandler?.Invoke(this, e);
+        }
     }
 }

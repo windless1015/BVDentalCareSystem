@@ -29,9 +29,10 @@ namespace BVDentalCareSystem
         //数据通信
         const string heartBeatSendCmd = "0101000101040000";
 
-        private USBHelper usbHelperInstance = null;
-        private SerialPortHelper serialPort = null;
-        private NetHelper netHelperInstance = null; //网络通信库
+        private ICommunicationBase periCommunicateInstance = null; //牙周内窥镜的通信
+        private ICommunicationBase oralCommunicateInstance = null; //口腔观察仪的通信
+        //private ICommunicationBase cleanerCommunicateInstance = null; //洁牙机的通信
+
 
         public MainForm()
         {
@@ -196,7 +197,8 @@ namespace BVDentalCareSystem
 
         private void ControlPanelForm_cmdOutProcessing(ref string cmd)
         {
-            usbHelperInstance.Write(cmd);
+            //usbHelperInstance.Write(cmd);
+            oralCommunicateInstance.SendCmdMsg(cmd);
         }
 
         //deviceType: 1.牙周观察仪   2.口腔观察 usb  3.口腔观察 wifi
@@ -205,42 +207,41 @@ namespace BVDentalCareSystem
             switch (deviceType)
             {
                 case 1:  //牙周观察
-                    if (serialPort != null)
+                    if (periCommunicateInstance != null)
                     {
-                        serialPort.ClosePort();
-                        serialPort = null;
+                        periCommunicateInstance.Close();
+                        periCommunicateInstance = null;
                     }
-                    serialPort = new SerialPortHelper();
-                    serialPort.FindDevice(); //寻找本地INI文件
-                    serialPort.SerialPortRecvCmdEvent += OnRecvCurrentCommand;//设置命令接受处理函数
+                    string comName = INIOperation.ReadSerialPortINIFile();
+                    comName = "COM4";
+                    periCommunicateInstance = new SerialPortHelper(comName);
+                    periCommunicateInstance.Open();
+                    periCommunicateInstance.MsgReceivedHandler += OnRecvCurrentCommand;//设置命令接受处理函数
                     break;
                 case 2:    //口腔观察 usb连接
-                    if (usbHelperInstance != null)
+                    if (oralCommunicateInstance != null)
                     {
-                        usbHelperInstance.CloseDevice();
-                        usbHelperInstance = null;
+                        oralCommunicateInstance.Close();
+                        oralCommunicateInstance = null;
                     }
-                    usbHelperInstance = new USBHelper();
-                    usbHelperInstance.OpenDevice(0x10c4, 0x8846);
+                    oralCommunicateInstance = new USBHelper(0x10c4, 0x8846);
+                    oralCommunicateInstance.Open();
                     //绑定指令处理函数
-                    usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
+                    //usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
                     break;
 
                 default:  //口腔观察 wifi连接
-                    if (netHelperInstance != null)
-                    {
-                        
-                    }
+                    
                     break;
             }
 
             
         }
 
-        private void OnRecvCurrentCommand(object sender, RecvCommandChangedEventArgs e)
+        private void OnRecvCurrentCommand(object sender, RecvMsgEventArgs e)
         {
             //接受到字符串的命令指令
-            string RecvCmdString = e.ReceivedCommand;
+            string RecvCmdString = e.ReceivedMsg;
             int deviceType = e.deviceType;
             ParseRecvCommandsAndSetButtons(ref RecvCmdString, ref deviceType);
         }
@@ -260,23 +261,23 @@ namespace BVDentalCareSystem
         {
             if (cmd == "5AA508F1A100A55A") //水泵关闭信号
             {
-                serialPort.SendReplay("5AA508F1A200A55A");
+                oralCommunicateInstance.SendCmdMsg("5AA508F1A200A55A");
             }
             else if (cmd == "5AA508F2A100A55A") //气泵关闭信号
             {
-                serialPort.SendReplay("5AA508F2A200A55A");
+                oralCommunicateInstance.SendCmdMsg("5AA508F2A200A55A");
             }
             else if (cmd == "5AA508F1A111A55A") //水泵打开
             {
-                serialPort.SendReplay("5AA508F1A211A55A");
+                oralCommunicateInstance.SendCmdMsg("5AA508F1A211A55A");
             }
             else if (cmd == "5AA508F2A111A55A") //气泵打开
             {
-                serialPort.SendReplay("5AA508F2A211A55A");
+                oralCommunicateInstance.SendCmdMsg("5AA508F2A211A55A");
             }
             else if (cmd == "5AA508F0A111A55A") //拍照指令
             {
-                serialPort.SendReplay("5AA508F0A211A55A");
+                oralCommunicateInstance.SendCmdMsg("5AA508F0A211A55A");
                 Action actionDelegate;
                 actionDelegate = () => { ControlPanelForm_PressSnapShotBtn(); };
                 this.Invoke(actionDelegate);
@@ -537,7 +538,7 @@ namespace BVDentalCareSystem
         //每隔2s发送一次心跳指令---发送1,1,0,1,1,4,0,0, 设备收到后回复11110000
         private void timer_heartbeat_Tick(object sender, EventArgs e)
         {
-            usbHelperInstance.Write(heartBeatSendCmd);
+            oralCommunicateInstance.SendCmdMsg(heartBeatSendCmd);
             timer_timeout.Start();
         }
 

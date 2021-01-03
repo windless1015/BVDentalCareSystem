@@ -376,7 +376,6 @@ namespace BVDentalCareSystem.CommandParse
             {
                 //连接服务器
                 socket.Connect(ip, port);
-
                 //检测连接状态
                 return socket.Poll(-1, SelectMode.SelectWrite);
             }
@@ -535,4 +534,111 @@ namespace BVDentalCareSystem.CommandParse
         #endregion
 
     }
+
+
+    public class TcpHelper : ICommunicationBase
+    {
+        private Socket tcpSocket = null;
+        private string tcpIp;
+        private int tcpPort;
+        public event EventHandler<RecvMsgEventArgs> MsgReceivedHandler; //接受到数据
+
+        public TcpHelper(string ip, int port)
+        {
+            tcpIp = ip;
+            tcpPort = port;
+        }
+
+        public bool Open()
+        {
+            tcpSocket = NetHelper.CreateTcpSocket();
+            bool isConn = NetHelper.Connect(tcpSocket, tcpIp, tcpPort);
+            return isConn;
+        }
+
+        public void Close()
+        {
+            tcpSocket.Close();
+            tcpSocket.Dispose();
+        }
+
+        public void SendCmdMsg(string message)
+        {
+            if (!message.StartsWith("{"))
+            {
+                var chars = message.Split(' ');
+                message = string.Empty;
+                foreach (var cha in chars)
+                {
+                    message += string.Format("{0:X}", Convert.ToInt32(cha)).PadLeft(2, '0');
+                }
+                message = "{\"mcucmd\":\"" + message + "\"}";
+            }
+
+            try
+            {
+                tcpSocket.Send(Encoding.UTF8.GetBytes(message));
+            }
+            catch (SocketException se)
+            {
+                throw;
+            }
+        }
+
+        public byte[] RecvCmdMsg()
+        {
+            byte[] readBuffer = new byte[33];
+            var message = string.Empty;
+            try
+            {
+                tcpSocket.Receive(readBuffer);
+                message = Encoding.UTF8.GetString(readBuffer).Trim();
+                var byt = new byte[8];
+                if (message.StartsWith("{"))
+                {
+                    message = message.Replace("\n", "").Replace("\t", "").Replace("{\"mcucmd\":\"", "").Replace("\"}", "");
+                    for (int i = 0; i < 16; i += 2)
+                    {
+                        var str = string.Format("{0}{1}", message[i], message[i + 1]);
+                        byt[i / 2] = Convert.ToByte(Convert.ToInt32(str, 16));
+                    }
+                    return byt;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //public string RecvCmdMsg()
+        //{
+        //    byte[] readBuffer = new byte[33];
+        //    var message = string.Empty;
+        //    try
+        //    {
+        //        tcpSocket.Receive(readBuffer);
+        //        message = Encoding.UTF8.GetString(readBuffer).Trim();
+        //        string ret = "";
+        //        if (message.StartsWith("{"))
+        //        {
+        //            message = message.Replace("\n", "").Replace("\t", "").Replace("{\"mcucmd\":\"", "").Replace("\"}", "");
+        //            for (int i = 0; i < 16; i += 2)
+        //            {
+        //                ret = string.Format("{0}{1}", message[i], message[i + 1]);
+        //            }
+        //            return ret;
+        //        }
+        //        return null;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
+    }
+
 }
