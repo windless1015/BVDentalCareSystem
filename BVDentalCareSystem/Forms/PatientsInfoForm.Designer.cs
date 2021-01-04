@@ -28,16 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PatientsInfoForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.GroupBox_Operation = new System.Windows.Forms.GroupBox();
+            this.Button_add = new System.Windows.Forms.Button();
+            this.Button_query = new System.Windows.Forms.Button();
+            this.Button_modify = new System.Windows.Forms.Button();
+            this.Button_delete = new System.Windows.Forms.Button();
             this.radioBtnFemale = new System.Windows.Forms.RadioButton();
             this.radioBtnMale = new System.Windows.Forms.RadioButton();
             this.dtpicker = new System.Windows.Forms.DateTimePicker();
@@ -57,10 +61,6 @@
             this.identity_number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.phone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.create_time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Button_add = new System.Windows.Forms.Button();
-            this.Button_query = new System.Windows.Forms.Button();
-            this.Button_modify = new System.Windows.Forms.Button();
-            this.Button_delete = new System.Windows.Forms.Button();
             this.GroupBox_Operation.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataView_Patients)).BeginInit();
             this.SuspendLayout();
@@ -89,6 +89,61 @@
             this.GroupBox_Operation.TabIndex = 23;
             this.GroupBox_Operation.TabStop = false;
             // 
+            // Button_add
+            // 
+            this.Button_add.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_add_record;
+            this.Button_add.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_add.FlatAppearance.BorderSize = 0;
+            this.Button_add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_add.Location = new System.Drawing.Point(1108, 24);
+            this.Button_add.Name = "Button_add";
+            this.Button_add.Size = new System.Drawing.Size(113, 41);
+            this.Button_add.TabIndex = 15;
+            this.Button_add.Tag = "add";
+            this.Button_add.UseVisualStyleBackColor = true;
+            this.Button_add.Click += new System.EventHandler(this.Button_add_Click);
+            // 
+            // Button_query
+            // 
+            this.Button_query.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_query_record;
+            this.Button_query.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_query.FlatAppearance.BorderSize = 0;
+            this.Button_query.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_query.Location = new System.Drawing.Point(820, 24);
+            this.Button_query.Name = "Button_query";
+            this.Button_query.Size = new System.Drawing.Size(113, 41);
+            this.Button_query.TabIndex = 14;
+            this.Button_query.Tag = "query";
+            this.Button_query.UseVisualStyleBackColor = true;
+            this.Button_query.Click += new System.EventHandler(this.Button_query_Click);
+            // 
+            // Button_modify
+            // 
+            this.Button_modify.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Button_modify.BackgroundImage")));
+            this.Button_modify.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_modify.FlatAppearance.BorderSize = 0;
+            this.Button_modify.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_modify.Location = new System.Drawing.Point(820, 91);
+            this.Button_modify.Name = "Button_modify";
+            this.Button_modify.Size = new System.Drawing.Size(113, 41);
+            this.Button_modify.TabIndex = 16;
+            this.Button_modify.Tag = "modify";
+            this.Button_modify.UseVisualStyleBackColor = true;
+            this.Button_modify.Click += new System.EventHandler(this.Button_modify_Click);
+            // 
+            // Button_delete
+            // 
+            this.Button_delete.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_del_record;
+            this.Button_delete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Button_delete.FlatAppearance.BorderSize = 0;
+            this.Button_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Button_delete.Location = new System.Drawing.Point(1108, 89);
+            this.Button_delete.Name = "Button_delete";
+            this.Button_delete.Size = new System.Drawing.Size(113, 41);
+            this.Button_delete.TabIndex = 17;
+            this.Button_delete.UseVisualStyleBackColor = true;
+            this.Button_delete.Click += new System.EventHandler(this.Button_delete_Click);
+            // 
             // radioBtnFemale
             // 
             this.radioBtnFemale.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -99,6 +154,7 @@
             this.radioBtnFemale.TabStop = true;
             this.radioBtnFemale.Text = "女";
             this.radioBtnFemale.UseVisualStyleBackColor = true;
+            this.radioBtnFemale.CheckedChanged += new System.EventHandler(this.radioBtnFemale_CheckedChanged);
             // 
             // radioBtnMale
             // 
@@ -110,6 +166,7 @@
             this.radioBtnMale.TabStop = true;
             this.radioBtnMale.Text = "男";
             this.radioBtnMale.UseVisualStyleBackColor = true;
+            this.radioBtnMale.CheckedChanged += new System.EventHandler(this.radioBtnMale_CheckedChanged);
             // 
             // dtpicker
             // 
@@ -198,14 +255,14 @@
             // 
             // DataView_Patients
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DataView_Patients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataView_Patients.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.DataView_Patients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataView_Patients.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
@@ -226,12 +283,12 @@
             this.DataView_Patients.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataView_Patients_CellClick);
             this.DataView_Patients.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataView_Patients_CellMouseEnter);
             this.DataView_Patients.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataView_Patients_CellMouseLeave);
-             // 
+            // 
             // id
             // 
             this.id.DataPropertyName = "id";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.id.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.id.DefaultCellStyle = dataGridViewCellStyle10;
             this.id.HeaderText = "ID";
             this.id.MinimumWidth = 8;
             this.id.Name = "id";
@@ -240,8 +297,8 @@
             // name
             // 
             this.name.DataPropertyName = "name";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.name.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.name.DefaultCellStyle = dataGridViewCellStyle11;
             this.name.HeaderText = "姓名";
             this.name.MinimumWidth = 8;
             this.name.Name = "name";
@@ -251,8 +308,8 @@
             // gender
             // 
             this.gender.DataPropertyName = "gender";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.gender.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.gender.DefaultCellStyle = dataGridViewCellStyle12;
             this.gender.HeaderText = "性别";
             this.gender.MinimumWidth = 8;
             this.gender.Name = "gender";
@@ -263,8 +320,8 @@
             // birth_date
             // 
             this.birth_date.DataPropertyName = "birth_date";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.birth_date.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.birth_date.DefaultCellStyle = dataGridViewCellStyle13;
             this.birth_date.HeaderText = "出生日期";
             this.birth_date.MinimumWidth = 8;
             this.birth_date.Name = "birth_date";
@@ -274,8 +331,8 @@
             // identity_number
             // 
             this.identity_number.DataPropertyName = "identity_number";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.identity_number.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.identity_number.DefaultCellStyle = dataGridViewCellStyle14;
             this.identity_number.HeaderText = "社保号";
             this.identity_number.MinimumWidth = 8;
             this.identity_number.Name = "identity_number";
@@ -285,8 +342,8 @@
             // phone
             // 
             this.phone.DataPropertyName = "phone";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.phone.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.phone.DefaultCellStyle = dataGridViewCellStyle15;
             this.phone.HeaderText = "电话号码";
             this.phone.MinimumWidth = 8;
             this.phone.Name = "phone";
@@ -296,68 +353,13 @@
             // create_time
             // 
             this.create_time.DataPropertyName = "create_time";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.create_time.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.create_time.DefaultCellStyle = dataGridViewCellStyle16;
             this.create_time.HeaderText = "创建日期";
             this.create_time.MinimumWidth = 8;
             this.create_time.Name = "create_time";
             this.create_time.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.create_time.Width = 215;
-            // 
-            // Button_add
-            // 
-            this.Button_add.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_add_record;
-            this.Button_add.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button_add.FlatAppearance.BorderSize = 0;
-            this.Button_add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_add.Location = new System.Drawing.Point(1108, 24);
-            this.Button_add.Name = "Button_add";
-            this.Button_add.Size = new System.Drawing.Size(113, 41);
-            this.Button_add.TabIndex = 15;
-            this.Button_add.Tag = "add";
-            this.Button_add.UseVisualStyleBackColor = true;
-            this.Button_add.Click += new System.EventHandler(this.Button_add_Click);
-            // 
-            // Button_query
-            // 
-            this.Button_query.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_query_record;
-            this.Button_query.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button_query.FlatAppearance.BorderSize = 0;
-            this.Button_query.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_query.Location = new System.Drawing.Point(820, 24);
-            this.Button_query.Name = "Button_query";
-            this.Button_query.Size = new System.Drawing.Size(113, 41);
-            this.Button_query.TabIndex = 14;
-            this.Button_query.Tag = "query";
-            this.Button_query.UseVisualStyleBackColor = true;
-            this.Button_query.Click += new System.EventHandler(this.Button_query_Click);
-            // 
-            // Button_modify
-            // 
-            this.Button_modify.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Button_modify.BackgroundImage")));
-            this.Button_modify.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button_modify.FlatAppearance.BorderSize = 0;
-            this.Button_modify.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_modify.Location = new System.Drawing.Point(820, 91);
-            this.Button_modify.Name = "Button_modify";
-            this.Button_modify.Size = new System.Drawing.Size(113, 41);
-            this.Button_modify.TabIndex = 16;
-            this.Button_modify.Tag = "modify";
-            this.Button_modify.UseVisualStyleBackColor = true;
-            this.Button_modify.Click += new System.EventHandler(this.Button_modify_Click);
-            // 
-            // Button_delete
-            // 
-            this.Button_delete.BackgroundImage = global::BVDentalCareSystem.Properties.Resources.btn_del_record;
-            this.Button_delete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Button_delete.FlatAppearance.BorderSize = 0;
-            this.Button_delete.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Button_delete.Location = new System.Drawing.Point(1108, 89);
-            this.Button_delete.Name = "Button_delete";
-            this.Button_delete.Size = new System.Drawing.Size(113, 41);
-            this.Button_delete.TabIndex = 17;
-            this.Button_delete.UseVisualStyleBackColor = true;
-            this.Button_delete.Click += new System.EventHandler(this.Button_delete_Click);
             // 
             // PatientsInfoForm
             // 

@@ -73,20 +73,7 @@ namespace BVDentalCareSystem.CommandParse
 
         public void SendCmdMsg(string msg)
         {
-            Console.WriteLine(msg);
-            byte[] bytesToWriteBuffer = StringOperator.ConvertStringToByteArray(msg);
-            //byte[] writeBuffer = new byte[8];
-            //for (int i = 0; i < 8; i++)
-            //{
-            //    if (i < msg.Length)
-            //    {
-            //        char ss = msg[i];
-            //        byte c = Convert.ToByte(msg[i]);
-
-            //        writeBuffer[i] = c;
-            //    }
-            //}
-
+            byte[] bytesToWriteBuffer = StringOperator.ConvertStringToHEXByte(msg);
             int bytesWritten;
             writer.Write(bytesToWriteBuffer, 100, out bytesWritten);
         }
@@ -94,22 +81,23 @@ namespace BVDentalCareSystem.CommandParse
 
         public byte[] RecvCmdMsg()
         {
-            byte[] readBuffer = new byte[8];
-            try
-            {
-                if (MyUsbDevice.IsOpen)
-                {
-                    UsbEndpointReader reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                    int bytesRead;
-                    reader.Read(readBuffer, 100, out bytesRead);
-                    return readBuffer;
-                }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+            //byte[] readBuffer = new byte[8];
+            //try
+            //{
+            //    if (MyUsbDevice.IsOpen)
+            //    {
+            //        UsbEndpointReader reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+            //        int bytesRead;
+            //        reader.Read(readBuffer, 100, out bytesRead);
+            //        return readBuffer;
+            //    }
+            //    return null;
+            //}
+            //catch
+            //{
+            //    return null;
+            //}
+            return null;
         }
 
         public void OnRxEndPointData(object sender, EndpointDataEventArgs e)
@@ -118,7 +106,6 @@ namespace BVDentalCareSystem.CommandParse
             if (!isValid(ref recvBytes))
                 return;
             string recvMsgStr = StringOperator.ByteArrayToString3(e.Buffer);
-            Console.WriteLine(recvMsgStr);
             args.ReceivedMsg = recvMsgStr;
             USBRecvMsgNotifyEvent(args);//向外通知usb收到了指令
         }

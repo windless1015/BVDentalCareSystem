@@ -64,7 +64,7 @@
             // 
             this.delCurImgToolStripMenuItem.Name = "delCurImgToolStripMenuItem";
             this.delCurImgToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.delCurImgToolStripMenuItem.Text = "删除本图片";
+            this.delCurImgToolStripMenuItem.Text = "删除本条目";
             this.delCurImgToolStripMenuItem.Click += new System.EventHandler(this.delCurImgToolStripMenuItem_Click);
             // 
             // doubleBufferListView

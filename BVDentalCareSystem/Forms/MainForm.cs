@@ -197,7 +197,6 @@ namespace BVDentalCareSystem
 
         private void ControlPanelForm_cmdOutProcessing(ref string cmd)
         {
-            //usbHelperInstance.Write(cmd);
             oralCommunicateInstance.SendCmdMsg(cmd);
         }
 
@@ -213,10 +212,10 @@ namespace BVDentalCareSystem
                         periCommunicateInstance = null;
                     }
                     string comName = INIOperation.ReadSerialPortINIFile();
-                    comName = "COM4";
+                    comName = "COM3";
                     periCommunicateInstance = new SerialPortHelper(comName);
                     periCommunicateInstance.Open();
-                    periCommunicateInstance.MsgReceivedHandler += OnRecvCurrentCommand;//设置命令接受处理函数
+                    periCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
                     break;
                 case 2:    //口腔观察 usb连接
                     if (oralCommunicateInstance != null)
@@ -227,7 +226,7 @@ namespace BVDentalCareSystem
                     oralCommunicateInstance = new USBHelper(0x10c4, 0x8846);
                     oralCommunicateInstance.Open();
                     //绑定指令处理函数
-                    //usbHelperInstance.RecvCommandChanged += OnRecvCurrentCommand;//设置命令接受处理函数
+                    oralCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
                     break;
 
                 default:  //口腔观察 wifi连接
@@ -238,7 +237,7 @@ namespace BVDentalCareSystem
             
         }
 
-        private void OnRecvCurrentCommand(object sender, RecvMsgEventArgs e)
+        private void OnRecvMsgHandler(object sender, RecvMsgEventArgs e)
         {
             //接受到字符串的命令指令
             string RecvCmdString = e.ReceivedMsg;
@@ -252,7 +251,7 @@ namespace BVDentalCareSystem
             //这里分成牙周观察和口腔观察
             if (deviceType == 1)
                 PeriCmdParse(ref cmd);
-            else
+            else if(deviceType == 2)
                 OralCmdParse(ref cmd);
         }
 
@@ -261,23 +260,23 @@ namespace BVDentalCareSystem
         {
             if (cmd == "5AA508F1A100A55A") //水泵关闭信号
             {
-                oralCommunicateInstance.SendCmdMsg("5AA508F1A200A55A");
+                periCommunicateInstance.SendCmdMsg("5AA508F1A200A55A");
             }
             else if (cmd == "5AA508F2A100A55A") //气泵关闭信号
             {
-                oralCommunicateInstance.SendCmdMsg("5AA508F2A200A55A");
+                periCommunicateInstance.SendCmdMsg("5AA508F2A200A55A");
             }
             else if (cmd == "5AA508F1A111A55A") //水泵打开
             {
-                oralCommunicateInstance.SendCmdMsg("5AA508F1A211A55A");
+                periCommunicateInstance.SendCmdMsg("5AA508F1A211A55A");
             }
             else if (cmd == "5AA508F2A111A55A") //气泵打开
             {
-                oralCommunicateInstance.SendCmdMsg("5AA508F2A211A55A");
+                periCommunicateInstance.SendCmdMsg("5AA508F2A211A55A");
             }
             else if (cmd == "5AA508F0A111A55A") //拍照指令
             {
-                oralCommunicateInstance.SendCmdMsg("5AA508F0A211A55A");
+                periCommunicateInstance.SendCmdMsg("5AA508F0A211A55A");
                 Action actionDelegate;
                 actionDelegate = () => { ControlPanelForm_PressSnapShotBtn(); };
                 this.Invoke(actionDelegate);
@@ -288,7 +287,7 @@ namespace BVDentalCareSystem
         //口腔观察解析
         private void OralCmdParse(ref string cmd)
         {
-            if (cmd == "0101010101010101") //休眠指令
+            if (cmd == "11111111") //休眠指令
             {
                 timer_timeout.Stop(); //信号灯的超时连接定时器
 
@@ -297,13 +296,13 @@ namespace BVDentalCareSystem
             }
             else //非休眠指令
             {
-                if (cmd == "0001000000010000" || cmd == "0104000000050000" || cmd == "020a0000000c0000")
+                if (cmd == "01000100" || cmd == "14000500" || cmd == "2A000C00")
                 {
                     if (controlPanelForm != null)
                         controlPanelForm.ModeSwitchByRecvAndSend(ref cmd);
                 }
                 //拍照指令
-                if (cmd == "0002000000020000")
+                if (cmd == "02000200")
                 {
                     Action actionDelegate;
                     actionDelegate = () => { ControlPanelForm_PressSnapShotBtn(); };
@@ -386,7 +385,37 @@ namespace BVDentalCareSystem
             {
                 procesRepo[0].Kill();
             }
-            System.Environment.Exit(0);
+
+            //释放需要释放的资源
+            if (videoCamera != null)
+            {
+                videoCamera.Dispose();
+            }
+            if (picBox != null)
+            {
+                picBox.Dispose();
+            }
+            if (pif != null) 
+            {
+                pif.Dispose();
+            }
+            if (controlPanelForm != null)
+            {
+                controlPanelForm.Dispose();
+            }
+
+            if (periCommunicateInstance != null)
+            {
+                periCommunicateInstance.Close();
+                periCommunicateInstance = null;
+            }
+            if (oralCommunicateInstance != null)
+            {
+                oralCommunicateInstance.Close();
+                oralCommunicateInstance = null;
+            }
+
+        System.Environment.Exit(0);
         }
 
 
@@ -490,15 +519,6 @@ namespace BVDentalCareSystem
             }
             else if (fileType == ".avi")
             {
-                if (this.splitContainer.Panel2.Controls.Contains(picBox))
-                {
-                    this.splitContainer.Panel2.Controls.Remove(picBox);
-                }
-                if (videoCamera != null)
-                {
-                    videoCamera.Dispose();
-                    videoCamera = null;
-                }
                 //先去进程库里查询是否有BVPlayer.exe进程存在
                 Process[] procesRepo = Process.GetProcessesByName("BVPlayer");
                 if (procesRepo.Length > 0)

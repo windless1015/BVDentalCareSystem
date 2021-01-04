@@ -57,30 +57,27 @@ namespace BVDentalCareSystem.Forms
         private void MicroLensModeBtn_Click(object sender, EventArgs e)
         {
             //上位机发给下位机的微距模式  01010200
-            string cmd = "0001000100020000";
-            cmd = "01010200";
-            ModeSwitchByRecvAndSend(ref cmd);
-            cmdOutProcessing(ref cmd);
+            string msg = "01010200";
+            ModeSwitchByRecvAndSend(ref msg);
+            cmdOutProcessing(ref msg);
         }
 
         //一般模式
         private void NormalModeBtn_Click(object sender, EventArgs e)
         {
-            string cmd = "0104000100060000";
-            cmd = "14010600";
+            string msg = "14010600";
             //上位机发给下位机的normal模式  14010600
-            ModeSwitchByRecvAndSend(ref cmd);
-            cmdOutProcessing(ref cmd);
+            ModeSwitchByRecvAndSend(ref msg);
+            cmdOutProcessing(ref msg);
         }
 
         //人像模式
         private void FigureModeBtn_Click(object sender, EventArgs e)
         {
-            string cmd = "020a0001000d0000";
-            cmd = "2A010D00";
-            //上位机发给下位机的figure模式  2a010d00
-            ModeSwitchByRecvAndSend(ref cmd);
-            cmdOutProcessing(ref cmd);
+            string msg = "2A010D00";
+            //上位机发给下位机的figure模式  2A010D00
+            ModeSwitchByRecvAndSend(ref msg);
+            cmdOutProcessing(ref msg);
         }
 
         //拍照
@@ -118,17 +115,17 @@ namespace BVDentalCareSystem.Forms
         {
             bool MicroLensFlg = false, NormalFlg = false, FigureFlg = false;
             //微距模式
-            if (cmd == "0001000000010000" || cmd == "0001000100020000")
+            if (cmd == "01000100" || cmd == "01010200")
             {
                 MicroLensFlg = true; NormalFlg = false; FigureFlg = false;
             }
             //一般模式
-            else if (cmd == "0104000000050000" || cmd == "0104000100060000")
+            else if (cmd == "14000500" || cmd == "14010600")
             {
                 MicroLensFlg = false; NormalFlg = true; FigureFlg = false;
             }
             //人像模式
-            else if (cmd == "020a0000000c0000" || cmd == "020a0001000d0000")
+            else if (cmd == "2A000C00" || cmd == "2A010D00")
             {
                 MicroLensFlg = false; NormalFlg = false; FigureFlg = true;
             }

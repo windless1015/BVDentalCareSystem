@@ -58,6 +58,7 @@ namespace BVDentalCareSystem.Forms
             }
         }
 
+        //查询患者按钮事件
         private void Button_query_Click(object sender, EventArgs e)
         {
             if (Button_query.Tag.ToString() == "query")
@@ -85,7 +86,7 @@ namespace BVDentalCareSystem.Forms
             }
         }
 
-
+        //新建患者按钮事件
         private void Button_add_Click(object sender, EventArgs e)
         {
             PatientDisplayForm patienDisForm = new PatientDisplayForm();
@@ -96,11 +97,12 @@ namespace BVDentalCareSystem.Forms
             patienDisForm.ShowDialog();
         }
 
+        //修改患者信息按钮事件
         private void Button_modify_Click(object sender, EventArgs e)
         {
             PatientDisplayForm patienDisForm = new PatientDisplayForm();
             patienDisForm.Text = "患者信息修改";
-            string genderChinese = radioBtnMale.Checked ? "男" : "女";
+            string genderChinese = DataView_Patients.Rows[curSelectIdx].Cells[2].Value.ToString();
             patienDisForm.SetPatientInfoData("modify", textBox_name.Text, textBox_phone.Text,
                 textBox_identity.Text, genderChinese, dtpicker.Value);
             patienDisForm.PassParamNotify += PatienDisForm_PassParamNotify;
@@ -137,7 +139,12 @@ namespace BVDentalCareSystem.Forms
                 //添加了一个数据之后,默认会选中这个数据行,所以要取消选中
                 int rowSize = DataView_Patients.RowCount;
                 curSelectIdx = rowSize - 1;
-                DataView_Patients.Rows[curSelectIdx].Selected = true;
+                /////////////////////////////////////////////////////////
+                //用这行是不能设置current row的,需要用current cell 属性
+                //参考 https://stackoverflow.com/questions/14576803/selecting-rows-programmatically-in-datagridview
+                //DataView_Patients.Rows[curSelectIdx].Selected = true;
+                DataView_Patients.CurrentCell = DataView_Patients.Rows[curSelectIdx].Cells[0];
+                /////////////////////////////////////////////////////////
                 SelectOnePatient(curSelectIdx);
 
                 //创建该文件夹
@@ -149,7 +156,7 @@ namespace BVDentalCareSystem.Forms
                 //如果不是修改病人姓名的，则不会改变文件夹名称，这种直接修改数据库
                 if (name == dataTablePatientInfo.Rows[curRowIndex][1].ToString()) //名字没有改变
                 {
-                    dataTablePatientInfo.Rows[curRowIndex][2] = (radioBtnMale.Checked) ? "男" : "女";
+                    dataTablePatientInfo.Rows[curRowIndex][2] = gender;
                     dataTablePatientInfo.Rows[curRowIndex][3] = dtpicker.Value.ToString("yyyy-MM-dd");
                     dataTablePatientInfo.Rows[curRowIndex][4] = textBox_identity.Text;
                     dataTablePatientInfo.Rows[curRowIndex][5] = textBox_phone.Text;
@@ -170,6 +177,7 @@ namespace BVDentalCareSystem.Forms
                     dataTablePatientInfo.Rows[curRowIndex][7] = newFileName;
                     sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
                 }
+                DataView_Patients.CurrentCell = DataView_Patients.Rows[curSelectIdx].Cells[0];
             }
             else if (opType == "query")
             {
@@ -318,14 +326,6 @@ namespace BVDentalCareSystem.Forms
             textBox_phone.Text = "";
             textBox_identity.Text = "";
         }
-        ////对于四个按钮的设置使能(或者失能)的状态
-        //private void DisableOrEnableFourButtons(bool query, bool add, bool modify, bool delete)
-        //{
-        //    Button_query.Enabled = query;
-        //    Button_modify.Enabled = modify;
-        //    Button_delete.Enabled = delete;
-        //    Button_add.Enabled = add;
-        //}
 
         //控制输入类型的控件使之能够输入或者输出
         private void EnableOrDisableInputControls(bool isEnable)
@@ -346,9 +346,13 @@ namespace BVDentalCareSystem.Forms
             if (DataView_Patients.Rows[rowIdx].Cells[2].Value.ToString() == "男")
             {
                 radioBtnMale.Checked = true;
+                radioBtnFemale.Checked = false;
             }
             else
+            {
+                radioBtnMale.Checked = false;
                 radioBtnFemale.Checked = true;
+            }
             dtpicker.Value = Convert.ToDateTime(DataView_Patients.Rows[rowIdx].Cells[3].Value.ToString());
             textBox_identity.Text = DataView_Patients.Rows[rowIdx].Cells[4].Value.ToString();
             textBox_phone.Text = DataView_Patients.Rows[rowIdx].Cells[5].Value.ToString();
@@ -406,6 +410,16 @@ namespace BVDentalCareSystem.Forms
                 throw e;
             }
             srcPath = null;
+        }
+
+        private void radioBtnMale_CheckedChanged(object sender, EventArgs e)
+        {
+            radioBtnFemale.Checked = !radioBtnMale.Checked;
+        }
+
+        private void radioBtnFemale_CheckedChanged(object sender, EventArgs e)
+        {
+            radioBtnMale.Checked = !radioBtnFemale.Checked;
         }
 
         //private void DataView_Patients_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
