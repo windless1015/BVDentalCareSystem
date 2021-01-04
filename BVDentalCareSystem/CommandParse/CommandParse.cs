@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace BVDentalCareSystem.CommandParse
 {
+   
+
     #region 牙周观察仪指令
     enum PeridonticCameraMsgType
     { 
@@ -69,10 +71,42 @@ namespace BVDentalCareSystem.CommandParse
         SET_SW_STATE = 0xB4,
         SET_SW_MODE = 0xB5
     }
+
+    //所有关于牙周治疗仪的数据
+    public struct AllParamItem
+    {
+        public int pwrLevels { get; set; } //功率总档数
+        public int curPwrLevel { get; set; } //当前功率档数
+        public int pwrMode { get; set; } //功率模式
+        public int pumpLevels { get; set; } //水泵总档数
+        public int curPumpLevel { get; set; } //当前水泵档数
+        public int pumpMode { get; set; } //当前水泵模式
+        public int osc_state { get; set; } //震荡器工作状态
+        public int osc_mode { get; set; } //振荡器工作模式
+        public int sw_mode { get; set; } //开关模式
+
+        public AllParamItem(int defaultVal)
+        {
+            pwrLevels = defaultVal;
+            curPwrLevel = defaultVal;
+            pwrMode = defaultVal;
+            pumpLevels = defaultVal;
+            curPumpLevel = defaultVal;
+            pumpMode = defaultVal;
+            osc_state = defaultVal;
+            osc_mode = defaultVal;
+            sw_mode = defaultVal;
+        }
+
+    }
+
+
     #endregion
 
     class CommandParse
     {
+
+
         #region 牙周观察仪
 
         #endregion
@@ -92,13 +126,17 @@ namespace BVDentalCareSystem.CommandParse
             return msg;
         }
 
-        public static void ReadPeridonticMsg(ref byte[] recv8BitsBytes,
+        public static void ReadPeridonticMsg(ref string recvMsg,
             out PeridonticTherapyDeviceMsgType type, out int param)
         {
+            //"5A A5 08 B0 A1 01 A5 5A"
+
             //根据第三个byte判断指令类型
-            int typeNum = recv8BitsBytes[3];
+            string typeNumStr = recvMsg.Substring(9, 2);
+            string valStr = recvMsg.Substring(15, 2);
+            int typeNum = Convert.ToInt32(typeNumStr, 16);
             type = (PeridonticTherapyDeviceMsgType)typeNum;
-            param = recv8BitsBytes[5];
+            param = Convert.ToInt32(valStr, 16);
         }
         #endregion
 

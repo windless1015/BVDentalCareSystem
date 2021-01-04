@@ -46,6 +46,7 @@ namespace BVDentalCareSystem
             this.timer_heartbeat = new System.Windows.Forms.Timer(this.components);
             this.timer_timeout = new System.Windows.Forms.Timer(this.components);
             this.imageVideoBrowserSideBar = new BVDentalCareSystem.SelfDefinedControls.ImageVideoBrowserSideBar();
+            this.btn_toothCleaner = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -65,6 +66,7 @@ namespace BVDentalCareSystem
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.splitContainer.Panel1.Controls.Add(this.btn_toothCleaner);
             this.splitContainer.Panel1.Controls.Add(this.pictureBox_logo);
             this.splitContainer.Panel1.Controls.Add(this.btn_exit);
             this.splitContainer.Panel1.Controls.Add(this.btn_oralView);
@@ -235,6 +237,21 @@ namespace BVDentalCareSystem
             this.imageVideoBrowserSideBar.Size = new System.Drawing.Size(364, 984);
             this.imageVideoBrowserSideBar.TabIndex = 3;
             // 
+            // btn_toothCleaner
+            // 
+            this.btn_toothCleaner.BackColor = System.Drawing.Color.Transparent;
+            this.btn_toothCleaner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_toothCleaner.FlatAppearance.BorderSize = 0;
+            this.btn_toothCleaner.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_toothCleaner.Location = new System.Drawing.Point(26, 741);
+            this.btn_toothCleaner.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_toothCleaner.Name = "btn_toothCleaner";
+            this.btn_toothCleaner.Size = new System.Drawing.Size(212, 153);
+            this.btn_toothCleaner.TabIndex = 67;
+            this.btn_toothCleaner.Text = "洁牙机设置";
+            this.btn_toothCleaner.UseVisualStyleBackColor = false;
+            this.btn_toothCleaner.Click += new System.EventHandler(this.btn_toothCleaner_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -275,6 +292,7 @@ namespace BVDentalCareSystem
         private System.Windows.Forms.Panel panel_side;
         private System.Windows.Forms.Timer timer_heartbeat;
         private System.Windows.Forms.Timer timer_timeout;
+        private System.Windows.Forms.Button btn_toothCleaner;
     }
 }
 

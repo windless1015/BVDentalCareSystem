@@ -18,6 +18,12 @@ namespace BVDentalCareSystem.CommandParse
         // 事件对象
         public event EventHandler<RecvMsgEventArgs> MsgReceivedHandler;
         private RecvMsgEventArgs args = new RecvMsgEventArgs();
+        public int deviceType { get; set; }
+
+
+        private byte[] onePieceOfMsg = new byte[8]; //一次接收到的8个字节的数据
+        bool pieceMsgReady = false;
+        int curLastBitOfMsgBuff = 0;// 记录当前8个数据字节的最后一位
 
         public SerialPortHelper(string com)
         {
@@ -48,7 +54,14 @@ namespace BVDentalCareSystem.CommandParse
 
         public void SendCmdMsg(string msg)
         {
-            byte[] CmdBytes = StringOperator.ConvertStringToByteArray2(msg);
+            byte[] CmdBytes;
+            if (deviceType == 4)
+            {
+                CmdBytes = StringOperator.ConvertStringToByteArray(msg);
+            }
+            else
+                CmdBytes = StringOperator.ConvertStringToByteArray2(msg);
+
             comPortDevice.Write(CmdBytes, 0, CmdBytes.Length);
         }
         public byte[] RecvCmdMsg()
@@ -59,15 +72,38 @@ namespace BVDentalCareSystem.CommandParse
         private void ComPortDevice_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort comDeviceInstance = (SerialPort)sender;
-            byte[] recvDataBytes = new byte[comDeviceInstance.BytesToRead];
+            int bytsToReadNum = comDeviceInstance.BytesToRead;
+            byte[] recvDataBytes = new byte[bytsToReadNum];
             comDeviceInstance.Read(recvDataBytes, 0, recvDataBytes.Length);//读取数据
 
-            string str = StringOperator.ByteArrayToString(recvDataBytes);//5AA508F1A111A55A
-            
-            args.ReceivedMsg = str;
-            args.deviceType = 1; //1表示牙周观察
-            SerialPortRecvMsgNotifyEvent(args);//向外界发送收到信息的事件
+            if (deviceType == 4)
+            {
+                string readBytesStr = StringOperator.ByteToHex(recvDataBytes);
 
+                Construct8BytesMsg("5A", ref readBytesStr, ref recvDataBytes, ref bytsToReadNum);
+
+                if (pieceMsgReady)
+                {
+                    args.ReceivedMsg = StringOperator.ByteToHex(onePieceOfMsg);
+                    args.deviceType = deviceType; //1表示牙周观察, 4表示洁牙机
+                    SerialPortRecvMsgNotifyEvent(args);//向外界发送收到信息的事件
+                    //使用完毕之后就清空
+                    for (int i = 0; i < 8; i++)
+                    {
+                        onePieceOfMsg[i] = 0;
+                    }
+                    curLastBitOfMsgBuff = 0;
+                    pieceMsgReady = false;
+                }
+            }
+            else
+            {
+                string str = StringOperator.ByteArrayToString(recvDataBytes);//5AA508F1A111A55A
+                args.ReceivedMsg = str;
+                args.deviceType = deviceType; //1表示牙周观察, 4表示洁牙机
+                SerialPortRecvMsgNotifyEvent(args);//向外界发送收到信息的事件
+
+            }
         }
 
 
@@ -75,6 +111,37 @@ namespace BVDentalCareSystem.CommandParse
         protected virtual void SerialPortRecvMsgNotifyEvent(RecvMsgEventArgs e)
         {
             MsgReceivedHandler?.Invoke(this, e);
+        }
+
+
+        //通过头帧检测什么时候开始计算,然后来构造8个字节的字节消息
+        private void Construct8BytesMsg(string headFram, ref string bytesReadStr, ref byte[] bytesRead, ref int bytesNum)
+        {
+            //根据头帧开始算起, 输入的只能是 "5A"  "FF" 类似这样的数据格式
+            string first2Letter = bytesReadStr.Substring(0, 2);
+
+            //因为这个指令
+            if (headFram.Equals(first2Letter) && (curLastBitOfMsgBuff != 6)) //说明就是需要写入到指定缓冲池
+            {
+
+                Array.Copy(bytesRead, onePieceOfMsg, bytesNum);
+                curLastBitOfMsgBuff = bytesNum - 1; //因为是从0开始的
+                pieceMsgReady = (bytesNum == 8) ? true : false; //如果一次性接受到8个字节,那么pieceMsgReady就为true,否则为false
+            }
+            else
+            {
+                for (int i = 0; i < bytesNum; i++)
+                {
+                    onePieceOfMsg[curLastBitOfMsgBuff + 1 + i] = bytesRead[i];
+                }
+                curLastBitOfMsgBuff += bytesNum;
+                if (curLastBitOfMsgBuff == 7)
+                    pieceMsgReady = true;
+                else
+                    pieceMsgReady = false;
+            }
+
+
         }
 
     }

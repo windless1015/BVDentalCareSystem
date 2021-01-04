@@ -29,11 +29,12 @@ namespace BVDentalCareSystem
         //数据通信
         const string heartBeatSendCmd = "0101000101040000";
 
-        private ICommunicationBase periCommunicateInstance = null; //牙周内窥镜的通信
+        private SerialPortHelper periCommunicateInstance = null; //牙周内窥镜的通信
         private ICommunicationBase oralCommunicateInstance = null; //口腔观察仪的通信
-        //private ICommunicationBase cleanerCommunicateInstance = null; //洁牙机的通信
+        private SerialPortHelper cleanerCommunicateInstance = null; //洁牙机的通信
 
-
+        ToothCleanerSettingControl settingControl = null;
+        
         public MainForm()
         {
             InitializeComponent();　 
@@ -72,8 +73,7 @@ namespace BVDentalCareSystem
                 pif.Dispose();
                 pif = null;
             }
-            
-            
+
             btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_selected;
             pif = new PatientsInfoForm();
             pif.SideBarDataReorderNotify += ProcessSideBarRecord;
@@ -102,6 +102,57 @@ namespace BVDentalCareSystem
             PressCameraButton(2);
             
         }
+
+        //点击洁牙机
+        private void btn_toothCleaner_Click(object sender, EventArgs e)
+        {
+            //如果当前显示的是静态截图照片的处理
+            if (picBox != null)
+            {
+                picBox.Dispose();
+                picBox = null;
+                this.splitContainer.Panel2.Controls.Remove(picBox);
+            }
+            //如果当前正在播放视频，再次点击
+            if (videoCamera != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(videoCamera);
+                videoCamera.Stop();
+                videoCamera.Dispose();
+                videoCamera = null;
+            }
+            //如果当前显示的是病历列表
+            if (pif != null)
+            {
+                this.splitContainer.Panel2.Controls.Remove(pif);
+                pif.Dispose();
+                pif = null;
+            }
+
+            BuildCommunication(4);
+
+            settingControl = new ToothCleanerSettingControl();
+            settingControl.ToothCleanerMsgOut += SettingControl_ToothCleanerMsgOut;//洁牙机界面向外发送数据
+            int w, h;
+            w = splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
+            h = w * 720 / 1280;
+            settingControl.Location = new Point(0, panel_head.Height + 34);
+            btn_periodontal.BackgroundImage = Properties.Resources.periodontal_unselected;
+            btn_oralView.BackgroundImage = Properties.Resources.oralView_unselected;
+            btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
+            settingControl.Width = 1280;
+            settingControl.Height = 720;
+            settingControl.Show();
+            splitContainer.Panel2.Controls.Add(settingControl);
+
+        }
+
+        private void SettingControl_ToothCleanerMsgOut(string msg)
+        {
+            cleanerCommunicateInstance.SendCmdMsg(msg);
+        }
+
+
 
         //deviceType 为1表示牙周，2表示口腔
         private void PressCameraButton(int deviceType)
@@ -214,6 +265,7 @@ namespace BVDentalCareSystem
                     string comName = INIOperation.ReadSerialPortINIFile();
                     comName = "COM3";
                     periCommunicateInstance = new SerialPortHelper(comName);
+                    periCommunicateInstance.deviceType = 1;
                     periCommunicateInstance.Open();
                     periCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
                     break;
@@ -228,7 +280,20 @@ namespace BVDentalCareSystem
                     //绑定指令处理函数
                     oralCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
                     break;
-
+                case 3: //口腔观察 wifi
+                    break;
+                case 4:
+                    if (cleanerCommunicateInstance != null)
+                    {
+                        cleanerCommunicateInstance.Close();
+                        cleanerCommunicateInstance = null;
+                    }
+                    string comNamed = "COM4";
+                    cleanerCommunicateInstance = new SerialPortHelper(comNamed);
+                    cleanerCommunicateInstance.deviceType = 4;
+                    cleanerCommunicateInstance.Open();
+                    cleanerCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
+                    break;
                 default:  //口腔观察 wifi连接
                     
                     break;
@@ -248,11 +313,23 @@ namespace BVDentalCareSystem
         //解析收到的指令,然后设置对应的按钮
         private void ParseRecvCommandsAndSetButtons(ref string cmd, ref int deviceType)
         {
-            //这里分成牙周观察和口腔观察
-            if (deviceType == 1)
-                PeriCmdParse(ref cmd);
-            else if(deviceType == 2)
-                OralCmdParse(ref cmd);
+            switch (deviceType)
+            {
+                case 1://牙周观察
+                    PeriCmdParse(ref cmd);
+                    break;
+                case 2://口腔观察, usb模式
+                    OralCmdParse(ref cmd);
+                    break;
+                case 3://口腔观察, wifi模式
+                    break;
+                case 4: //洁牙机, 串口
+                    ToothCleanerCmdParse(ref cmd);
+                    break;
+                default:
+                    break;
+            }
+                
         }
 
         //牙周观察
@@ -310,6 +387,51 @@ namespace BVDentalCareSystem
                 }
             }
         }
+
+        //洁牙机解析
+        private void ToothCleanerCmdParse(ref string cmd)
+        {
+            //接受到字符串的命令指令
+            Console.WriteLine("接受到的整条指令为: " + cmd);
+            PeridonticTherapyDeviceMsgType msgType;
+            int param;
+            BVDentalCareSystem.CommandParse.CommandParse.ReadPeridonticMsg(ref cmd, out msgType, out param);
+            AllParamItem guiParam = new AllParamItem(-1); //默认都是-1
+            switch (msgType)
+            {
+                case PeridonticTherapyDeviceMsgType.RD_PWR_LEVELS:
+                    guiParam.pwrLevels = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_CUR_PWR_LEVEL:
+                    guiParam.curPumpLevel = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_PWR_MODE:
+                    guiParam.pwrMode = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_PUMP_LEVELS:
+                    guiParam.pumpLevels = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_CUR_PUMP_LEVEL:
+                    guiParam.curPumpLevel = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_PUMP_MODE:
+                    guiParam.pumpMode = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_OSC_STATE:
+                    guiParam.osc_state = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_OSC_MODE:
+                    guiParam.osc_mode = param;
+                    break;
+                case PeridonticTherapyDeviceMsgType.RD_SW_MODE:
+                    guiParam.sw_mode = param;
+                    break;
+                default:
+                    break;
+            }
+            settingControl.UpdateALLParam2GUI(ref guiParam);
+        }
+
 
         //点击截图按钮
         private void ControlPanelForm_PressSnapShotBtn()
@@ -415,7 +537,13 @@ namespace BVDentalCareSystem
                 oralCommunicateInstance = null;
             }
 
-        System.Environment.Exit(0);
+            if (cleanerCommunicateInstance != null)
+            {
+                cleanerCommunicateInstance.Close();
+                cleanerCommunicateInstance = null;
+            }
+
+            System.Environment.Exit(0);
         }
 
 
@@ -590,6 +718,7 @@ namespace BVDentalCareSystem
                 Directory.CreateDirectory(rootPath);
             }
         }
+
 
     }
 }

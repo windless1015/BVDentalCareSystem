@@ -194,6 +194,12 @@
     <Compile Include="SelfDefinedControls\PatientDisplayForm.Designer.cs">
       <DependentUpon>PatientDisplayForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SelfDefinedControls\ToothCleanerSettingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SelfDefinedControls\ToothCleanerSettingControl.Designer.cs">
+      <DependentUpon>ToothCleanerSettingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelfDefinedControls\VideoPlayer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -226,6 +232,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SelfDefinedControls\PatientDisplayForm.resx">
       <DependentUpon>PatientDisplayForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelfDefinedControls\ToothCleanerSettingControl.resx">
+      <DependentUpon>ToothCleanerSettingControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelfDefinedControls\VideoPlayer.resx">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
