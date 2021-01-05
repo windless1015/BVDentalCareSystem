@@ -178,6 +178,8 @@ namespace BVDentalCareSystem.Forms
                     sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
                 }
                 DataView_Patients.CurrentCell = DataView_Patients.Rows[curSelectIdx].Cells[0];
+                //底部显示的部分也要更新显示
+                SelectOnePatient(curSelectIdx);
             }
             else if (opType == "query")
             {
