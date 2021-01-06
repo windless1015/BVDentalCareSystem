@@ -118,6 +118,8 @@ namespace vlc.net
             }
             else 
             {
+                if (trackBar_playProgress.Value + 1 > trackBar_playProgress.Maximum)
+                    return;
                 trackBar_playProgress.Value = trackBar_playProgress.Value + 1;
                 if (trackBar_playProgress.Value < trackBar_playProgress.Maximum)
                 {
@@ -135,6 +137,7 @@ namespace vlc.net
             }
         }
 
+        //快退
         private void btn_fastBackward_Click(object sender, EventArgs e)
         {
             if (is_playing)
@@ -158,6 +161,8 @@ namespace vlc.net
             }
             else
             {
+                if (trackBar_playProgress.Value - 1 < 0)
+                    return;
                 trackBar_playProgress.Value = trackBar_playProgress.Value - 1;
                 if (trackBar_playProgress.Value > trackBar_playProgress.Minimum)
                 {
