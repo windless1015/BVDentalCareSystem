@@ -265,7 +265,6 @@ namespace BVDentalCareSystem
                         periCommunicateInstance = null;
                     }
                     string comName = INIOperation.ReadSerialPortINIFile();
-                    comName = "COM3";
                     periCommunicateInstance = new SerialPortHelper(comName);
                     periCommunicateInstance.deviceType = 1;
                     periCommunicateInstance.Open();
