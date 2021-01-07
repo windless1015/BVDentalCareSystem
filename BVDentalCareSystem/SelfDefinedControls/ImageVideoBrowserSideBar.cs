@@ -315,17 +315,27 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             if (doubleBufferListView.SelectedItems.Count == 0)
                 return;
-            string fullPath = dataPath + @"/" + doubleBufferListView.SelectedItems[0].Text; //获取选中文件名
+            string fullPath = dataPath + @"\" + doubleBufferListView.SelectedItems[0].Text; //获取选中文件名
             try
             {
-                //实例化一个新的Process类 命名空间using System.Diagnostics;
-                using (System.Diagnostics.Process p = new System.Diagnostics.Process())
+                string suffix = fullPath.Substring(fullPath.Length - 3);
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                if (suffix == "jpg")
                 {
                     p.StartInfo.FileName = fullPath; //指定要启动的文件路径
                     p.StartInfo.CreateNoWindow = false; //在当前窗口启动程序
                     p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal; //指定窗口的显示样式
                     p.StartInfo.UseShellExecute = true; //使用操作系统的shell启动进程
                     p.Start(); //开始打开文件
+                }
+                else if (suffix == "avi")
+                {
+                    p.StartInfo.FileName = @"BVPlayer.exe";
+                    int aa = fullPath.LastIndexOf('\\');
+                    string fileName = fullPath;
+                    string folderPath = fullPath.Substring(0, aa);
+                    p.StartInfo.Arguments = fileName + " " + folderPath;
+                    p.Start();//开启程序
                 }
             }
             catch (Exception msg) //异常处理

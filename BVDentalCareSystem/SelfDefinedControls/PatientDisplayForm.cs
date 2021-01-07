@@ -64,11 +64,13 @@ namespace BVDentalCareSystem.SelfDefinedControls
             DateTime birth;
             OutputPatientInfoData(out opType, out name, out phone, out identityNum, out gender, out birth);
             PassParamNotify(opType, name, phone, identityNum, gender, birth);
+            this.DialogResult = DialogResult.OK;
             Close();
         }
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 

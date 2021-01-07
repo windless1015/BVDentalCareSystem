@@ -69,7 +69,7 @@ namespace BVDentalCareSystem.Forms
                 patienDisForm.SetPatientInfoData("query", "", "", "", "", DateTime.Now);
                 patienDisForm.PassParamNotify += PatienDisForm_PassParamNotify;
                 patienDisForm.ShowDialog();
-
+                
                 if (patienDisForm.DialogResult != DialogResult.Cancel)
                 {
                     Button_query.Tag = "return";
@@ -157,9 +157,9 @@ namespace BVDentalCareSystem.Forms
                 if (name == dataTablePatientInfo.Rows[curRowIndex][1].ToString()) //名字没有改变
                 {
                     dataTablePatientInfo.Rows[curRowIndex][2] = gender;
-                    dataTablePatientInfo.Rows[curRowIndex][3] = dtpicker.Value.ToString("yyyy-MM-dd");
-                    dataTablePatientInfo.Rows[curRowIndex][4] = textBox_identity.Text;
-                    dataTablePatientInfo.Rows[curRowIndex][5] = textBox_phone.Text;
+                    dataTablePatientInfo.Rows[curRowIndex][3] = birth;//dtpicker.Value.ToString("yyyy-MM-dd");
+                    dataTablePatientInfo.Rows[curRowIndex][4] = identityNum;
+                    dataTablePatientInfo.Rows[curRowIndex][5] = phone;
                     sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
                 }
                 else  //修改了用户的姓名

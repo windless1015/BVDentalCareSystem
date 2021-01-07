@@ -44,7 +44,7 @@ namespace BVDentalCareSystem
         {
             //检测数据文件夹是否存在,如果不存在就创建
             TestDataRootDirectoryExist();
-            //btn_toothCleaner.Visible = false;
+            btn_toothCleaner.Visible = false;
             panel_help.Visible = false;
         }
 
@@ -602,7 +602,8 @@ namespace BVDentalCareSystem
 
         private void DoubleClickOpenProcessing(string itemPath)
         {
-            if (videoCamera != null && videoCamera.isPlaying)
+            //
+            if (videoCamera != null && videoCamera.isRecording)
             {
                 return;
             }
