@@ -602,7 +602,7 @@ namespace BVDentalCareSystem
 
         private void DoubleClickOpenProcessing(string itemPath)
         {
-            //
+            //录像时候需要返回
             if (videoCamera != null && videoCamera.isRecording)
             {
                 return;
