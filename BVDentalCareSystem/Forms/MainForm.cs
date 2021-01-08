@@ -13,6 +13,7 @@ using System.IO;
 using BVDentalCareSystem.CommandParse;
 using Accord.Video.DirectShow;
 using System.Diagnostics;
+using System.Threading;
 
 namespace BVDentalCareSystem
 {
@@ -269,6 +270,9 @@ namespace BVDentalCareSystem
                     periCommunicateInstance.deviceType = 1;
                     periCommunicateInstance.Open();
                     periCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
+                    //牙周观察需要发送打开软件的指令,然后延时4s
+                    periCommunicateInstance.SendCmdMsg("5AA508F4A211A55A"); //上位机发送打开软件的指令
+                    Thread.Sleep(4000);
                     break;
                 case 2:    //口腔观察 usb连接
                     if (oralCommunicateInstance != null)
@@ -533,6 +537,7 @@ namespace BVDentalCareSystem
 
             if (periCommunicateInstance != null)
             {
+                periCommunicateInstance.SendCmdMsg("5AA508F4A200A55A");
                 periCommunicateInstance.Close();
                 periCommunicateInstance = null;
             }
