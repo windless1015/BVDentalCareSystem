@@ -83,6 +83,7 @@ namespace BVDentalCareSystem.Forms
                 sqlHeperInstance.SelectionQuery(querySql, ref dataTablePatientInfo);
                 Button_query.Tag = "query";
                 Button_query.BackgroundImage = Properties.Resources.btn_query_record;
+                SelectOnePatient(0); //默认显示第0行
             }
         }
 
@@ -102,7 +103,15 @@ namespace BVDentalCareSystem.Forms
         {
             PatientDisplayForm patienDisForm = new PatientDisplayForm();
             patienDisForm.Text = "患者信息修改";
-            string genderChinese = DataView_Patients.Rows[curSelectIdx].Cells[2].Value.ToString();
+            int curRowCount = DataView_Patients.RowCount;
+            string genderChinese = "";
+            if (curRowCount == 1) 
+            {
+                genderChinese = DataView_Patients.Rows[0].Cells[2].Value.ToString();
+            }
+            else
+                genderChinese = DataView_Patients.Rows[curSelectIdx].Cells[2].Value.ToString();
+
             patienDisForm.SetPatientInfoData("modify", textBox_name.Text, textBox_phone.Text,
                 textBox_identity.Text, genderChinese, dtpicker.Value);
             patienDisForm.PassParamNotify += PatienDisForm_PassParamNotify;
@@ -197,7 +206,7 @@ namespace BVDentalCareSystem.Forms
                 }
                 dataTablePatientInfo.Clear();
                 sqlHeperInstance.SelectionQuery(querySql, ref dataTablePatientInfo);
-
+                SelectOnePatient(0); //默认显示第0行
             }
         }
 
