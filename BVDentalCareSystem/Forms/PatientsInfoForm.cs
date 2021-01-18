@@ -19,11 +19,11 @@ namespace BVDentalCareSystem.Forms
     {
         SqliteHelper sqlHeperInstance = null;
         DataTable dataTablePatientInfo = null;
+        DataTable dtTemp = new DataTable();
         string rootPath = Environment.CurrentDirectory + @"\PatientInfoDir\";
         public delegate void NotifyRecordSideBarEvent(string dataPath);
         public event NotifyRecordSideBarEvent SideBarDataReorderNotify;
 
-        private int curSelectIdx = 0;//当前选择的行idx
         public PatientsInfoForm()
         {
             InitializeComponent();
@@ -42,12 +42,15 @@ namespace BVDentalCareSystem.Forms
             //加载的时候查询当前数据库的表
             dataTablePatientInfo = sqlHeperInstance.QuerySqlTable();
             DataView_Patients.DataSource = dataTablePatientInfo;
-            SelectOnePatient(0);
+
+            if (dataTablePatientInfo.Rows.Count > 0) //有数据,就展示第一个数据
+            {
+                string curFirstRowToCaseId = DataView_Patients.Rows[0].Cells[0].Value.ToString();
+                DisplayOnePatientInfoWithID(curFirstRowToCaseId);
+            }
 
             //设置控件属性
             SetControlsProperties();
-            //禁止输入控件
-            EnableOrDisableInputControls(false);
         }
 
         private void PatientsInfoForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -83,7 +86,8 @@ namespace BVDentalCareSystem.Forms
                 sqlHeperInstance.SelectionQuery(querySql, ref dataTablePatientInfo);
                 Button_query.Tag = "query";
                 Button_query.BackgroundImage = Properties.Resources.btn_query_record;
-                SelectOnePatient(0); //默认显示第0行
+                string curFirstRowToCaseId = DataView_Patients.Rows[0].Cells[0].Value.ToString();
+                DisplayOnePatientInfoWithID(curFirstRowToCaseId);
             }
         }
 
@@ -103,14 +107,8 @@ namespace BVDentalCareSystem.Forms
         {
             PatientDisplayForm patienDisForm = new PatientDisplayForm();
             patienDisForm.Text = "患者信息修改";
-            int curRowCount = DataView_Patients.RowCount;
-            string genderChinese = "";
-            if (curRowCount == 1) 
-            {
-                genderChinese = DataView_Patients.Rows[0].Cells[2].Value.ToString();
-            }
-            else
-                genderChinese = DataView_Patients.Rows[curSelectIdx].Cells[2].Value.ToString();
+            int curRowIdx = DataView_Patients.CurrentRow.Index;
+            string genderChinese  = DataView_Patients.Rows[curRowIdx].Cells[2].Value.ToString();
 
             patienDisForm.SetPatientInfoData("modify", textBox_name.Text, textBox_phone.Text,
                 textBox_identity.Text, genderChinese, dtpicker.Value);
@@ -118,7 +116,7 @@ namespace BVDentalCareSystem.Forms
             patienDisForm.ShowDialog();
         }
 
-        private void PatienDisForm_PassParamNotify(string opType, string name, string phone, string identityNum, string gender, DateTime birth)
+        private void PatienDisForm_PassParamNotify(string opType, string name, string phone, string identityNum, string gender, string birth)
         {
             if (opType == "add")
             {
@@ -132,7 +130,7 @@ namespace BVDentalCareSystem.Forms
                 DataRow dr = dataTablePatientInfo.NewRow();
                 dr["name"] = name;
                 dr["gender"] = gender;
-                dr["birth_date"] = birth.ToString("yyyy-MM-dd");
+                dr["birth_date"] = birth;//.ToString("yyyy-MM-dd");
                 dr["identity_number"] = identityNum;
                 dr["phone"] = phone;
                 dr["create_time"] = DateTime.Now.ToString("yyyy-MM-dd");
@@ -145,17 +143,19 @@ namespace BVDentalCareSystem.Forms
                 //把新建的这个数据行插入到数据表之后,然后更新到sql里面
                 sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
 
-                //添加了一个数据之后,默认会选中这个数据行,所以要取消选中
-                int rowSize = DataView_Patients.RowCount;
-                curSelectIdx = rowSize - 1;
+                dataTablePatientInfo.Clear();
+                dataTablePatientInfo = sqlHeperInstance.QuerySqlTable();
+                DataView_Patients.DataSource = dataTablePatientInfo;
+                int curMaxId = GetCurMaxId();
                 /////////////////////////////////////////////////////////
                 //用这行是不能设置current row的,需要用current cell 属性
                 //参考 https://stackoverflow.com/questions/14576803/selecting-rows-programmatically-in-datagridview
                 //DataView_Patients.Rows[curSelectIdx].Selected = true;
-                DataView_Patients.CurrentCell = DataView_Patients.Rows[curSelectIdx].Cells[0];
+                int gridViewMaxSize = DataView_Patients.Rows.Count;
+                DataView_Patients.CurrentCell = DataView_Patients.Rows[gridViewMaxSize - 1].Cells[0];
                 /////////////////////////////////////////////////////////
-                SelectOnePatient(curSelectIdx);
-
+                string curFirstRowToCaseId = curMaxId.ToString();
+                DisplayOnePatientInfoWithID(curFirstRowToCaseId);
                 //创建该文件夹
                 Directory.CreateDirectory(rootPath + case_file_name);
             }
@@ -163,15 +163,12 @@ namespace BVDentalCareSystem.Forms
             {
                 int curRowIndex = DataView_Patients.CurrentRow.Index;
                 //如果不是修改病人姓名的，则不会改变文件夹名称，这种直接修改数据库
-                if (name == dataTablePatientInfo.Rows[curRowIndex][1].ToString()) //名字没有改变
-                {
-                    dataTablePatientInfo.Rows[curRowIndex][2] = gender;
-                    dataTablePatientInfo.Rows[curRowIndex][3] = birth;//dtpicker.Value.ToString("yyyy-MM-dd");
-                    dataTablePatientInfo.Rows[curRowIndex][4] = identityNum;
-                    dataTablePatientInfo.Rows[curRowIndex][5] = phone;
-                    sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
-                }
-                else  //修改了用户的姓名
+                dataTablePatientInfo.Rows[curRowIndex][2] = gender;
+                dataTablePatientInfo.Rows[curRowIndex][3] = birth;//dtpicker.Value.ToString("yyyy-MM-dd");
+                dataTablePatientInfo.Rows[curRowIndex][4] = identityNum;
+                dataTablePatientInfo.Rows[curRowIndex][5] = phone;
+
+                if(name == dataTablePatientInfo.Rows[curRowIndex][1].ToString())  //修改了用户的姓名
                 {
                     System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
                     string timeStamp = Convert.ToInt32((DateTime.Now - startTime).TotalSeconds).ToString(); // 相差秒数
@@ -184,11 +181,16 @@ namespace BVDentalCareSystem.Forms
                     //更新数据库中 姓名,case_file_name 这两个个字段
                     dataTablePatientInfo.Rows[curRowIndex][1] = name;
                     dataTablePatientInfo.Rows[curRowIndex][7] = newFileName;
-                    sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
                 }
-                DataView_Patients.CurrentCell = DataView_Patients.Rows[curSelectIdx].Cells[0];
-                //底部显示的部分也要更新显示
-                SelectOnePatient(curSelectIdx);
+
+                sqlHeperInstance.UpdateData(ref dataTablePatientInfo);
+                //重新绑定一下
+                dataTablePatientInfo = sqlHeperInstance.QuerySqlTable();
+                DataView_Patients.DataSource = dataTablePatientInfo;
+                DataView_Patients.CurrentCell = DataView_Patients.Rows[curRowIndex].Cells[0];
+
+                string curFirstRowToCaseId = DataView_Patients.Rows[curRowIndex].Cells[0].Value.ToString();
+                DisplayOnePatientInfoWithID(curFirstRowToCaseId);
             }
             else if (opType == "query")
             {
@@ -206,11 +208,22 @@ namespace BVDentalCareSystem.Forms
                 }
                 dataTablePatientInfo.Clear();
                 sqlHeperInstance.SelectionQuery(querySql, ref dataTablePatientInfo);
-                SelectOnePatient(0); //默认显示第0行
+                //取消默认选中
+                DataView_Patients.ClearSelection();
             }
         }
 
-        
+        //获取当前数据库中病人id最大的那个数字
+        private int GetCurMaxId()
+        {
+            string querySql = "SELECT * FROM patientInfo_t WHERE id =(select max(id) from patientInfo_t)";
+            sqlHeperInstance.SelectionQuery(querySql, ref dtTemp);
+            if (dtTemp.Rows.Count <= 0)
+                return 0;
+            int maxId = Convert.ToInt32(dtTemp.Rows[0][0]);
+            dtTemp.Clear();
+            return maxId;
+        }
 
         private void Button_delete_Click(object sender, EventArgs e)
         {
@@ -221,24 +234,32 @@ namespace BVDentalCareSystem.Forms
             }
 
             //删除之前提示对应的数据是不是也要一并删除
-            int needDeleteIdx = DataView_Patients.CurrentRow.Index;
-            string dataPath = GetDataPath(needDeleteIdx);
-            if (Directory.Exists(dataPath))
+            int needDeleteIdx = DataView_Patients.CurrentRow.Index; //显示datagridview的当前行数
+            string delDataPath =  rootPath +  DataView_Patients.Rows[needDeleteIdx].Cells[7].Value.ToString();
+            if (Directory.Exists(delDataPath))
             {
                 if (MessageBox.Show("是否删除当前病人所有数据?", "确认信息", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
                     return;
                 }
             }
-            //递归删除文件夹
-            DelectDir(ref dataPath);
             dataTablePatientInfo.Rows[needDeleteIdx].Delete();
             sqlHeperInstance.DeleteData(ref dataTablePatientInfo);
             dataTablePatientInfo.AcceptChanges();
 
-            //向外发送sidebar更新的消息
-            SideBarDataReorderNotify("");
-            ClearInputBoxes();
+            //递归删除文件夹
+            DelectDir(ref delDataPath);
+
+            //显示删除完毕的前一个数据
+            if (DataView_Patients.CurrentRow == null)
+                return;
+            int defaulSelectIdxAfterDel = DataView_Patients.CurrentRow.Index;
+            string curFirstRowToCaseId = DataView_Patients.Rows[defaulSelectIdxAfterDel].Cells[0].Value.ToString();
+            DisplayOnePatientInfoWithID(curFirstRowToCaseId);
+            string defaulNextCaseDataPath = DataView_Patients.CurrentRow.Cells[7].Value.ToString();
+            //向右侧发送消息, ""表示无效数据
+            SideBarDataReorderNotify(defaulNextCaseDataPath);
+            
         }
 
         private void PatientsInfoForm_Resize(object sender, EventArgs e)
@@ -250,8 +271,8 @@ namespace BVDentalCareSystem.Forms
         {
             if (e.RowIndex == -1)
                 return;
-            curSelectIdx = e.RowIndex;
-            SelectOnePatient(e.RowIndex);
+            string curFirstRowToCaseId = DataView_Patients.Rows[e.RowIndex].Cells[0].Value.ToString();
+            DisplayOnePatientInfoWithID(curFirstRowToCaseId);
             //判断这个文件夹是否存在
             string caseFileName = DataView_Patients.Rows[e.RowIndex].Cells[7].Value.ToString();
             string patienDataPath = rootPath + caseFileName;
@@ -309,8 +330,6 @@ namespace BVDentalCareSystem.Forms
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             //禁止用户改变DataGridView1所有行的行高
             DataView_Patients.AllowUserToResizeRows = false;
-            //去掉默认选中
-            this.DataView_Patients.ClearSelection();
             //可以更改表头样式，否则后面涉及表头颜色改变的不起作用
             DataView_Patients.EnableHeadersVisualStyles = false;
             //所有cell居中
@@ -319,42 +338,27 @@ namespace BVDentalCareSystem.Forms
             DataView_Patients.DefaultCellStyle.Font = new Font("微软雅黑", 13);
             //禁止调整列宽
             DataView_Patients.AllowUserToResizeColumns = false;
-
             //最后一列是记录文件名,不显示
             DataView_Patients.Columns[7].Visible = false;
-
             // DataGridView1的单元格只读  
             DataView_Patients.ReadOnly = true;
-
             //取消默认选中
             DataView_Patients.ClearSelection();
-
-        }
-        //清空输入控件
-        private void ClearInputBoxes()
-        {
-            textBox_name.Text = "";
-            textBox_phone.Text = "";
-            textBox_identity.Text = "";
         }
 
-        //控制输入类型的控件使之能够输入或者输出
-        private void EnableOrDisableInputControls(bool isEnable)
-        {
-            textBox_name.Enabled = isEnable;
-            textBox_phone.Enabled = isEnable;
-            textBox_identity.Enabled = isEnable;
-            dtpicker.Enabled = isEnable;
-            radioBtnFemale.Enabled = isEnable;
-            radioBtnMale.Enabled = isEnable;
-        }
 
-        
 
-        private void FillOneItmeToDisplay(int rowIdx)
+        //用id号来显示,避免产生崩溃和歧义
+        public void DisplayOnePatientInfoWithID(string caseId)
         {
-            textBox_name.Text = DataView_Patients.Rows[rowIdx].Cells[1].Value.ToString();
-            if (DataView_Patients.Rows[rowIdx].Cells[2].Value.ToString() == "男")
+            string querySql = "SELECT * FROM patientInfo_t WHERE id=" + caseId + "";
+            sqlHeperInstance.SelectionQuery(querySql, ref dtTemp);
+            if (dtTemp.Rows.Count <= 0)
+                return;
+            DataRow oneRow = dtTemp.Rows[0];
+
+            textBox_name.Text = oneRow[1].ToString();
+            if (oneRow[2].ToString() == "男")
             {
                 radioBtnMale.Checked = true;
                 radioBtnFemale.Checked = false;
@@ -364,34 +368,14 @@ namespace BVDentalCareSystem.Forms
                 radioBtnMale.Checked = false;
                 radioBtnFemale.Checked = true;
             }
-            dtpicker.Value = Convert.ToDateTime(DataView_Patients.Rows[rowIdx].Cells[3].Value.ToString());
-            textBox_identity.Text = DataView_Patients.Rows[rowIdx].Cells[4].Value.ToString();
-            textBox_phone.Text = DataView_Patients.Rows[rowIdx].Cells[5].Value.ToString();
-        }
+            dtpicker.Value = Convert.ToDateTime(oneRow[3].ToString());
+            textBox_identity.Text = oneRow[4].ToString();
+            textBox_phone.Text = oneRow[5].ToString();
 
-        private string GetDataPath(int rowIndex)
-        {
-            if (DataView_Patients.RowCount <= 0)
-                return "";
-            if (DataView_Patients.Rows[rowIndex].Cells[7].Value == null)
-                return"";
-            string caseFileName = DataView_Patients.Rows[rowIndex].Cells[7].Value.ToString();
-            caseFileName = rootPath + caseFileName;
-            return caseFileName;
-        }
-
-        public void SelectOnePatient(int rowIndex)
-        {
-            DataGridViewRow oneRow = DataView_Patients.Rows[rowIndex];
-            object patientNameObj = oneRow.Cells[1].Value;
-            if (patientNameObj == null)
-                return;
-
-            FillOneItmeToDisplay(rowIndex);
             //发送消息,告诉外界 窗体控件更新数据
-            string dataPath = GetDataPath(rowIndex);
-            if (dataPath != "")
-                SideBarDataReorderNotify(dataPath);
+            string caseFileName = rootPath + oneRow[7].ToString();
+            SideBarDataReorderNotify(caseFileName);
+            dtTemp.Clear(); //清除了dtTemp所有
         }
 
         public void DelectDir(ref string srcPath)

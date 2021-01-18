@@ -14,7 +14,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
     public partial class PatientDisplayForm : Form
     {
         public delegate void PassPatientInfoDataEvent(string opType, string name, string phone, string identityNum,
-            string gender, DateTime birth);
+            string gender, string birth);
         public event PassPatientInfoDataEvent PassParamNotify;
 
         private string m_OpType = "";// 操作类型
@@ -37,14 +37,14 @@ namespace BVDentalCareSystem.SelfDefinedControls
         }
 
         public void OutputPatientInfoData(out string OpType, out string name, out string phone, out string identityNum,
-            out string gender, out DateTime birth)
+            out string gender, out string birth)
         {
             OpType = m_OpType;
             name = textBox_name.Text.Trim();
             phone = textBox_phone.Text.Trim();
             identityNum = textBox_identity.Text.Trim();
             gender = radioBtnMale.Checked ? "男" : "女";
-            birth = dtpicker.Value;
+            birth = dtpicker.Value.ToString("yyyy-MM-dd");
         }
 
         private void btn_confirm_Click(object sender, EventArgs e)
@@ -60,8 +60,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
                 if (!JudgeIdentityNumber(textBox_identity.Text.Trim()))
                     return;
             }
-            string opType, name, phone, identityNum, gender;
-            DateTime birth;
+            string opType, name, phone, identityNum, gender, birth;
             OutputPatientInfoData(out opType, out name, out phone, out identityNum, out gender, out birth);
             PassParamNotify(opType, name, phone, identityNum, gender, birth);
             this.DialogResult = DialogResult.OK;
@@ -99,41 +98,38 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private void textBox_phone_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != '\b')//这是允许输入退格键 
-            {
-                int len = textBox_phone.Text.Length;
-                if (len < 1 && e.KeyChar == '0')
+            //只有0-9数字和 退格键可以输入
+            if ((e.KeyChar >= '0' && e.KeyChar <= '9') || e.KeyChar == '\b')
+            {
+                if (e.KeyChar == '\b')
+                    e.Handled = false;
+                else 
                 {
-                    e.Handled = true;
+                    if (textBox_phone.Text.Length > 10)
+                    {
+                        e.Handled = true;//不处理
+                    }
                 }
-                else if ((e.KeyChar < '0') || (e.KeyChar > '9'))//这是允许输入0-9数字 
-                {
-                    e.Handled = true;
-                }
-                if (textBox_phone.Text.Length > 10)
-                {
-                    e.Handled = true;
-                }
+                
             }
         }
 
         private void textBox_identity_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar != '\b')//这是允许输入退格键 
-            {
-                int len = textBox_identity.Text.Length;
-                if (len < 1 && e.KeyChar == '0')
+            //只有0-9数字和 退格键可以输入
+            if ((e.KeyChar >= '0' && e.KeyChar <= '9') || e.KeyChar == '\b' 
+                || e.KeyChar == 'x' || e.KeyChar == 'X')
+            {
+                if (e.KeyChar == '\b')
+                    e.Handled = false;
+                else
                 {
-                    e.Handled = true;
+                    if (textBox_identity.Text.Length > 17)
+                    {
+                        e.Handled = true;//不处理
+                    }
                 }
-                else if ((e.KeyChar < '0') || (e.KeyChar > '9'))//这是允许输入0-9数字 
-                {
-                    e.Handled = true;
-                }
-                if (textBox_identity.Text.Length > 8)
-                {
-                    e.Handled = true;
-                }
+
             }
         }
 
@@ -162,9 +158,9 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
         private bool JudgeIdentityNumber(string phone)
         {
-            if (textBox_identity.Text.Length != 9)
+            if (textBox_identity.Text.Length > 18)
             {
-                MessageBox.Show("社保号码为9位数字,请检查社保号是否正确！", "社保号错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("社保号为18位以内, 请检查社保号是否正确！", "社保号错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;

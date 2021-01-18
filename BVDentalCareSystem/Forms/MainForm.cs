@@ -47,6 +47,7 @@ namespace BVDentalCareSystem
             TestDataRootDirectoryExist();
             btn_toothCleaner.Visible = false;
             panel_help.Visible = false;
+            btn_periodontal.Visible = false;
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
