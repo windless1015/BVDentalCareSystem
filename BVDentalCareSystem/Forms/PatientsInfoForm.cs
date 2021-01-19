@@ -168,7 +168,7 @@ namespace BVDentalCareSystem.Forms
                 dataTablePatientInfo.Rows[curRowIndex][4] = identityNum;
                 dataTablePatientInfo.Rows[curRowIndex][5] = phone;
 
-                if(name == dataTablePatientInfo.Rows[curRowIndex][1].ToString())  //修改了用户的姓名
+                if(name != dataTablePatientInfo.Rows[curRowIndex][1].ToString())  //修改了用户的姓名
                 {
                     System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
                     string timeStamp = Convert.ToInt32((DateTime.Now - startTime).TotalSeconds).ToString(); // 相差秒数
