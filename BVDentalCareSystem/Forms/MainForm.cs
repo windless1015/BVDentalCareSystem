@@ -34,7 +34,7 @@ namespace BVDentalCareSystem
         private ICommunicationBase oralCommunicateInstance = null; //口腔观察仪的通信
         private SerialPortHelper cleanerCommunicateInstance = null; //洁牙机的通信
 
-        ToothCleanerSettingControl settingControl = null;
+        TeethCleanerPanel teethCleanerPanel = null;
         
         public MainForm()
         {
@@ -47,7 +47,7 @@ namespace BVDentalCareSystem
             TestDataRootDirectoryExist();
             btn_toothCleaner.Visible = false;
             panel_help.Visible = false;
-            btn_periodontal.Visible = false;
+            //btn_periodontal.Visible = false;
         }
 
         private void btn_patientInfo_Click(object sender, EventArgs e)
@@ -135,19 +135,19 @@ namespace BVDentalCareSystem
 
             BuildCommunication(4);
 
-            settingControl = new ToothCleanerSettingControl();
-            settingControl.ToothCleanerMsgOut += SettingControl_ToothCleanerMsgOut;//洁牙机界面向外发送数据
+            teethCleanerPanel = new TeethCleanerPanel();
+            teethCleanerPanel.ToothCleanerMsgOut += SettingControl_ToothCleanerMsgOut;//洁牙机界面向外发送数据
             int w, h;
             w = splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
             h = w * 720 / 1280;
-            settingControl.Location = new Point(0, panel_head.Height + 34);
+            teethCleanerPanel.Location = new Point(0, panel_head.Height + 34);
             btn_periodontal.BackgroundImage = Properties.Resources.periodontal_unselected;
             btn_oralView.BackgroundImage = Properties.Resources.oralView_unselected;
             btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
-            settingControl.Width = 1280;
-            settingControl.Height = 720;
-            settingControl.Show();
-            splitContainer.Panel2.Controls.Add(settingControl);
+            teethCleanerPanel.Width = 1280;
+            teethCleanerPanel.Height = 720;
+            teethCleanerPanel.Show();
+            splitContainer.Panel2.Controls.Add(teethCleanerPanel);
 
         }
 
@@ -435,7 +435,7 @@ namespace BVDentalCareSystem
                 default:
                     break;
             }
-            settingControl.UpdateALLParam2GUI(ref guiParam);
+            teethCleanerPanel.UpdateALLParam2GUI(ref guiParam);
         }
 
 

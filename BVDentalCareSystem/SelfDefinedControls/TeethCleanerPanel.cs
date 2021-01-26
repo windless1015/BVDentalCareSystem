@@ -1,24 +1,21 @@
-﻿using BVDentalCareSystem.CommandParse;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BVDentalCareSystem.CommandParse;
 
 namespace BVDentalCareSystem.SelfDefinedControls
 {
-    public partial class ToothCleanerSettingControl : UserControl
+    public partial class TeethCleanerPanel : UserControl
     {
         public delegate void ToothCleanerMsgOutEvent(string msg);
         public event ToothCleanerMsgOutEvent ToothCleanerMsgOut;
-
-
-        public ToothCleanerSettingControl()
+        public TeethCleanerPanel()
         {
             InitializeComponent();
         }
@@ -42,7 +39,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
             if (guiParam.osc_state != -1)
                 label_osc_state.Text = (guiParam.osc_state == 0) ? "空闲" : "工作"; //空闲, 工作
             if (guiParam.sw_mode != -1)
-            { 
+            {
                 radioBtn_fingerControl.Checked = (guiParam.sw_mode == 1) ? false : true; //指控 手柄开关, swMode = 0
                 radioBtn_footPadel.Checked = !radioBtn_fingerControl.Checked; // 脚踏, sw mode =1
             }
@@ -59,16 +56,16 @@ namespace BVDentalCareSystem.SelfDefinedControls
         //水泵
         private void btn_pump_increase_Click(object sender, EventArgs e)
         {
-            if( vScrollBar_waterPump.Value > 20)
+            if (vScrollBar_waterPump.Value > 20)
                 return;
 
             Console.WriteLine(vScrollBar_waterPump.Value);
-                vScrollBar_waterPump.Value += 1;
-                int val = vScrollBar_waterPump.Value;
-                textBox_pump_level.Text = val.ToString();
-                string msg = BVDentalCareSystem.CommandParse.CommandParse.SendPeridonticMsg(
-                    PeridonticTherapyDeviceMsgType.SET_CUR_PUMP_LEVEL, val);
-                ToothCleanerMsgOut(msg);
+            vScrollBar_waterPump.Value += 1;
+            int val = vScrollBar_waterPump.Value;
+            textBox_pump_level.Text = val.ToString();
+            string msg = BVDentalCareSystem.CommandParse.CommandParse.SendPeridonticMsg(
+                PeridonticTherapyDeviceMsgType.SET_CUR_PUMP_LEVEL, val);
+            ToothCleanerMsgOut(msg);
 
         }
 
@@ -76,14 +73,14 @@ namespace BVDentalCareSystem.SelfDefinedControls
         {
             if (vScrollBar_waterPump.Value < 0)
                 return;
-            
-                vScrollBar_waterPump.Value -= 1;
-                int val = vScrollBar_waterPump.Value;
-                textBox_pump_level.Text = val.ToString();
-                string msg = BVDentalCareSystem.CommandParse.CommandParse.SendPeridonticMsg(
-                        PeridonticTherapyDeviceMsgType.SET_CUR_PUMP_LEVEL, vScrollBar_waterPump.Value);
-                ToothCleanerMsgOut(msg);
-            
+
+            vScrollBar_waterPump.Value -= 1;
+            int val = vScrollBar_waterPump.Value;
+            textBox_pump_level.Text = val.ToString();
+            string msg = BVDentalCareSystem.CommandParse.CommandParse.SendPeridonticMsg(
+                    PeridonticTherapyDeviceMsgType.SET_CUR_PUMP_LEVEL, vScrollBar_waterPump.Value);
+            ToothCleanerMsgOut(msg);
+
         }
 
         private void btn_pwr_increase_Click(object sender, EventArgs e)
