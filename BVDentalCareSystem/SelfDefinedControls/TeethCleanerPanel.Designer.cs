@@ -62,9 +62,9 @@
             this.groupBox2.Controls.Add(this.label_osc_mode);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(49, 15);
+            this.groupBox2.Location = new System.Drawing.Point(56, 15);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(245, 130);
+            this.groupBox2.Size = new System.Drawing.Size(245, 172);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "震荡指标";
@@ -116,9 +116,9 @@
             this.groupBox3.BackColor = System.Drawing.Color.LightGray;
             this.groupBox3.Controls.Add(this.radioBtn_footPadel);
             this.groupBox3.Controls.Add(this.radioBtn_fingerControl);
-            this.groupBox3.Location = new System.Drawing.Point(49, 151);
+            this.groupBox3.Location = new System.Drawing.Point(58, 241);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(245, 120);
+            this.groupBox3.Size = new System.Drawing.Size(245, 172);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "操作模式";
@@ -126,7 +126,7 @@
             // radioBtn_footPadel
             // 
             this.radioBtn_footPadel.AutoSize = true;
-            this.radioBtn_footPadel.Location = new System.Drawing.Point(151, 57);
+            this.radioBtn_footPadel.Location = new System.Drawing.Point(151, 73);
             this.radioBtn_footPadel.Name = "radioBtn_footPadel";
             this.radioBtn_footPadel.Size = new System.Drawing.Size(47, 16);
             this.radioBtn_footPadel.TabIndex = 5;
@@ -137,7 +137,7 @@
             // 
             this.radioBtn_fingerControl.AutoSize = true;
             this.radioBtn_fingerControl.Checked = true;
-            this.radioBtn_fingerControl.Location = new System.Drawing.Point(27, 57);
+            this.radioBtn_fingerControl.Location = new System.Drawing.Point(30, 73);
             this.radioBtn_fingerControl.Name = "radioBtn_fingerControl";
             this.radioBtn_fingerControl.Size = new System.Drawing.Size(47, 16);
             this.radioBtn_fingerControl.TabIndex = 5;
@@ -153,9 +153,9 @@
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.btn_pwr_increase);
             this.groupBox5.Controls.Add(this.btn_pwr_descend);
-            this.groupBox5.Location = new System.Drawing.Point(49, 448);
+            this.groupBox5.Location = new System.Drawing.Point(58, 693);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(245, 165);
+            this.groupBox5.Size = new System.Drawing.Size(245, 172);
             this.groupBox5.TabIndex = 11;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "能量级别";
@@ -213,9 +213,9 @@
             this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.btn_pump_increase);
             this.groupBox4.Controls.Add(this.btn_pump_descend);
-            this.groupBox4.Location = new System.Drawing.Point(49, 277);
+            this.groupBox4.Location = new System.Drawing.Point(58, 467);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(245, 165);
+            this.groupBox4.Size = new System.Drawing.Size(245, 172);
             this.groupBox4.TabIndex = 10;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "水泵模式";
@@ -267,7 +267,7 @@
             // 
             // btn_init
             // 
-            this.btn_init.Location = new System.Drawing.Point(88, 643);
+            this.btn_init.Location = new System.Drawing.Point(88, 918);
             this.btn_init.Name = "btn_init";
             this.btn_init.Size = new System.Drawing.Size(173, 31);
             this.btn_init.TabIndex = 12;
@@ -278,6 +278,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.Controls.Add(this.btn_init);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);

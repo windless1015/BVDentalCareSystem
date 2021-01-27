@@ -152,6 +152,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
     public partial class ImageVideoBrowserSideBar : UserControl
     {
+       public string name { get; }
         public string dataPath { set; get; } //控件当前需要显示图像和视频的路径
         public ImageList thumbnailImageList; //需要显示的所列图图片列表
         private List<ItemDiscriptor> itemsList; //所有items的列表
@@ -159,6 +160,21 @@ namespace BVDentalCareSystem.SelfDefinedControls
         public delegate void DoubleClickOpenItemNotifyHandler(string itemPath);
         //声明双击打开一个Item（图片，视频）
         public event DoubleClickOpenItemNotifyHandler DBClickOpenItemNotify;
+
+        public ImageVideoBrowserSideBar()
+        {
+            InitializeComponent();
+            name = "ImageVideoBrowserSideBar";
+            thumbnailImageList = new ImageList(); //创建显示的集合
+            thumbnailImageList.ImageSize = new Size(128, 128); //设置imagelist的 属性
+            thumbnailImageList.ColorDepth = ColorDepth.Depth24Bit;
+
+            itemsList = new List<ItemDiscriptor>();  //创建图片,视频items的集合 
+
+            //记得要设置ShowGroups属性为true（默认是false），否则显示不出分组 
+            doubleBufferListView.ShowGroups = true;
+        }
+
 
         //根据dataPath进行时间降序排序
         public void SortOrderByTimeDescend()
@@ -252,18 +268,7 @@ namespace BVDentalCareSystem.SelfDefinedControls
 
 
 
-        public ImageVideoBrowserSideBar()
-        {
-            InitializeComponent();
-            thumbnailImageList = new ImageList(); //创建显示的集合
-            thumbnailImageList.ImageSize = new Size(128, 128); //设置imagelist的 属性
-            thumbnailImageList.ColorDepth = ColorDepth.Depth24Bit;
-
-            itemsList = new List<ItemDiscriptor>();  //创建图片,视频items的集合 
-
-            //记得要设置ShowGroups属性为true（默认是false），否则显示不出分组 
-            doubleBufferListView.ShowGroups = true;
-        }
+        
 
         //在listview上单击显示右键菜单
         private void doubleBufferListView_MouseClick(object sender, MouseEventArgs e)

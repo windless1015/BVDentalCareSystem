@@ -23,6 +23,7 @@ namespace BVDentalCareSystem.Forms
         string rootPath = Environment.CurrentDirectory + @"\PatientInfoDir\";
         public delegate void NotifyRecordSideBarEvent(string dataPath);
         public event NotifyRecordSideBarEvent SideBarDataReorderNotify;
+        public string curPatientDataPath {get; set;}
 
         public PatientsInfoForm()
         {
@@ -375,6 +376,7 @@ namespace BVDentalCareSystem.Forms
             //发送消息,告诉外界 窗体控件更新数据
             string caseFileName = rootPath + oneRow[7].ToString();
             SideBarDataReorderNotify(caseFileName);
+            curPatientDataPath = caseFileName;
             dtTemp.Clear(); //清除了dtTemp所有
         }
 

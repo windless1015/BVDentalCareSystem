@@ -13,11 +13,13 @@ namespace BVDentalCareSystem.SelfDefinedControls
 {
     public partial class TeethCleanerPanel : UserControl
     {
+        public string name { get; }
         public delegate void ToothCleanerMsgOutEvent(string msg);
         public event ToothCleanerMsgOutEvent ToothCleanerMsgOut;
         public TeethCleanerPanel()
         {
             InitializeComponent();
+            name = "TeethCleanerPanel";
         }
 
         private void btn_init_Click(object sender, EventArgs e)
