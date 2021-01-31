@@ -117,50 +117,6 @@ namespace BVDentalCareSystem
                 ShowTeethCleanerPanel();
         }
 
-        //点击洁牙机
-        private void btn_toothCleaner_Click(object sender, EventArgs e)
-        {
-            //如果当前显示的是静态截图照片的处理
-            if (picBox != null)
-            {
-                picBox.Dispose();
-                picBox = null;
-                this.splitContainer.Panel2.Controls.Remove(picBox);
-            }
-            //如果当前正在播放视频，再次点击
-            if (videoCamera != null)
-            {
-                this.splitContainer.Panel2.Controls.Remove(videoCamera);
-                videoCamera.Stop();
-                videoCamera.Dispose();
-                videoCamera = null;
-            }
-            //如果当前显示的是病历列表
-            if (pif != null)
-            {
-                this.splitContainer.Panel2.Controls.Remove(pif);
-                pif.Dispose();
-                pif = null;
-            }
-
-            BuildCommunication(4);
-
-            teethCleanerPanel = new TeethCleanerPanel();
-            teethCleanerPanel.ToothCleanerMsgOut += SettingControl_ToothCleanerMsgOut;//洁牙机界面向外发送数据
-            int w, h;
-            w = splitContainer.Panel2.Width - imageVideoBrowserSideBar.Width - 10;
-            h = w * 720 / 1280;
-            teethCleanerPanel.Location = new Point(0, panel_head.Height + 34);
-            btn_periodontal.BackgroundImage = Properties.Resources.periodontal_unselected;
-            btn_oralView.BackgroundImage = Properties.Resources.oralView_unselected;
-            btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_unselected;
-            teethCleanerPanel.Width = 1280;
-            teethCleanerPanel.Height = 720;
-            teethCleanerPanel.Show();
-            splitContainer.Panel2.Controls.Add(teethCleanerPanel);
-
-        }
-
         //显示右侧侧边栏
         private void ShowImageVideoBrowserSideBar(string dataPath)
         {
@@ -189,7 +145,10 @@ namespace BVDentalCareSystem
                 teethCleanerPanel.Dispose();
                 teethCleanerPanel = null;
             }
+            BuildCommunication(4);//洁牙机串口建立通信
             teethCleanerPanel = new TeethCleanerPanel();
+            teethCleanerPanel.ToothCleanerMsgOut += SettingControl_ToothCleanerMsgOut;//洁牙机界面向外发送数据
+            teethCleanerPanel.StartSendShakeHandMsg();
             teethCleanerPanel.Location = new System.Drawing.Point(1290, 96);
             teethCleanerPanel.Size = rightControlSize;
             teethCleanerPanel.Show();
@@ -339,7 +298,7 @@ namespace BVDentalCareSystem
                         cleanerCommunicateInstance.Close();
                         cleanerCommunicateInstance = null;
                     }
-                    string comNamed = "COM4";
+                    string comNamed = "COM7";
                     cleanerCommunicateInstance = new SerialPortHelper(comNamed);
                     cleanerCommunicateInstance.deviceType = 4;
                     cleanerCommunicateInstance.Open();
@@ -353,6 +312,7 @@ namespace BVDentalCareSystem
             
         }
 
+        //串口的指令接收处理函数
         private void OnRecvMsgHandler(object sender, RecvMsgEventArgs e)
         {
             //接受到字符串的命令指令
@@ -447,6 +407,14 @@ namespace BVDentalCareSystem
             PeridonticTherapyDeviceMsgType msgType;
             int param;
             BVDentalCareSystem.CommandParse.CommandParse.ReadPeridonticMsg(ref cmd, out msgType, out param);
+            //如果是心跳指令,不需要设置界面的参数
+            if (msgType == PeridonticTherapyDeviceMsgType.SHAKE_HAND)
+            {
+                teethCleanerPanel.RecvShakeHandMsgFromUpperWare();
+                return;
+            }
+
+
             AllParamItem guiParam = new AllParamItem(-1); //默认都是-1
             switch (msgType)
             {
@@ -480,7 +448,7 @@ namespace BVDentalCareSystem
                 default:
                     break;
             }
-            teethCleanerPanel.UpdateALLParam2GUI(ref guiParam);
+            teethCleanerPanel.UpdateALLParam2GUI(guiParam);
         }
 
 

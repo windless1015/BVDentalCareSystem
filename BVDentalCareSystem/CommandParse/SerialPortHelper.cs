@@ -78,23 +78,52 @@ namespace BVDentalCareSystem.CommandParse
 
             if (deviceType == 4)
             {
-                string readBytesStr = StringOperator.ByteToHex(recvDataBytes);
-
-                Construct8BytesMsg("5A", ref readBytesStr, ref recvDataBytes, ref bytsToReadNum);
-
-                if (pieceMsgReady)
+                //有可能一次读入超过8个字节,即 recvDataBytes 长度超过8
+                //只取前8个字节,后面的字节再次读入
+                int readTimes = (recvDataBytes.Length % 8 == 0) ? recvDataBytes.Length / 8 : recvDataBytes.Length / 8 + 1; //如果长度为小于等于8, 那么readTimes为1,大于8 则根据具体长度来计算
+                for(int i=0; i < readTimes; i++)
                 {
-                    args.ReceivedMsg = StringOperator.ByteToHex(onePieceOfMsg);
-                    args.deviceType = deviceType; //1表示牙周观察, 4表示洁牙机
-                    SerialPortRecvMsgNotifyEvent(args);//向外界发送收到信息的事件
-                    //使用完毕之后就清空
-                    for (int i = 0; i < 8; i++)
+                    int curBytesNum = 0; //本次需要读入的字节数
+                    if (bytsToReadNum % 8 == 0) //8的倍数
                     {
-                        onePieceOfMsg[i] = 0;
+                        curBytesNum = 8;
                     }
-                    curLastBitOfMsgBuff = 0;
-                    pieceMsgReady = false;
+                    else //不是8的倍数
+                    {
+                        if (i < readTimes - 1)
+                        {
+                            curBytesNum = 8;
+                        }
+                        else
+                            curBytesNum = bytsToReadNum % 8;
+                    }
+
+                    byte[] curProcessBytes = new byte[curBytesNum];//构造本地处理的字节数
+                    //把真实的byte[]拷贝过来
+                    for (int j = 0; j < curBytesNum; j++)
+                    {
+                        int realIdx = i * 8 + j;
+                        curProcessBytes[j] = recvDataBytes[realIdx];
+                    }
+                    string readBytesStr = StringOperator.ByteToHex(curProcessBytes);
+                    Construct8BytesMsg("5A", ref readBytesStr, ref curProcessBytes, ref curBytesNum);
+
+                    if (pieceMsgReady)
+                    {
+                        args.ReceivedMsg = StringOperator.ByteToHex(onePieceOfMsg);
+                        args.deviceType = deviceType; //1表示牙周观察, 4表示洁牙机
+                        SerialPortRecvMsgNotifyEvent(args);//向外界发送收到信息的事件
+                                                           //使用完毕之后就清空
+                        for (int m = 0; m < 8; m++)
+                        {
+                            onePieceOfMsg[m] = 0;
+                        }
+                        curLastBitOfMsgBuff = 0;
+                        pieceMsgReady = false;
+                    }
                 }
+
+                
             }
             else
             {

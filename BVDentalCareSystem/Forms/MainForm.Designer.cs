@@ -82,21 +82,6 @@ namespace BVDentalCareSystem
             this.splitContainer.SplitterDistance = 262;
             this.splitContainer.TabIndex = 0;
             // 
-            // btn_toothCleaner
-            // 
-            this.btn_toothCleaner.BackColor = System.Drawing.Color.Transparent;
-            this.btn_toothCleaner.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btn_toothCleaner.FlatAppearance.BorderSize = 0;
-            this.btn_toothCleaner.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_toothCleaner.Location = new System.Drawing.Point(26, 741);
-            this.btn_toothCleaner.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_toothCleaner.Name = "btn_toothCleaner";
-            this.btn_toothCleaner.Size = new System.Drawing.Size(212, 153);
-            this.btn_toothCleaner.TabIndex = 67;
-            this.btn_toothCleaner.Text = "洁牙机设置";
-            this.btn_toothCleaner.UseVisualStyleBackColor = false;
-            this.btn_toothCleaner.Click += new System.EventHandler(this.btn_toothCleaner_Click);
-            // 
             // pictureBox_logo
             // 
             this.pictureBox_logo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;

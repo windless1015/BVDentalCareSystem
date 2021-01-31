@@ -67,6 +67,7 @@ namespace BVDentalCareSystem.Forms
             this.textBox_userName.Name = "textBox_userName";
             this.textBox_userName.Size = new System.Drawing.Size(285, 36);
             this.textBox_userName.TabIndex = 1;
+            this.textBox_userName.Text = "13760347852";
             this.textBox_userName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox_userName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_userName_KeyPress);
             // 
@@ -78,6 +79,7 @@ namespace BVDentalCareSystem.Forms
             this.textBox_pwd.Name = "textBox_pwd";
             this.textBox_pwd.Size = new System.Drawing.Size(285, 36);
             this.textBox_pwd.TabIndex = 2;
+            this.textBox_pwd.Text = "123456";
             this.textBox_pwd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label_userName

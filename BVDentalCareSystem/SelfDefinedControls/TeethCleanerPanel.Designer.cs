@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label_osc_state = new System.Windows.Forms.Label();
             this.label_osc_mode = new System.Windows.Forms.Label();
@@ -49,10 +50,16 @@
             this.btn_pump_increase = new System.Windows.Forms.Button();
             this.btn_pump_descend = new System.Windows.Forms.Button();
             this.btn_init = new System.Windows.Forms.Button();
+            this.timer_shakeHand = new System.Windows.Forms.Timer(this.components);
+            this.groupBox_connStatus = new System.Windows.Forms.GroupBox();
+            this.label_connStatus = new System.Windows.Forms.Label();
+            this.label_desc = new System.Windows.Forms.Label();
+            this.timer_oscModel = new System.Windows.Forms.Timer(this.components);
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox_connStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
@@ -62,7 +69,7 @@
             this.groupBox2.Controls.Add(this.label_osc_mode);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(56, 15);
+            this.groupBox2.Location = new System.Drawing.Point(58, 158);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(245, 172);
             this.groupBox2.TabIndex = 7;
@@ -116,7 +123,7 @@
             this.groupBox3.BackColor = System.Drawing.Color.LightGray;
             this.groupBox3.Controls.Add(this.radioBtn_footPadel);
             this.groupBox3.Controls.Add(this.radioBtn_fingerControl);
-            this.groupBox3.Location = new System.Drawing.Point(58, 241);
+            this.groupBox3.Location = new System.Drawing.Point(58, 347);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(245, 172);
             this.groupBox3.TabIndex = 8;
@@ -132,6 +139,7 @@
             this.radioBtn_footPadel.TabIndex = 5;
             this.radioBtn_footPadel.Text = "脚踏";
             this.radioBtn_footPadel.UseVisualStyleBackColor = true;
+            this.radioBtn_footPadel.CheckedChanged += new System.EventHandler(this.radioBtn_footPadel_CheckedChanged);
             // 
             // radioBtn_fingerControl
             // 
@@ -144,6 +152,7 @@
             this.radioBtn_fingerControl.TabStop = true;
             this.radioBtn_fingerControl.Text = "指控";
             this.radioBtn_fingerControl.UseVisualStyleBackColor = true;
+            this.radioBtn_fingerControl.CheckedChanged += new System.EventHandler(this.radioBtn_fingerControl_CheckedChanged);
             // 
             // groupBox5
             // 
@@ -153,7 +162,7 @@
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.btn_pwr_increase);
             this.groupBox5.Controls.Add(this.btn_pwr_descend);
-            this.groupBox5.Location = new System.Drawing.Point(58, 693);
+            this.groupBox5.Location = new System.Drawing.Point(58, 730);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(245, 172);
             this.groupBox5.TabIndex = 11;
@@ -195,6 +204,7 @@
             this.btn_pwr_increase.TabIndex = 2;
             this.btn_pwr_increase.Text = "+";
             this.btn_pwr_increase.UseVisualStyleBackColor = true;
+            this.btn_pwr_increase.Click += new System.EventHandler(this.btn_pwr_increase_Click);
             // 
             // btn_pwr_descend
             // 
@@ -204,6 +214,7 @@
             this.btn_pwr_descend.TabIndex = 1;
             this.btn_pwr_descend.Text = "-";
             this.btn_pwr_descend.UseVisualStyleBackColor = true;
+            this.btn_pwr_descend.Click += new System.EventHandler(this.btn_pwr_descend_Click);
             // 
             // groupBox4
             // 
@@ -213,7 +224,7 @@
             this.groupBox4.Controls.Add(this.label3);
             this.groupBox4.Controls.Add(this.btn_pump_increase);
             this.groupBox4.Controls.Add(this.btn_pump_descend);
-            this.groupBox4.Location = new System.Drawing.Point(58, 467);
+            this.groupBox4.Location = new System.Drawing.Point(58, 539);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(245, 172);
             this.groupBox4.TabIndex = 10;
@@ -255,6 +266,7 @@
             this.btn_pump_increase.TabIndex = 2;
             this.btn_pump_increase.Text = "+";
             this.btn_pump_increase.UseVisualStyleBackColor = true;
+            this.btn_pump_increase.Click += new System.EventHandler(this.btn_pump_increase_Click);
             // 
             // btn_pump_descend
             // 
@@ -264,21 +276,63 @@
             this.btn_pump_descend.TabIndex = 1;
             this.btn_pump_descend.Text = "-";
             this.btn_pump_descend.UseVisualStyleBackColor = true;
+            this.btn_pump_descend.Click += new System.EventHandler(this.btn_pump_descend_Click);
             // 
             // btn_init
             // 
-            this.btn_init.Location = new System.Drawing.Point(88, 918);
+            this.btn_init.Location = new System.Drawing.Point(123, 928);
             this.btn_init.Name = "btn_init";
-            this.btn_init.Size = new System.Drawing.Size(173, 31);
+            this.btn_init.Size = new System.Drawing.Size(97, 31);
             this.btn_init.TabIndex = 12;
             this.btn_init.Text = "初始化";
             this.btn_init.UseVisualStyleBackColor = true;
+            this.btn_init.Click += new System.EventHandler(this.btn_init_Click);
+            // 
+            // timer_shakeHand
+            // 
+            this.timer_shakeHand.Interval = 1000;
+            this.timer_shakeHand.Tick += new System.EventHandler(this.timer_shakeHand_Tick);
+            // 
+            // groupBox_connStatus
+            // 
+            this.groupBox_connStatus.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox_connStatus.Controls.Add(this.label_desc);
+            this.groupBox_connStatus.Controls.Add(this.label_connStatus);
+            this.groupBox_connStatus.Location = new System.Drawing.Point(58, 21);
+            this.groupBox_connStatus.Name = "groupBox_connStatus";
+            this.groupBox_connStatus.Size = new System.Drawing.Size(245, 109);
+            this.groupBox_connStatus.TabIndex = 13;
+            this.groupBox_connStatus.TabStop = false;
+            this.groupBox_connStatus.Text = "连接状态";
+            // 
+            // label_connStatus
+            // 
+            this.label_connStatus.BackColor = System.Drawing.Color.Red;
+            this.label_connStatus.Location = new System.Drawing.Point(85, 32);
+            this.label_connStatus.Name = "label_connStatus";
+            this.label_connStatus.Size = new System.Drawing.Size(53, 38);
+            this.label_connStatus.TabIndex = 3;
+            // 
+            // label_desc
+            // 
+            this.label_desc.AutoSize = true;
+            this.label_desc.Location = new System.Drawing.Point(89, 83);
+            this.label_desc.Name = "label_desc";
+            this.label_desc.Size = new System.Drawing.Size(41, 12);
+            this.label_desc.TabIndex = 4;
+            this.label_desc.Text = "未连接";
+            // 
+            // timer_oscModel
+            // 
+            this.timer_oscModel.Interval = 200;
+            this.timer_oscModel.Tick += new System.EventHandler(this.timer_oscModel_Tick);
             // 
             // TeethCleanerPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.Controls.Add(this.groupBox_connStatus);
             this.Controls.Add(this.btn_init);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -286,6 +340,7 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "TeethCleanerPanel";
             this.Size = new System.Drawing.Size(364, 984);
+            this.Load += new System.EventHandler(this.TeethCleanerPanel_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -294,6 +349,8 @@
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox_connStatus.ResumeLayout(false);
+            this.groupBox_connStatus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -321,5 +378,10 @@
         private System.Windows.Forms.Button btn_pump_increase;
         private System.Windows.Forms.Button btn_pump_descend;
         private System.Windows.Forms.Button btn_init;
+        private System.Windows.Forms.Timer timer_shakeHand;
+        private System.Windows.Forms.GroupBox groupBox_connStatus;
+        private System.Windows.Forms.Label label_connStatus;
+        private System.Windows.Forms.Label label_desc;
+        private System.Windows.Forms.Timer timer_oscModel;
     }
 }
