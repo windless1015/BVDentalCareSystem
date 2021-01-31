@@ -27,7 +27,7 @@ namespace BVDentalCareSystem
         TeethCleanerPanel teethCleanerPanel = null;
         string displayImageAbsPath = null;
         public bool isTakingPicturePause = false; //是否是拍照暂停了
-        string rootPath = Environment.CurrentDirectory + @"\PatientInfoDir\";
+        public string rootPath { get; set; }
         string curPatientPath = null;
         Size rightControlSize = new Size(364, 984);
         //数据通信
@@ -41,7 +41,8 @@ namespace BVDentalCareSystem
         {
             InitializeComponent();
 
-            
+            imageVideoBrowserSideBar = new ImageVideoBrowserSideBar();
+            imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -83,6 +84,7 @@ namespace BVDentalCareSystem
 
             btn_patientInfo.BackgroundImage = Properties.Resources.patientInfo_selected;
             pif = new PatientsInfoForm();
+            pif.rootPath = rootPath;
             pif.SideBarDataReorderNotify += ProcessSideBarRecord;
             pif.TopLevel = false; //重要的一个步骤
             pif.Parent = this.splitContainer.Panel2;
@@ -94,25 +96,25 @@ namespace BVDentalCareSystem
             this.splitContainer.Panel2.Controls.Add(pif);
 
 
-            ShowOrHideControl(imageVideoBrowserSideBar, teethCleanerPanel);
-            imageVideoBrowserSideBar.dataPath = pif.curPatientDataPath;
-            imageVideoBrowserSideBar.DBClickOpenItemNotify += new ImageVideoBrowserSideBar.DoubleClickOpenItemNotifyHandler(DoubleClickOpenProcessing);
+            ShowImageVideoBrowserSideBar(pif.curPatientDataPath); 
         }
 
         //牙周观察
         private void btn_periodontal_Click(object sender, EventArgs e)
         {
             BuildCommunication(1);
-            PressCameraButton(1);
-            ShowTeethCleanerPanel(teethCleanerPanel, imageVideoBrowserSideBar);
+            bool isOk = ShowCamera(1);
+            if(isOk)
+                ShowTeethCleanerPanel();
         }
 
         //口腔观察
         private void btn_oralView_Click(object sender, EventArgs e)
         {
             BuildCommunication(2);
-            PressCameraButton(2);
-            ShowTeethCleanerPanel(teethCleanerPanel, imageVideoBrowserSideBar);
+            bool isOk = ShowCamera(2);
+            if (isOk)
+                ShowTeethCleanerPanel();
         }
 
         //点击洁牙机
@@ -160,38 +162,39 @@ namespace BVDentalCareSystem
         }
 
         //显示右侧侧边栏
-        private void ShowOrHideControl(ref ImageVideoBrowserSideBar ivb, bool showOrHide1, ref TeethCleanerPanel tcp, bool showOrHide2)
+        private void ShowImageVideoBrowserSideBar(string dataPath)
         {
-
-            if (showOrHide1)
+            //TeethCleanerPanel 需要析构,隐藏
+            if (teethCleanerPanel != null && splitContainer.Panel2.Controls.Contains(teethCleanerPanel))
             {
-                displayControl = ivb;
-                hideControl = tcp;
+                splitContainer.Panel2.Controls.Remove(teethCleanerPanel);
+                teethCleanerPanel.Dispose();
+                teethCleanerPanel = null;
             }
-            else 
-            {
-                displayControl = tcp;
-                hideControl = ivb;
-            }
-
-            if (hideControl != null && splitContainer.Panel2.Controls.Contains(hideControl))
-            {
-                splitContainer.Panel2.Controls.Remove(hideControl);
-                hideControl.Dispose();
-                hideControl = null;
-            }
-            if (displayControl != null)
-            {
-                displayControl.Dispose();
-                displayControl = null;
-            }
-            displayControl = new TeethCleanerPanel();
-            displayControl.Location = new System.Drawing.Point(1290, 96);
-            displayControl.Size = rightControlSize;
-            displayControl.Show();
-            splitContainer.Panel2.Controls.Add(displayControl);
+            imageVideoBrowserSideBar.dataPath = dataPath;
+            imageVideoBrowserSideBar.Location = new System.Drawing.Point(1290, 96);
+            imageVideoBrowserSideBar.Size = rightControlSize;
+            imageVideoBrowserSideBar.Show();
+            splitContainer.Panel2.Controls.Add(imageVideoBrowserSideBar);
         }
 
+        private void ShowTeethCleanerPanel()
+        {
+            if (imageVideoBrowserSideBar != null && splitContainer.Panel2.Controls.Contains(imageVideoBrowserSideBar))
+            {
+                splitContainer.Panel2.Controls.Remove(imageVideoBrowserSideBar);
+            }
+            if (teethCleanerPanel != null)
+            {
+                teethCleanerPanel.Dispose();
+                teethCleanerPanel = null;
+            }
+            teethCleanerPanel = new TeethCleanerPanel();
+            teethCleanerPanel.Location = new System.Drawing.Point(1290, 96);
+            teethCleanerPanel.Size = rightControlSize;
+            teethCleanerPanel.Show();
+            splitContainer.Panel2.Controls.Add(teethCleanerPanel);
+        }
         private void SettingControl_ToothCleanerMsgOut(string msg)
         {
             cleanerCommunicateInstance.SendCmdMsg(msg);
@@ -200,18 +203,18 @@ namespace BVDentalCareSystem
 
 
         //deviceType 为1表示牙周，2表示口腔
-        private void PressCameraButton(int deviceType)
+        private bool ShowCamera(int deviceType)
         {
             if (!CheckDeviceAvailable(deviceType))
             {
                 string caption = (deviceType == 1) ? "牙周观察仪不存在，请检查设备连接！":"口腔观察仪不存在，请检查设备连接！";
                 MessageBox.Show(caption, "连接设备出错", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
             if (curPatientPath == null)
             {
                 MessageBox.Show("请选择一个患者!", "选择患者", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false;
             }
 
             //如果当前显示的是静态截图照片的处理
@@ -289,6 +292,7 @@ namespace BVDentalCareSystem
             controlPanelForm.Location = new Point(0, 870);
             controlPanelForm.Show();
             this.splitContainer.Panel2.Controls.Add(controlPanelForm);
+            return true;
         }
 
         private void ControlPanelForm_cmdOutProcessing(ref string cmd)
@@ -761,8 +765,6 @@ namespace BVDentalCareSystem
 
         private void ProcessSideBarRecord(string dataPath)
         {
-            if (imageVideoBrowserSideBar == null)
-                return;
             curPatientPath = dataPath;
             imageVideoBrowserSideBar.Clear();
             imageVideoBrowserSideBar.dataPath = dataPath;

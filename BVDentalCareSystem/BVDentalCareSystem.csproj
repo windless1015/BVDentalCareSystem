@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandParse\CommandParse.cs" />
+    <Compile Include="CommandParse\Common.cs" />
     <Compile Include="CommandParse\ConvertHelper.cs" />
     <Compile Include="CommandParse\ICommunicationBase.cs" />
     <Compile Include="CommandParse\INIOperation.cs" />
@@ -155,6 +156,18 @@
     <Compile Include="Forms\ControlPanel.Designer.cs">
       <DependentUpon>ControlPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DoctorInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DoctorInfoForm.Designer.cs">
+      <DependentUpon>DoctorInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,6 +180,7 @@
     <Compile Include="Forms\PatientsInfoForm.Designer.cs">
       <DependentUpon>PatientsInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\CSQLiteHelper.cs" />
     <Compile Include="Interfaces\SqliteHelper.cs" />
     <Compile Include="Interfaces\VlcPlayer.cs" />
     <Compile Include="Program.cs" />
@@ -212,6 +226,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ControlPanel.resx">
       <DependentUpon>ControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DoctorInfoForm.resx">
+      <DependentUpon>DoctorInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

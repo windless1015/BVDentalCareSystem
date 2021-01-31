@@ -20,7 +20,7 @@ namespace BVDentalCareSystem.Forms
         SqliteHelper sqlHeperInstance = null;
         DataTable dataTablePatientInfo = null;
         DataTable dtTemp = new DataTable();
-        string rootPath = Environment.CurrentDirectory + @"\PatientInfoDir\";
+        public string rootPath;
         public delegate void NotifyRecordSideBarEvent(string dataPath);
         public event NotifyRecordSideBarEvent SideBarDataReorderNotify;
         public string curPatientDataPath {get; set;}
@@ -38,6 +38,7 @@ namespace BVDentalCareSystem.Forms
                 sqlHeperInstance = null;
             }
             sqlHeperInstance = new SqliteHelper(); //实例化
+            sqlHeperInstance.dbFilePath = rootPath + @"patientInfo_t.db";
             sqlHeperInstance.InitDB();
             sqlHeperInstance.CreateDBFile();
             //加载的时候查询当前数据库的表
@@ -52,6 +53,7 @@ namespace BVDentalCareSystem.Forms
 
             //设置控件属性
             SetControlsProperties();
+
         }
 
         private void PatientsInfoForm_FormClosing(object sender, FormClosingEventArgs e)

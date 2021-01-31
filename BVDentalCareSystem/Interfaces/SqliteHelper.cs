@@ -16,8 +16,8 @@ namespace BVDentalCareSystem.Interfaces
         private SQLiteConnectionStringBuilder sb = null;
         private string connectionString = null;
 
-        //数据库所在的路径,为exe同级目录
-        private string dbFilePath = Environment.CurrentDirectory + @"\patientInfo_t.db";
+        //数据库所在的路径
+        public string dbFilePath { get; set; }
         public SqliteHelper()
         {
             // SQLiteDataAdapter 是对数据库进行增加表，删除， 修改等操作，不是对某一个具体的数据表
