@@ -270,7 +270,7 @@ namespace BVDentalCareSystem
                         periCommunicateInstance.Close();
                         periCommunicateInstance = null;
                     }
-                    string comName = INIOperation.ReadSerialPortINIFile();
+                    string comName = INIOperation.ReadSerialPortINIFile(1);
                     periCommunicateInstance = new SerialPortHelper(comName);
                     periCommunicateInstance.deviceType = 1;
                     periCommunicateInstance.Open();
@@ -298,8 +298,8 @@ namespace BVDentalCareSystem
                         cleanerCommunicateInstance.Close();
                         cleanerCommunicateInstance = null;
                     }
-                    string comNamed = "COM7";
-                    cleanerCommunicateInstance = new SerialPortHelper(comNamed);
+                    string cleanerCom = INIOperation.ReadSerialPortINIFile(2);
+                    cleanerCommunicateInstance = new SerialPortHelper(cleanerCom);
                     cleanerCommunicateInstance.deviceType = 4;
                     cleanerCommunicateInstance.Open();
                     cleanerCommunicateInstance.MsgReceivedHandler += OnRecvMsgHandler;
